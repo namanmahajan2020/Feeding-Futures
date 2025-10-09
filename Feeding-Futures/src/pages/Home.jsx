@@ -6,7 +6,7 @@ const Home = () => {
   const [navActive, setNavActive] = useState(false);
 
   return (
-    <div className="bg-gray-50 min-h-screen font-poppins">
+    <div className="bg-gradient-to-b from-green-50 to-white min-h-screen font-poppins">
       <Navbar navActive={navActive} setNavActive={setNavActive} />
       {/* Banner */}
       <section

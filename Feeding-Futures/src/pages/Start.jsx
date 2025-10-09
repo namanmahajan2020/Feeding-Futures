@@ -2,7 +2,7 @@ import React from 'react';
 
 const Start = () => {
   return (
-    <div className="h-screen w-full bg-[#ccfbf1a5] flex flex-col items-center font-poppins px-4">
+    <div className="h-screen w-full bg-gray-50 flex flex-col items-center font-poppins px-4">
       {/* Title */}
       <p className="text-3xl md:text-5xl font-bold mb-6 mt-20 text-center text-black">
         Welcome to Feeding <span className="text-[#06C167] font-extrabold">Futures</span>
