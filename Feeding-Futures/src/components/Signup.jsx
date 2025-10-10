@@ -1,151 +1,120 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-function Signup() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    gender: "",
-  });
+const AuthForm = () => {
+  const [isSignup, setIsSignup] = useState(true); // toggle form
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", gender: "" });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    if (res.ok) {
-      alert("Signup successful!");
-    } else {
-      const data = await res.json();
-      setError(data.message || "An error occurred. Please try again.");
+    setSuccess("");
+    try {
+      const url = isSignup ? "/api/users/signup" : "/api/users/login";
+      const res = await axios.post(url, formData);
+      setSuccess(res.data.message);
+      if (!isSignup && res.data.user) {
+        localStorage.setItem("name", res.data.user.name);
+        localStorage.setItem("email", res.data.user.email);
+        localStorage.setItem("gender", res.data.user.gender);
+        window.location.href = "/profile"; // redirect after login
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        maxWidth: 400,
-        margin: "40px auto",
-        padding: 24,
-        background: "#191919",
-        border: "2px solid #06C167",
-        borderRadius: 12,
-        boxShadow: "0 2px 20px #0008",
-      }}
-      aria-label="Signup form"
-    >
-      <h2 style={{ textAlign: "center", marginBottom: 25 }}>Create your account</h2>
-
-      <label htmlFor="name">User name</label>
-      <input
-        id="name"
-        name="name"
-        placeholder="Enter your user name"
-        value={formData.name}
-        autoComplete="username"
-        onChange={handleChange}
-        required
-        style={{
-          width: "100%", padding: 12, marginBottom: 14, fontSize: 16,
-          background: "#232323", color: "#fafafa", border: "1.5px solid #444", borderRadius: 6,
-        }}
-      />
-
-      <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        placeholder="Enter your email"
-        value={formData.email}
-        autoComplete="email"
-        onChange={handleChange}
-        required
-        style={{
-          width: "100%", padding: 12, marginBottom: 14, fontSize: 16,
-          background: "#232323", color: "#fafafa", border: "1.5px solid #444", borderRadius: 6,
-        }}
-      />
-
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        placeholder="Password (min 6 characters)"
-        value={formData.password}
-        autoComplete="new-password"
-        minLength={6}
-        onChange={handleChange}
-        required
-        style={{
-          width: "100%", padding: 12, marginBottom: 14, fontSize: 16,
-          background: "#232323", color: "#fafafa", border: "1.5px solid #444", borderRadius: 6,
-        }}
-      />
-
-      <label htmlFor="gender">Gender</label>
-      <select
-        id="gender"
-        name="gender"
-        value={formData.gender}
-        onChange={handleChange}
-        required
-        style={{
-          width: "100%", padding: 12, marginBottom: 18, fontSize: 16,
-          background: "#232323", color: "#fafafa", border: "1.5px solid #444", borderRadius: 6,
-        }}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-gray-800 p-8 rounded-xl shadow-lg"
       >
-        <option value="">Select gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-        <option value="preferNotToSay">Prefer not to say</option>
-      </select>
+        <h2 className="text-2xl font-bold text-green-500 text-center mb-6">
+          {isSignup ? "Create your account" : "Login to your account"}
+        </h2>
 
-      <button
-        type="submit"
-        style={{
-          backgroundColor: "#06C167",
-          color: "#fff",
-          fontSize: 20,
-          padding: "12px",
-          width: "100%",
-          border: "none",
-          borderRadius: 7,
-          cursor: "pointer",
-          letterSpacing: 2,
-          marginTop: 8,
-          fontWeight: 600,
-        }}
-      >
-        Continue
-      </button>
-      {error && (
-        <p
-          role="alert"
-          style={{
-            color: "#ff5252",
-            background: "#2d0808",
-            borderRadius: 6,
-            marginTop: 16,
-            padding: "8px 0",
-            textAlign: "center",
-          }}
+        {isSignup && (
+          <>
+            <label className="block text-gray-200 mb-1">Name</label>
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter your name"
+              required
+              className="w-full mb-4 p-3 rounded-md bg-gray-700 text-white focus:outline-green-500"
+            />
+
+            <label className="block text-gray-200 mb-1">Gender</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+              className="w-full mb-4 p-3 rounded-md bg-gray-700 text-white focus:outline-green-500"
+            >
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+              <option value="preferNotToSay">Prefer not to say</option>
+            </select>
+          </>
+        )}
+
+        <label className="block text-gray-200 mb-1">Email</label>
+        <input
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Enter your email"
+          required
+          className="w-full mb-4 p-3 rounded-md bg-gray-700 text-white focus:outline-green-500"
+        />
+
+        <label className="block text-gray-200 mb-1">Password</label>
+        <input
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Enter password"
+          required
+          className="w-full mb-4 p-3 rounded-md bg-gray-700 text-white focus:outline-green-500"
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-md font-semibold mb-4"
         >
-          {error}
-        </p>
-      )}
-    </form>
-  );
-}
+          {isSignup ? "Sign Up" : "Login"}
+        </button>
 
-export default Signup;
+        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
+        {success && <p className="text-green-400 text-center mb-2">{success}</p>}
+
+        <p className="text-gray-400 text-center">
+          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+          <span
+            onClick={() => {
+              setIsSignup(!isSignup);
+              setError("");
+              setSuccess("");
+            }}
+            className="text-green-500 cursor-pointer font-semibold"
+          >
+            {isSignup ? "Login" : "Sign Up"}
+          </span>
+        </p>
+      </form>
+    </div>
+  );
+};
+
+export default AuthForm;

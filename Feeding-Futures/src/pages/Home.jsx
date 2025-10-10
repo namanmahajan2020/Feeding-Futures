@@ -38,7 +38,7 @@ const Home = () => {
       </div>
 
       {/* Content */}
-      <div className="bg-green-600 p-6 max-w-3xl mt-5 mx-auto mt-2 rounded-2xl">
+      <div className="bg-green-600 p-6 max-w-3xl mt-5 mx-auto rounded-2xl">
         <p className="text-white text-xl font-normal text-center">
           Cutting food waste is a delicious way of saving money, helping to
           feed the world and protect the planet.
