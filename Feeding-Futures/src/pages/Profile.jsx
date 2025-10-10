@@ -66,40 +66,46 @@ const Profile = () => {
 
                     <hr className="my-6" />
 
-                    <h3 className="text-2xl font-semibold text-gray-800 mb-3">Your Donations</h3>
-                    <div className="overflow-y-auto max-h-56 border rounded-lg shadow-sm">
-                        <table className="min-w-full text-sm text-gray-700">
-                            <thead className="bg-green-100 text-green-800 sticky top-0">
-                                <tr>
-                                    <th className="py-2 px-3">Food</th>
-                                    <th className="py-2 px-3">Type</th>
-                                    <th className="py-2 px-3">Category</th>
-                                    <th className="py-2 px-3">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {donations.length > 0 ? (
-                                    donations.map((item, index) => (
-                                        <tr key={index} className="border-t text-center hover:bg-gray-50">
-                                            <td className="py-2 px-3">{item.foodname}</td>
-                                            <td className="py-2 px-3">{item.meal}</td>
-                                            <td className="py-2 px-3">{item.category}</td>
-                                            <td className="py-2 px-3">
-                                                {new Date(item.createdAt).toLocaleDateString()}
-                                            </td>
-
-                                        </tr>
-                                    ))
-                                ) : (
+                    <h3 className="text-2xl font-semibold text-cyan-800 mb-3">Your Donations</h3>
+                    <div className="border-cyan-600 border-1 rounded-xl shadow-lg overflow-x-auto p-4">
+                        <div className="overflow-hidden rounded-t-xl ">
+                            <table className="min-w-full text-sm text-gray-700 bg-gradient-to-r from-white to-teal-50">
+                                <thead className="bg-gradient-to-r from-green-400 to-teal-500 text-white">
                                     <tr>
-                                        <td colSpan="4" className="py-4 text-center text-gray-500">
-                                            No donations found.
-                                        </td>
+                                        <th className="py-3 px-4 pl-10 text-left">Food</th>
+                                        <th className="py-3 px-4 text-center">Type</th>
+                                        <th className="py-3 px-4 text-center">Category</th>
+                                        <th className="py-3 px-4 text-center">Date</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {donations.length > 0 ? (
+                                        donations.map((item, index) => (
+                                            <tr
+                                                key={index}
+                                                className="border-green-600 border-b text-center hover:bg-gray-50 transition-all"
+                                            >
+                                                <td className="py-3 pl-10 px-4 max-w-40 truncate text-left">{item.foodname}</td>
+                                                <td className="py-3 px-4">{item.meal}</td>
+                                                <td className="py-3 px-4">{item.category}</td>
+                                                <td className="py-3 px-4">
+                                                    {new Date(item.createdAt).toLocaleDateString()}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="4" className="py-4 text-center text-gray-500">
+                                                No donations found.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+
 
 
                 </div>

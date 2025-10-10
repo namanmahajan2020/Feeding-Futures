@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const userEmail = localStorage.getItem("email");
 const GenderSelect = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
   const options = ["Male", "Female", "Other", "Prefer not to say"];

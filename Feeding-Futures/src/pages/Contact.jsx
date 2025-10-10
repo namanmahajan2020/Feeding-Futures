@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { NavLink } from 'react-router-dom';
 
 const accordionData = [
   {
     question: 'How to donate food?',
     answer: (
       <>
-        <p>1) Click on <a href="fooddonate.html" className="text-green-600 underline">donate</a> on the home page.</p>
+        <p>1) Click on <NavLink
+          to="/foodDonationForm"
+          className="text-red-600 text-base underline hover:text-red-400 transition-colors"
+        >
+          donate
+        </NavLink>
+          {' '}on the home page.</p>
         <p>2) Fill the details.</p>
         <p>3) Click on submit.</p>
-        <img src="img/mobile.jpg" alt="mobile instruction" className="w-full mt-2 rounded" />
+        <img src="img/mobile.jpg" alt="mobile instruction" className="w-full bg-green-50 mt-2 rounded" />
       </>
     )
   },
   {
     question: 'How will my donation be used?',
     answer: (
-      <p className="p-2">
+      <p className="p-2 ">
         Your donation will be used to support our mission and the various programs and initiatives that we have in place. Your donation will help us to continue providing assistance and support to those in need. You can find more information about our programs and initiatives on our website. If you have any specific questions or concerns, please feel free to contact us.
       </p>
     )
@@ -25,7 +32,7 @@ const accordionData = [
   {
     question: 'What should I do if my food donation is near or past its expiration date?',
     answer: (
-      <p className="p-2">
+      <p className="p-2 ">
         We appreciate your willingness to donate, but to ensure the safety of our clients we can't accept food that is near or past its expiration date. We recommend checking expiration dates before making a donation or contact us for further guidance.
       </p>
     )
@@ -60,7 +67,7 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const { name, email, message } = formData;
 
     if (!name || !email || !message) {
@@ -199,13 +206,13 @@ function Contact() {
       <div className="bg-gradient-to-b from-green-100 to-white p-8 rounded-xl max-w-4xl mx-auto mb-12">
         {/* Help & FAQs */}
         <div className="help max-w-2xl mx-auto mt-5">
-          <p className="text-2xl font-semibold text-center mb-7">Help & FAQs?</p>
+          <p className="text-2xl text-gray-700 font-bold text-center mb-7">Help & FAQs?</p>
           {accordionData.map(({ question, answer }, index) => {
             const isActive = activeAccordions.includes(index);
             return (
               <div key={index} className="mb-4 rounded">
                 <button
-                  className={`w-full text-left px-4 py-3 border-1 border-black hover:bg-green-700 font-semibold text-lg bg-green-600 text-white focus:outline-none hover:scale-x-102 transition-transform duration-300
+                  className={`w-full text-left px-4 py-3 border-1 font-semibold text-lg bg-gradient-to-b from-green-400 to-green-700 text-white focus:outline-none hover:scale-x-102 transition-transform duration-300
                   ${isActive ? 'rounded-t' : 'rounded'}`}
                   onClick={() => toggleAccordion(index)}
                   aria-expanded={isActive}
@@ -213,7 +220,7 @@ function Contact() {
                   {question}
                 </button>
                 {isActive && (
-                  <div className="p-4 bg-white mt-1 mb-12 border-t border-green-600">
+                  <div className="p-4 bg-gradient-to-b from-white to-green-100 mt-1 mb-12 border-t border-green-600">
                     {answer}
                   </div>
                 )}
