@@ -2,27 +2,41 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const AuthForm = () => {
-  const [isSignup, setIsSignup] = useState(true); // toggle form
-  const [formData, setFormData] = useState({ name: "", email: "", password: "", gender: "" });
+  const [isSignup, setIsSignup] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    gender: "",
+  });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
     try {
-      const url = isSignup ? "/api/users/signup" : "/api/users/login";
+      const url = isSignup
+        ? "http://localhost:5000/api/users/signup"
+        : "http://localhost:5000/api/users/login";
+
       const res = await axios.post(url, formData);
       setSuccess(res.data.message);
-      if (!isSignup && res.data.user) {
+
+      // ✅ Store data for both login and signup
+      if (res.data.user) {
         localStorage.setItem("name", res.data.user.name);
         localStorage.setItem("email", res.data.user.email);
         localStorage.setItem("gender", res.data.user.gender);
-        window.location.href = "/profile"; // redirect after login
       }
+
+      // ✅ Redirect for both signup and login
+      window.location.href = "/";
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
