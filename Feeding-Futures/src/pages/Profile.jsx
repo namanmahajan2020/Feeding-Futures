@@ -23,12 +23,16 @@ const Profile = () => {
 
     const fetchDonations = async () => {
         try {
-            const res = await axios.post("http://localhost:5000/api/donations/get", { email });
-            setDonations(res.data);
+            const res = await axios.post("http://localhost:5000/api/food-donation/get", {
+                email: localStorage.getItem("email"),
+            });
+            setDonations(res.data); // Store donations in state
         } catch (error) {
             console.error("Error fetching donations:", error);
         }
     };
+
+
 
     const handleLogout = () => {
         localStorage.clear();
@@ -63,24 +67,27 @@ const Profile = () => {
                     <hr className="my-6" />
 
                     <h3 className="text-2xl font-semibold text-gray-800 mb-3">Your Donations</h3>
-                    <div className=" overflow-y-auto max-h-56 border rounded-lg shadow-sm">
-                        <table className=" min-w-full text-sm text-gray-700">
+                    <div className="overflow-y-auto max-h-56 border rounded-lg shadow-sm">
+                        <table className="min-w-full text-sm text-gray-700">
                             <thead className="bg-green-100 text-green-800 sticky top-0">
                                 <tr>
                                     <th className="py-2 px-3">Food</th>
                                     <th className="py-2 px-3">Type</th>
                                     <th className="py-2 px-3">Category</th>
-                                    <th className="py-2 px-3">Date/Time</th>
+                                    <th className="py-2 px-3">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {donations.length > 0 ? (
                                     donations.map((item, index) => (
-                                        <tr key={index} className="border-t text-left hover:bg-gray-50">
-                                            <td className="py-2 px-3">{item.food}</td>
-                                            <td className="py-2 px-3">{item.type}</td>
+                                        <tr key={index} className="border-t text-center hover:bg-gray-50">
+                                            <td className="py-2 px-3">{item.foodname}</td>
+                                            <td className="py-2 px-3">{item.meal}</td>
                                             <td className="py-2 px-3">{item.category}</td>
-                                            <td className="py-2 px-3">{new Date(item.date).toLocaleString()}</td>
+                                            <td className="py-2 px-3">
+                                                {new Date(item.createdAt).toLocaleDateString()}
+                                            </td>
+
                                         </tr>
                                     ))
                                 ) : (
@@ -93,6 +100,8 @@ const Profile = () => {
                             </tbody>
                         </table>
                     </div>
+
+
                 </div>
             </div>
 

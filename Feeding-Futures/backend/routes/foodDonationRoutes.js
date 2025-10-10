@@ -46,4 +46,25 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Add this to your existing router
+
+// Route to fetch donations by email
+router.post("/get", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  try {
+    const donations = await FoodDonation.find({ email });
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("Error fetching donations:", error);
+    res.status(500).json({ message: "Server error while fetching donations" });
+  }
+});
+
+
+
 export default router;
