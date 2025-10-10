@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(
-  "mongodb+srv://nm4746_db_user:Na@15082005@cluster0.18b8ybu.mongodb.net/",
+  "mongodb+srv://nm4746_db_user:Na%4015082005@cluster0.18b8ybu.mongodb.net/",
   { useNewUrlParser: true, useUnifiedTopology: true }
 )
 .then(() => console.log("MongoDB Connected"))
