@@ -66,13 +66,17 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li>
-            <a
-              href="contact.html"
-              className="block px-6 py-2 rounded-full hover:bg-black hover:text-white transition"
-              onClick={() => setNavActive(false)}
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                isActive
+                  ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
+                  : "block px-6 py-2 rounded-full hover:bg-black hover:text-white transition"
+              }
+              onClick={() => setNavActive(false)} // close nav on click
             >
               Contact
-            </a>
+            </NavLink>
           </li>
           <li>
             <a
