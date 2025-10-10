@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AuthForm = () => {
@@ -11,6 +12,8 @@ const AuthForm = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const navigate = useNavigate(); // use navigate instead of window.location.href
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,15 +31,28 @@ const AuthForm = () => {
       const res = await axios.post(url, formData);
       setSuccess(res.data.message);
 
-      // ✅ Store data for both login and signup
+      // ✅ Store user data if returned
       if (res.data.user) {
         localStorage.setItem("name", res.data.user.name);
         localStorage.setItem("email", res.data.user.email);
         localStorage.setItem("gender", res.data.user.gender);
-      }
 
-      // ✅ Redirect for both signup and login
-      window.location.href = "/";
+        // ✅ Redirect using navigate
+        navigate("/profile");
+      } else if (isSignup) {
+        // After signup, user might not be returned from backend
+        // So you can directly login the user after signup
+        const loginRes = await axios.post("http://localhost:5000/api/users/login", {
+          email: formData.email,
+          password: formData.password,
+        });
+
+        localStorage.setItem("name", loginRes.data.user.name);
+        localStorage.setItem("email", loginRes.data.user.email);
+        localStorage.setItem("gender", loginRes.data.user.gender);
+
+        navigate("/");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }

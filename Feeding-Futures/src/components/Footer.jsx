@@ -14,14 +14,14 @@ const Footer = () => {
         {/* Social Links */}
         <div className="flex space-x-4 gap-3">
           <a href="https://www.facebook.com/" >
-            <img className='w-8' src="img/facebook.png" alt="Facebook" />
+            <img className='w-7' src="img/facebook.png" alt="Facebook" />
           </a>
           <a href="https://www.instagram.com/">
-            <img className='w-8' src="img/instagram.png" alt="Instagram" />
+            <img className='w-7' src="img/instagram.png" alt="Instagram" />
           </a>
           <a href="https://www.youtube.com/">
 
-            <img className='w-8' src="img/youtube.png" alt="Youtube" />
+            <img className='w-7' src="img/youtube.png" alt="Youtube" />
           </a>
         </div>
       </div>
