@@ -6,6 +6,7 @@ import Start from "./pages/Start.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Profile from "./pages/Profile.jsx";
+import FoodDonationForm from "./pages/FoodDonationForm.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/start" element={<Start />} />
+        <Route path="/foodDonationForm" element={<FoodDonationForm />} />
       </Routes>
     </BrowserRouter>
   );

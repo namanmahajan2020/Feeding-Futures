@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   const [navActive, setNavActive] = useState(false);
@@ -28,12 +29,12 @@ const Home = () => {
             `}
           </style>
 
-          <a
-            href="#"
+          <NavLink
+            to="/foodDonationForm"
             className="inline-block border-2 mt-1 rounded-lg border-red-500 shadow-lg shadow-red-900 bg-red-700 text-white uppercase tracking-widest px-10 py-3 font-semibold transition-all duration-500 ease-in-out hover:bg-red-700 hover:border-red-600 hover:shadow-2xl hover-wiggle"
           >
             Donate Food
-          </a>
+          </NavLink>
         </>
       </div>
 

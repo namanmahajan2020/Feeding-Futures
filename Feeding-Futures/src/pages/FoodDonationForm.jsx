@@ -28,8 +28,8 @@ const FoodDonationForm = () => {
   };
 
   return (
-    <div className="bg-[#06C167] min-h-screen flex items-center justify-center py-8">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+    <div className="bg-gradient-to-b from-green-50 to-white min-h-screen flex items-center justify-center py-8">
+      <div className="bg-gradient-to-b from-white to-green-100 p-8 rounded-lg shadow-lg w-full max-w-2xl">
         <h1 className="text-2xl font-bold text-center text-black mb-6">
           Feeding <span className="text-[#06C167]">Futures</span>
         </h1>
@@ -214,10 +214,10 @@ const FoodDonationForm = () => {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 mt-10 flex justify-center">
             <button
               type="submit"
-              className="w-full bg-black text-white p-3 rounded-md text-lg"
+              className="w-3/5 bg-green-600 text-white p-3 rounded-md text-lg hover:scale-105 hover:bg-green-700"
             >
               Submit
             </button>

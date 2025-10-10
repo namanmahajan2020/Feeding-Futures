@@ -5,7 +5,7 @@ const Navbar = () => {
   const [navActive, setNavActive] = useState(false);
 
   return (
-    <header className="w-full h-20 bg-gradient-to-b from-white to-green-100 flex justify-between items-center px-24 md:px-12 sm:px-6 fixed top-0 z-50 shadow-sm">
+    <header className="w-full h-18 bg-gradient-to-b from-white to-green-100 flex justify-between items-center px-24 md:px-12 sm:px-6 fixed top-0 z-50 shadow-sm">
       <NavLink
         to="/"
         end
