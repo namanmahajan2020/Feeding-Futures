@@ -38,7 +38,7 @@ const Profile = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-b from-green-50 to-white">
             {/* Navbar */}
-            <Navbar navActive={navActive} setNavActive={setNavActive} />
+            <Navbar className="navbar navbar-fixed" navActive={navActive} setNavActive={setNavActive} />
             {/* Main content area that grows to push footer down */}
             <div className="flex-grow flex items-start justify-center mt-16 mb-10 px-4">
                 <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md p-6 mt-10">
