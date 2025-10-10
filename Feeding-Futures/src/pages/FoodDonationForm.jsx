@@ -40,7 +40,7 @@ const FoodDonationForm = () => {
 
             const data = await response.json();
             if (response.ok) {
-                 toast.success("Donation submitted successfully!");
+                toast.success("Donation submitted successfully!");
                 setFormData({
                     foodname: '',
                     meal: 'veg',
@@ -53,15 +53,15 @@ const FoodDonationForm = () => {
                     email: userEmail,
                 });
                 setTimeout(() => {
-                navigate("/"); // 👈 Redirect to home page after 5 seconds
-            }, 3000); // 5000ms = 5 seconds // 👈 Redirect to home page
+                    navigate("/"); // 👈 Redirect to home page after 5 seconds
+                }, 2000); // 5000ms = 5 seconds // 👈 Redirect to home page
             }
             else {
-                 toast.error(data.message || "Submission failed.");
+                toast.error(data.message || "Submission failed.");
             }
         } catch (error) {
             console.error("Submission error:", error);
-             toast.error(data.message || "Submission failed.");
+            toast.error(data.message || "Submission failed.");
         }
     };
 
@@ -83,7 +83,7 @@ const FoodDonationForm = () => {
                                 type="text"
                                 id="foodname"
                                 name="foodname"
-                                className="w-full p-3 border border-gray-300 rounded-md"
+                                className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.foodname}
                                 onChange={handleChange}
                                 required
@@ -133,7 +133,7 @@ const FoodDonationForm = () => {
                                     <img
                                         src="img/raw-food.png"
                                         alt="raw-food"
-                                        className={`w-40 cursor-pointer hover:scale-105  ${formData.category === 'raw-food' ? 'border-2 border-black' : ''}`}
+                                        className={`w-40 cursor-pointer hover:scale-105  ${formData.category === 'raw-food' ? 'border-2 border-green-600 rounded-md' : ''}`}
                                     />
                                 </label>
 
@@ -150,7 +150,7 @@ const FoodDonationForm = () => {
                                     <img
                                         src="img/cooked-food.png"
                                         alt="cooked-food"
-                                        className={`w-40 cursor-pointer hover:scale-105  ${formData.category === 'cooked-food' ? 'border-2 border-black' : ''}`}
+                                        className={`w-40 cursor-pointer hover:scale-105  ${formData.category === 'cooked-food' ? 'border-2 border-green-600 rounded-md' : ''}`}
                                     />
                                 </label>
 
@@ -167,7 +167,7 @@ const FoodDonationForm = () => {
                                     <img
                                         src="img/packed-food.png"
                                         alt="packed-food"
-                                        className={`w-40 cursor-pointer hover:scale-105 ${formData.category === 'packed-food' ? 'border-2 border-black' : ''}`}
+                                        className={`w-40 cursor-pointer hover:scale-105 ${formData.category === 'packed-food' ? 'border-2 border-green-600 rounded-md' : ''}`}
                                     />
                                 </label>
                             </div>
@@ -181,7 +181,9 @@ const FoodDonationForm = () => {
                                 type="text"
                                 id="quantity"
                                 name="quantity"
-                                className="w-full p-3 border border-gray-300 rounded-md"
+                                maxLength="5"
+                                pattern="[0-9]{5}"
+                                className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.quantity}
                                 onChange={handleChange}
                                 required
@@ -198,7 +200,7 @@ const FoodDonationForm = () => {
                                 type="text"
                                 id="name"
                                 name="name"
-                                className="w-full p-3 border border-gray-300 rounded-md"
+                                className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
@@ -213,7 +215,7 @@ const FoodDonationForm = () => {
                                 type="text"
                                 id="phoneno"
                                 name="phoneno"
-                                className="w-full p-3 border border-gray-300 rounded-md"
+                                className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 maxLength="10"
                                 pattern="[0-9]{10}"
                                 value={formData.phoneno}
@@ -229,7 +231,7 @@ const FoodDonationForm = () => {
                             <select
                                 id="district"
                                 name="district"
-                                className="w-full p-3 border border-gray-300 rounded-md"
+                                className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.district}
                                 onChange={handleChange}
                             >
@@ -248,7 +250,7 @@ const FoodDonationForm = () => {
                                 type="text"
                                 id="address"
                                 name="address"
-                                className="w-full p-3 border border-gray-300 rounded-md"
+                                className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.address}
                                 onChange={handleChange}
                                 required
