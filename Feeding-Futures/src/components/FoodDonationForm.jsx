@@ -2,14 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const userEmail = localStorage.getItem("email");
 const FoodDonationForm = () => {
     const navigate = useNavigate();
+    const [userEmail, setUserEmail] = useState(localStorage.getItem("email"));
+
+    // Listen to changes in the localStorage for the userEmail
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setUserEmail(localStorage.getItem("email"));
+        };
+
+        // Event listener to track localStorage changes
+        window.addEventListener('storage', handleStorageChange);
+
+        // Cleanup on component unmount
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
     useEffect(() => {
         if (!userEmail) {
-            // If user is not logged in, redirect to signup page
             toast.error("You must be logged in to donate food.");
-            navigate("/signup"); // Redirect to signup page
+            navigate("/signup"); // Redirect to signup page if not logged in
         }
     }, [userEmail, navigate]);
 

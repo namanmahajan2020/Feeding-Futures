@@ -33,7 +33,7 @@ const Profile = () => {
 
     const handleLogout = () => {
         localStorage.clear();
-        navigate("/signup");
+        navigate("/");
     };
 
     return (
