@@ -9,10 +9,13 @@ import Profile from "./pages/Profile.jsx";
 import FoodDonationForm from "./components/FoodDonationForm.jsx";
 import Footer from "./components/Footer.jsx";
 import Navbar from "./components/Navbar.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+
 function App() {
   const [navActive, setNavActive] = useState(false);
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Navbar navActive={navActive} setNavActive={setNavActive} />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -30,7 +30,6 @@ const Profile = () => {
     };
 
 
-
     const handleLogout = () => {
         localStorage.clear();
         navigate("/");
@@ -99,10 +98,6 @@ const Profile = () => {
                             </table>
                         </div>
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>
