@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminDashboard1 from "./pages/AdminDashboard1.jsx";
 import AdminLogin from "./components/adminLogin.jsx";
+import Footer from './components/AdminFooter.jsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<AdminDashboard1 />} />
         <Route path="login/" element={<AdminLogin />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }

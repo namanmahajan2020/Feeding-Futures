@@ -40,7 +40,7 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center mt-10 bg-gradient-to-b from-green-50 to-white px-4 relative">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 relative">
             {/* Main login form */}
             <form
                 onSubmit={handleSubmit}
