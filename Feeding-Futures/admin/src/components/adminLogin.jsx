@@ -84,7 +84,7 @@ const AdminLogin = () => {
 
                 <p className="text-gray-600 text-center">
                     <span
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/start")}
                         className="text-red-400 cursor-pointer ml-2 font-semibold hover:underline"
                     >
                         Not an admin?
