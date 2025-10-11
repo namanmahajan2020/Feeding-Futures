@@ -1,35 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const Card = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+    <div className="max-w-sm mx-auto bg-white rounded-xl shadow-md p-6 mt-10">
+      <h1 className="text-2xl font-bold text-green-600 mb-2">Hello, Tailwind!</h1>
+      <p className="text-gray-700">
+        This is a small card component styled with Tailwind CSS.
       </p>
-    </>
-  )
-}
+      <button className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+        Click Me
+      </button>
+    </div>
+  );
+};
 
-export default App
+export default Card;
