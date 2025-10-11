@@ -39,10 +39,4 @@ body {
 html {
   overflow-y: scroll;
 }
-/* fallback scrollbar for browsers without custom component */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #16a34a94 #f0fdfa;
-}
-
 
