@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import StatCard from '../components/StatCard';
-import DonationsTable from '../components/DonationsTable';
+import StatCard from './StatCard';
+import DonationsTable from './DonationsTable';
 
 const Dashboard = ({ data, isLoading, isDarkMode }) => {
   const totalDonations = data.donations.length;
