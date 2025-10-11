@@ -1,10 +1,10 @@
 import React from 'react';
-
+import { NavLink } from "react-router-dom";
 const Start = () => {
   return (
-    <div className="h-screen w-full bg-gradient-to-b from-green-50 to-white flex flex-col items-center font-poppins px-4">
+    <div className="h-screen w-full bg-gradient-to-t from-green-50 to-white flex flex-col items-center font-poppins px-4">
       {/* Title */}
-      <p className="text-3xl md:text-5xl font-bold mb-6 mt-20 text-center text-black">
+      <p className="text-3xl md:text-5xl font-bold mb-6 mt-32 text-center text-black">
         Welcome to Feeding <span className="text-[#06C167] font-extrabold">Futures</span>
       </p>
 
@@ -13,15 +13,15 @@ const Start = () => {
 
       {/* Buttons stacked vertically */}
       <div className="flex flex-col items-center gap-7">
-        <a
-          href="signup.php"
+        <NavLink
+          to="/signup"
           className="bg-[#03512b] font-bold text-white px-9 py-2.5 tracking-[2px] text-lg transition-all duration-200"
           style={{ letterSpacing: '2px' }}
           onMouseEnter={e => (e.currentTarget.style.letterSpacing = '6px')}
           onMouseLeave={e => (e.currentTarget.style.letterSpacing = '2px')}
         >
           User
-        </a>
+        </NavLink>
 
         <a
           href="admin/signup.php"

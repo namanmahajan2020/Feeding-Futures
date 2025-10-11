@@ -1,8 +1,35 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [navActive, setNavActive] = useState(false);
+  const [userEmail, setUserEmail] = useState(localStorage.getItem("email"));
+  const navigate = useNavigate();
+
+  const location = useLocation(); // 👈 Get current path
+  const isLoggedIn = !!userEmail;
+  const currentPath = location.pathname;
+
+  // Real-time login state check
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const email = localStorage.getItem("email");
+      setUserEmail(email);
+    };
+
+    // Listen to localStorage changes (cross-tab)
+    window.addEventListener("storage", checkLoginStatus);
+
+    // Also check immediately on mount
+    checkLoginStatus();
+
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  }, [userEmail, navigate]);
+
+  const shouldShowSignIn =
+    !isLoggedIn && currentPath !== "/start" && currentPath !== "/signup";
 
   return (
     <header className="w-full h-18 bg-gradient-to-b from-white to-green-100 flex justify-between items-center px-24 md:px-12 sm:px-6 fixed top-0 z-50 shadow-sm">
@@ -14,7 +41,6 @@ const Navbar = () => {
             ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
             : "block px-6 py-2 rounded-full hover:scale-110 transition-transform duration-300"
         }
-
         onClick={() => setNavActive(false)} // close nav on click
       >
         <div className="text-3xl font-extrabold text-black select-none">
@@ -45,52 +71,68 @@ const Navbar = () => {
               className={({ isActive }) =>
                 isActive
                   ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
-                  : "block px-6 py-2 rounded-full hover:bg-black hover:text-white transition"
+                  : "block px-6 py-2 rounded-full hover:bg-gradient-to-t from-green-500 to-black hover:font-base hover:text-white transition"
               }
               onClick={() => setNavActive(false)} // close nav on click
             >
               Home
             </NavLink>
           </li>
+
           <li>
             <NavLink
               to="/about"
               className={({ isActive }) =>
                 isActive
                   ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
-                  : "block px-6 py-2 rounded-full hover:bg-black hover:text-white transition"
+                  : "block px-6 py-2 rounded-full hover:bg-gradient-to-t from-green-500 to-black hover:font-base hover:text-white transition"
               }
               onClick={() => setNavActive(false)} // close nav on click
             >
               About
             </NavLink>
           </li>
+
           <li>
             <NavLink
               to="/contact"
               className={({ isActive }) =>
                 isActive
                   ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
-                  : "block px-6 py-2 rounded-full hover:bg-black hover:text-white transition"
+                  : "block px-6 py-2 rounded-full hover:bg-gradient-to-t from-green-500 to-black hover:font-base hover:text-white transition"
               }
               onClick={() => setNavActive(false)} // close nav on click
             >
               Contact
             </NavLink>
           </li>
+
           <li>
-           <NavLink
+            <NavLink
               to="/profile"
               className={({ isActive }) =>
                 isActive
-                  ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
-                  : "block px-6 py-2 rounded-full hover:bg-black hover:text-white transition"
+                  ? "block px-6 py-2 rounded-full text-white md:text-green-600 font-semibold"
+                  : "block px-6 py-2 rounded-3xl hover:bg-gradient-to-t from-green-500 to-black hover:font-base hover:text-white transition"
               }
               onClick={() => setNavActive(false)} // close nav on click
             >
               Profile
             </NavLink>
           </li>
+
+          {/* Sign In Button (only if not logged in) */}
+          {shouldShowSignIn && (
+            <li>
+              <NavLink
+                to="/start"
+                className="block px-6 py-2 rounded-full bg-gradient-to-r from-indigo-400 via-sky-400 to-blue-400 text-white font-semibold hover:brightness-110 hover:scale-95 transition duration-200"
+                onClick={() => setNavActive(false)}
+              >
+                Sign In
+              </NavLink>
+            </li>
+          )}
         </ul>
       </nav>
     </header>

@@ -202,7 +202,7 @@ const FoodDonationForm = () => {
                                 id="quantity"
                                 name="quantity"
                                 maxLength="5"
-                                pattern="[0-9]"
+                                pattern="^[0-9]{1,5}$"
                                 className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.quantity}
                                 onChange={handleChange}
