@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { NavLink } from 'react-router-dom';
 
 const accordionData = [
@@ -40,7 +38,6 @@ const accordionData = [
 ];
 
 function Contact() {
-  const [navActive, setNavActive] = useState(false);
   const [activeAccordions, setActiveAccordions] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
@@ -98,7 +95,6 @@ function Contact() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-poppins">
-      <Navbar navActive={navActive} setNavActive={setNavActive} />
       {/* Heading */}
       <div className="flex justify-center">
         <p className="text-4xl font-extrabold leading-tight pt-24 my-6 mb-10 border-b-4 border-b-green-600 pb-1 inline-block">
@@ -229,7 +225,6 @@ function Contact() {
           })}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

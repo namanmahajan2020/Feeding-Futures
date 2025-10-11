@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { NavLink } from "react-router-dom";
 
 const Home = () => {
-  const [navActive, setNavActive] = useState(false);
 
   return (
     <div className="bg-gradient-to-b from-green-50 to-white min-h-screen font-poppins">
-      <Navbar navActive={navActive} setNavActive={setNavActive} />
       {/* Banner */}
       <section
         className="w-full h-[90vh] bg-cover bg-center flex items-center justify-center pt-20"
@@ -94,7 +90,6 @@ const Home = () => {
           className="w-120 mx-auto mt-5 rounded-xl shadow-lg bg-green-600 mix-blend-multiply"
         />
       </div>
-      <Footer />
     </div>
   );
 };

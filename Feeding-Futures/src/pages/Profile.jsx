@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 const Profile = () => {
-    const [navActive, setNavActive] = useState(false);
     const navigate = useNavigate();
     const [donations, setDonations] = useState([]);
 
@@ -41,11 +38,9 @@ const Profile = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-b from-green-50 to-white">
-            {/* Navbar */}
-            <Navbar className="navbar navbar-fixed" navActive={navActive} setNavActive={setNavActive} />
             {/* Main content area that grows to push footer down */}
             <div className="flex-grow flex items-start justify-center mt-16 mb-10 px-4">
-                <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md p-6 mt-10">
+                <div className="w-full max-w-3xl bg-gradient-to-t from-green-50 to-teal-50 rounded-2xl shadow-md p-6 mt-10">
                     <h2 className="text-3xl text-gray-800 font-semibold mb-6 flex items-center">
                         <img src="img/user.png" alt="user" className="w-10 h-10 mr-3" />
                         Your Profile
@@ -59,7 +54,7 @@ const Profile = () => {
 
                     <button
                         onClick={handleLogout}
-                        className="mt-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                        className="mt-4 bg-red-600 text-white font-bold px-4 py-2 rounded-md hover:scale-105 hover:bg-red-500"
                     >
                         Logout
                     </button>
@@ -110,9 +105,6 @@ const Profile = () => {
 
                 </div>
             </div>
-
-            {/* Footer always at bottom */}
-            <Footer />
         </div>
     );
 };

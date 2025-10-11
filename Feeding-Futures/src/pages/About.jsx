@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { FaLeaf, FaHandsHelping, FaClock, FaMobileAlt } from "react-icons/fa";
 
 const About = () => {
-    const [navActive, setNavActive] = useState(false);
-
     return (
         <div className="bg-gradient-to-b from-green-50 to-white min-h-screen font-poppins">
-            <Navbar navActive={navActive} setNavActive={setNavActive} />
 
             {/* Spacer */}
             <div className="h-20"></div>
@@ -132,7 +127,6 @@ const About = () => {
                     </p>
                 </div>
             </section>
-            <Footer />
         </div>
     );
 };

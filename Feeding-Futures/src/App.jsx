@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Signup from "./components/Signup.jsx";
@@ -6,10 +6,14 @@ import Start from "./pages/Start.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Profile from "./pages/Profile.jsx";
-import FoodDonationForm from "./pages/FoodDonationForm.jsx";
+import FoodDonationForm from "./components/FoodDonationForm.jsx";
+import Footer from "./components/Footer.jsx";
+import Navbar from "./components/Navbar.jsx";
 function App() {
+  const [navActive, setNavActive] = useState(false);
   return (
     <BrowserRouter>
+      <Navbar navActive={navActive} setNavActive={setNavActive} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -19,6 +23,7 @@ function App() {
         <Route path="/start" element={<Start />} />
         <Route path="/foodDonationForm" element={<FoodDonationForm />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

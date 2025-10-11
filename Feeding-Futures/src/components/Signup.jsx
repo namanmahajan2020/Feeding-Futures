@@ -104,7 +104,7 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4">
+    <div className="min-h-screen flex items-center justify-center mt-10 bg-gradient-to-b from-green-50 to-white px-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-gradient-to-b from-white to-green-100 p-8 rounded-2xl shadow-2xl border border-green-200"

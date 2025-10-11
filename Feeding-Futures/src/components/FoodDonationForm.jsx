@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
 const userEmail = localStorage.getItem("email");
 const FoodDonationForm = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!userEmail) {
+            // If user is not logged in, redirect to signup page
+            toast.error("You must be logged in to donate food.");
+            navigate("/signup"); // Redirect to signup page
+        }
+    }, [userEmail, navigate]);
+
     const [formData, setFormData] = useState({
         foodname: '',
         meal: 'veg',
@@ -17,7 +24,6 @@ const FoodDonationForm = () => {
         name: '',
         email: userEmail || "",
     });
-    const navigate = useNavigate();
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -70,7 +76,7 @@ const FoodDonationForm = () => {
         <div>
             <ToastContainer />
             <div className="bg-gradient-to-b from-green-50 to-white min-h-screen flex items-center justify-center py-8">
-                <div className="bg-gradient-to-b from-white to-green-100 p-8 rounded-lg shadow-lg w-full max-w-2xl">
+                <div className="bg-gradient-to-b from-white to-green-100 mt-10 p-8 rounded-lg shadow-lg w-full max-w-2xl">
                     <h1 className="text-3xl font-bold text-center text-black mb-6">
                         Feeding <span className="text-[#06C167]">Futures</span>
                     </h1>
@@ -182,7 +188,7 @@ const FoodDonationForm = () => {
                                 id="quantity"
                                 name="quantity"
                                 maxLength="5"
-                                pattern="[0-9]{5}"
+                                pattern="[0-9]"
                                 className="w-full p-3 bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600 rounded-md"
                                 value={formData.quantity}
                                 onChange={handleChange}
