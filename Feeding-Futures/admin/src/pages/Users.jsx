@@ -1,0 +1,30 @@
+// Users.jsx
+
+import React from "react";
+import TableComponent from "../components/TableComponent";  // Make sure TableComponent is correctly imported
+
+const Users = ({ data, isLoading, isDarkMode }) => {
+  // Define the columns for the users table
+  const usersColumns = [
+    { header: "ID", field: "id" },
+    { header: "Name", field: "name" },
+    { header: "Role", field: "role" },
+    { header: "Location", field: "location" },
+    { header: "Last Active", field: "lastActive" },
+  ];
+
+  return (
+    <div>
+      {/* Make sure the columns are defined */}
+      <TableComponent 
+        title="Users" 
+        columns={usersColumns} 
+        data={data.users} 
+        loading={isLoading} 
+        isDarkMode={isDarkMode} 
+      />
+    </div>
+  );
+};
+
+export default Users;

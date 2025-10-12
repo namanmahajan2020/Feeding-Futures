@@ -1,28 +1,38 @@
-// src/components/TableComponent.jsx
+// TableComponent.jsx
+
 import React from "react";
 
-const TableComponent = ({ columns, data, isLoading }) => {
-  if (isLoading) return <p>Loading...</p>;
+const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!data || data.length === 0) {
+    return <p>No data available</p>;
+  }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((col) => (
-            <th key={col.accessor || col}>{col.header || col}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, idx) => (
-          <tr key={idx}>
+    <div className={`table-container ${isDarkMode ? 'dark' : 'light'}`}>
+      <h3>{title}</h3>
+      <table>
+        <thead>
+          <tr>
             {columns.map((col) => (
-              <td key={col.accessor || col}>{row[col.accessor || col]}</td>
+              <th key={col.field}>{col.header}</th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id}>
+              {columns.map((col) => (
+                <td key={col.field}>{item[col.field]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

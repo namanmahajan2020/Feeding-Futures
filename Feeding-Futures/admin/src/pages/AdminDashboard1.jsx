@@ -154,7 +154,7 @@ export default function AdminDashboard() {
                 <div className="w-9 h-9 rounded-full bg-slate-300 dark:bg-slate-700 overflow-hidden">
                   {/* avatar */}
                   <img
-                    src="https://via.placeholder.com/40"
+                    src="img/facebook.png"
                     alt="avatar"
                     className="w-full h-full object-cover"
                   />

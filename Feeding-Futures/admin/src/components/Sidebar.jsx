@@ -34,7 +34,7 @@ const Sidebar = () => {
               className={`flex items-center p-3 rounded-xl transition duration-200 
                 ${item.path === activePage ? 'bg-emerald-600 text-white' : 'hover:bg-sky-600'}
                 ${isSidebarOpen ? '' : 'justify-center'}`}
-              activeClassName="bg-emerald-600 text-white"
+              activeclassname="bg-emerald-600 text-white"
             >
               <item.icon className="w-6 h-6 shrink-0" />
               <span className={`ml-4 text-sm font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'} transition-opacity duration-300`}>
