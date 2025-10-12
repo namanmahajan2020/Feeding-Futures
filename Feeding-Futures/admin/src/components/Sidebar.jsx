@@ -16,7 +16,7 @@ const Sidebar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 border-r h-full ${isSidebarOpen ? 'w-64' : 'w-20'} 
-      ${isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-sky-50 text-sky-900 border-sky-800'}
+      ${isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-gradient-to-r from-slate-50 to-sky-50 bg-gradient-to-b from-indigo-50 to-sky-100 text-sky-900 border-sky-800'}
       p-4 transition-all duration-300 z-30 shadow-xl md:shadow-none`}>
       
       <div className="flex items-center space-x-3 cursor-pointer overflow-hidden">
