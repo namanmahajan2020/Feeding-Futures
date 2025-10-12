@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {LogOut} from 'lucide-react';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -53,9 +54,11 @@ const Profile = () => {
 
                     <button
                         onClick={handleLogout}
-                        className="mt-4 bg-red-600 text-white font-bold px-4 py-2 rounded-md hover:scale-105 hover:bg-red-500"
+                        className="mt-4 bg-red-600 text-white font-bold pr-4 pl-2 py-2 flex flex-row gap-2 rounded-md hover:scale-105 hover:bg-red-500"
                     >
-                        Logout
+                    {/* Logout */}
+                         <LogOut className="w-8 h-6" />
+                          Logout
                     </button>
 
                     <hr className="my-6" />
