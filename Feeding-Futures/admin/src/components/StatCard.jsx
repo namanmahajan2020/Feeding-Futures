@@ -20,12 +20,12 @@ const darkClasses = {
 const StatCard = ({ icon: Icon, title, value, isDarkMode, color }) => {
   return (
     <div
-      className={`p-6 rounded-2xl shadow-lg ${isDarkMode ? "bg-slate-800 text-slate-200" : "bg-white text-slate-900"} transition-shadow hover:shadow-xl`}
+      className={`p-6 rounded-2xl shadow-lg ${isDarkMode ? "bg-slate-700 brightness-90 text-white" : "bg-white text-slate-900"} transition-shadow hover:shadow-xl`}
     >
       <div className="flex items-center justify-between mb-4">
         <h3
           className={`text-sm font-medium uppercase ${
-            isDarkMode ? "text-slate-400" : "text-slate-500"
+            isDarkMode ? "text-white" : "text-slate-500"
           }`}
         >
           {title}
@@ -37,7 +37,7 @@ const StatCard = ({ icon: Icon, title, value, isDarkMode, color }) => {
         >
           {/* Render the icon component passed as a prop */}
           <Icon className="w-6 h-6" />
-        </div>
+        </div> 
       </div>
       <p className="text-4xl font-extrabold">{value}</p>
     </div>

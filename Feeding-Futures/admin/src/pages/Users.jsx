@@ -1,7 +1,7 @@
 // Users.jsx
 
 import React from "react";
-import TableComponent from "../components/TableComponent";  // Make sure TableComponent is correctly imported
+import TableComponent from "../components/TableComponent"; // Make sure TableComponent is correctly imported
 
 const Users = ({ data, isLoading, isDarkMode }) => {
   // Define the columns for the users table
@@ -15,13 +15,12 @@ const Users = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <div>
-      {/* Make sure the columns are defined */}
-      <TableComponent 
-        title="Users" 
-        columns={usersColumns} 
-        data={data.users} 
-        loading={isLoading} 
-        isDarkMode={isDarkMode} 
+      <TableComponent
+        title="Users"
+        columns={usersColumns}
+        data={data.users}
+        loading={isLoading}
+        isDarkMode={isDarkMode}
       />
     </div>
   );
