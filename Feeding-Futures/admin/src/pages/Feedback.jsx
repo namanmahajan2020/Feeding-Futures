@@ -14,7 +14,7 @@ const Feedback = ({ data, isLoading, isDarkMode }) => {
   ];
 
   return (
-    <div>
+    <div className="m-10">
       {/* Pass the feedback columns to the TableComponent */}
       <TableComponent
         title="Feedback"

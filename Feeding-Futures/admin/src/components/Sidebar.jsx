@@ -19,18 +19,18 @@ const Sidebar = () => {
     <nav className={`fixed top-0 left-0 border-r h-full ${isSidebarOpen ? 'w-64' : 'w-20'} 
       ${isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-sky-50 text-sky-900 border-sky-800'}
       p-4 transition-all duration-300 z-30 shadow-xl md:shadow-none`}>
-      <div className="flex items-center space-x-3 mb-8 cursor-pointer overflow-hidden">
-        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`${isSidebarOpen ? '' : 'p-3'} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
+      <div className="flex items-center space-x-3 cursor-pointer overflow-hidden">
+        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`${isSidebarOpen ? 'ml-4 mt-3'  : 'p-3 '} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
           <Menu className="w-6 h-6" />
         </button>
       </div>
 
-      <ul className="space-y-4 mt-15">
+      <ul className="space-y-4 mt-10">
         {navItems.map(item => (
           <li key={item.name}>
             <NavLink
               to={item.path}
-              className={`flex items-center p-3 rounded-xl transition duration-200 
+              className={`flex items-center p-3 rounded-xl transition duration-100 
                 ${item.path === activePage ? 'text-blue-700' : 'hover:bg-sky-700 hover:text-white'}
                 ${isSidebarOpen ? '' : 'justify-center'}`}
               activeclassname="bg-emerald-600 text-blue-700"

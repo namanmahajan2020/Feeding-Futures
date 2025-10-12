@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value={providerValue}>
-      <div className={`min-h-screen font-sans ${isDarkMode ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-800'} transition-colors duration-300`}>
+      <div className={`min-h-screen font-sans ${isDarkMode ? 'bg-slate-800 text-slate-200' : 'bg-sky-50 text-slate-800'} transition-colors duration-300`}>
         <Router>
           {/* The Sidebar, Header, and Footer should be outside the Routes */}
           <div className={`flex min-h-screen ${isSidebarOpen ? 'md:ml-64' : 'md:ml-20'} transition-all duration-300`}>

@@ -13,7 +13,7 @@ const Donations = ({ data, isLoading, isDarkMode }) => {
   ];
 
   return (
-    <div>
+    <div className="m-10">
       {/* Pass the donations columns to the TableComponent */}
       <TableComponent 
         title="Donations" 

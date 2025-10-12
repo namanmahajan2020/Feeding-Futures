@@ -49,7 +49,9 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
               isDarkMode={isDarkMode}
             />
           </div>
+          <div className='mt-10'>
           <DonationsTable donations={data.donations.slice(0, 5)} isLoading={isLoading} isDarkMode={isDarkMode} />
+          </div>
         </>
       )}
     </main>

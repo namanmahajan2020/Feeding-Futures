@@ -14,7 +14,7 @@ const Users = ({ data, isLoading, isDarkMode }) => {
   ];
 
   return (
-    <div>
+    <div className="m-10">
       <TableComponent
         title="Users"
         columns={usersColumns}
