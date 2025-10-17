@@ -17,10 +17,8 @@ const Header = () => {
         <h1 className="text-2xl font-bold hidden sm:block">- Admin</h1>
       </div>
       <div className="flex items-center space-x-4">
-        <span className="text-sm hidden sm:inline text-slate-600 dark:text-slate-300">Status: Logged In (No Auth)</span>
-        <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold bg-emerald-600 text-white shadow-md">
-          A
-        </div>
+        <span className={`text-sm font-semibold hidden sm:inline ${isDarkMode ? "text-slate-100" : " text-slate-800"}`}>Status: Logged In -<span className='text-green-500'> Naman Mahajan</span></span>
+        <img className='w-10 h-10' src="img/admin.png" alt="profile pic" />
       </div>
     </header>
   );
