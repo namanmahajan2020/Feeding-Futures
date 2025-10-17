@@ -22,7 +22,7 @@ function AppLayout({ children }) {
   return (
     <div
       className={`min-h-screen font-sans ${
-        isDarkMode ? 'bg-slate-800 text-slate-200' : 'bg-gradient-to-b from-indigo-50 to-sky-100 text-slate-800'
+        isDarkMode ? 'bg-slate-800 text-slate-200' : 'bg-gradient-to-t from-blue-100 via-green-100 to-indigo-100 text-slate-800'
       } transition-colors duration-300`}
     >
       <div

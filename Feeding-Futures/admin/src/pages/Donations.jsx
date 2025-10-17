@@ -14,6 +14,7 @@ const Donations = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <div className="m-10">
+      <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-pink-400">Dashboard Overview</h2>
       {/* Pass the donations columns to the TableComponent */}
       <TableComponent 
         title="Donations" 

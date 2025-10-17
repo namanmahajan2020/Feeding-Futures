@@ -12,7 +12,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
   }
 
   return (
-    <section className={`${isDarkMode ? 'bg-slate-900 border-slate-700 ' : 'bg-sky-50 border-sky-800  '} border rounded-lg p-4`}>
+    <section className={`${isDarkMode ? 'bg-slate-900 border-slate-700 ' : 'bg-gradient-to-b from-blue-100 to-green-50 border-sky-800  '} border rounded-lg p-4`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className={`text-lg font-medium ${isDarkMode ? 'text-slate-300' : 'text-sky-900'}`}>{title}</h3>
         <div className="text-sm text-slate-500 dark:text-slate-400">Showing last {data.length} entries</div>
