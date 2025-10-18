@@ -20,7 +20,7 @@ const darkClasses = {
 const StatCard = ({ icon: Icon, title, value, isDarkMode, color }) => {
   return (
     <div
-      className={`p-6 rounded-2xl shadow-lg ${isDarkMode ? "bg-slate-700 brightness-90 text-white" : "bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}
+      className={`p-6 min-w-full rounded-2xl shadow-lg ${isDarkMode ? "bg-slate-700 brightness-90 text-white" : "bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}
     >
       <div className="flex items-center flex-col gap-4 justify-between mb-4">
        

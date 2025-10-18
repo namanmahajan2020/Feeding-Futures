@@ -58,9 +58,9 @@ const Sidebar = () => {
             ${isDarkMode ? 'hover:bg-slate-600' : 'hover:bg-sky-500 hover:text-white'}`}
           onClick={() => setIsDarkMode(prev => !prev)}
         >
-          <div className={`flex items-center ${isSidebarOpen ? '' : 'w-full justify-center'}`}>
-            {isDarkMode ? <Sun className="w-8 h-6 text-yellow-300" /> : <Moon className="w-6 h-6 text-black" />}
-            <span className={`${isDarkMode ? 'ml-3' : 'ml-5'} text-base font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+          <div className={`flex ${isSidebarOpen ? '' : 'w-full justify-left'}`}>
+            {isDarkMode ? <Sun className="w-8 h-6 text-yellow-300" /> : <Moon className="w-8 h-6 text-black" />}
+            <span className={`ml-4 text-base font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
               {isDarkMode ? 'Light Mode' : 'Dark Mode'}
             </span>
           </div>
@@ -72,7 +72,7 @@ const Sidebar = () => {
     ${isSidebarOpen ? '' : 'justify-center'}`}
         >
           <LogOut className="w-8 h-6 text-red-400" />
-          <span className={`ml-3 text-base font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+          <span className={`ml-4 text-base font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
             Logout
           </span>
         </button>
