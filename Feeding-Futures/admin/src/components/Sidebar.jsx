@@ -52,32 +52,56 @@ const Sidebar = () => {
         ))}
       </ul>
 
-      <div className="absolute bottom-6 left-4 right-4">
-        <div
-          className={`flex items-center justify-between p-3 rounded-xl cursor-pointer 
-            ${isDarkMode ? 'hover:bg-slate-600' : 'hover:bg-sky-500 hover:text-white'}`}
-          onClick={() => setIsDarkMode(prev => !prev)}
-        >
-          <div className={`flex ${isSidebarOpen ? '' : 'w-full justify-left'}`}>
-            {isDarkMode ? <Sun className="w-8 h-6 text-yellow-300" /> : <Moon className="w-8 h-6 text-black" />}
-            <span className={`ml-4 text-base font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
-              {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-            </span>
-          </div>
-        </div>
-        <button
-          onClick={handleLogout}
-          className={`flex items-center p-3 rounded-xl w-full
-    ${isDarkMode ? 'hover:bg-red-700' : 'hover:bg-red-600 hover:text-white'}
-    ${isSidebarOpen ? '' : 'justify-center'}`}
-        >
-          <LogOut className="w-8 h-6 text-red-400" />
-          <span className={`ml-4 text-base font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
-            Logout
-          </span>
-        </button>
+     <div className="absolute bottom-6 left-4 right-4 space-y-2">
+  <div
+    className={`flex items-center p-3 rounded-xl cursor-pointer
+      ${isDarkMode ? 'hover:bg-slate-600' : 'hover:bg-sky-500 hover:text-white'}
+      ${isSidebarOpen ? 'justify-start' : ''}`}
+    onClick={() => setIsDarkMode(prev => !prev)}
+  >
+    {/* Icon container with fixed width to prevent shift */}
+    <div style={{ minWidth: '32px', display: 'flex', justifyContent: 'center' }}>
+      {isDarkMode ? <Sun className="w-8 mr-2 h-6 text-yellow-300" /> : <Moon className="w-8 mr-2 h-6 text-black" />}
+    </div>
+    {/* Label with smooth opacity + width transition */}
+    <span
+      className="ml-2 text-base font-medium"
+      style={{
+        opacity: isSidebarOpen ? 1 : 0,
+        width: isSidebarOpen ? 'auto' : 0,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        transition: 'opacity 0.3s ease, width 0.3s ease',
+      }}
+    >
+      {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+    </span>
+  </div>
 
-      </div>
+  <button
+    onClick={handleLogout}
+    className={`flex items-center p-3 rounded-xl w-full
+      ${isDarkMode ? 'hover:bg-red-700' : 'hover:bg-red-600 hover:text-white'}
+      ${isSidebarOpen ? 'justify-start' : ''}`}
+  >
+    <div style={{ minWidth: '32px', display: 'flex', justifyContent: 'center' }}>
+      <LogOut className="w-8 h-6 mr-2 text-red-400" />
+    </div>
+    <span
+      className="ml-2 text-base font-medium"
+      style={{
+        opacity: isSidebarOpen ? 1 : 0,
+        width: isSidebarOpen ? 'auto' : 0,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        transition: 'opacity 0.3s ease, width 0.3s ease',
+      }}
+    >
+      Logout
+    </span>
+  </button>
+</div>
+
     </nav>
   );
 };
