@@ -31,30 +31,30 @@ function AppLayout({ children }) {
 
   return (
     <div
-      className={`min-h-screen font-sans ${
+      className={`min-h-screen font-sans flex flex-col ${
         isDarkMode
           ? "bg-slate-800 text-slate-200"
           : "bg-gradient-to-t from-blue-100 via-green-100 to-indigo-100 text-slate-800"
       } transition-colors duration-300`}
     >
+      {/* Only show layout if NOT login page */}
+      {!isLoginPage && <Sidebar />}
+
       <div
-        className={`flex min-h-screen ${
-          !isLoginPage && isSidebarOpen
-            ? "md:ml-64"
-            : !isLoginPage
-            ? "md:ml-20"
-            : ""
-        } transition-all duration-300`}
+        className={`flex flex-col flex-1 transition-all duration-300 ${
+          !isLoginPage ? (isSidebarOpen ? "md:ml-64" : "md:ml-20") : ""
+        }`}
       >
-        {!isLoginPage && <Sidebar />}
+        {!isLoginPage && <Header />}
 
-        <div className="flex-1 flex flex-col">
-          {!isLoginPage && <Header />}
-          <main className="flex-1">{children}</main>
-        </div>
+        {/* Page Content */}
+        <main className="flex-1 p-4 md:p-6 pb-20 overflow-auto">
+          {children}
+        </main>
+
+        {/* Footer INSIDE main layout, not outside */}
+        {!isLoginPage && <Footer />}
       </div>
-
-      {!isLoginPage && <Footer />}
     </div>
   );
 }

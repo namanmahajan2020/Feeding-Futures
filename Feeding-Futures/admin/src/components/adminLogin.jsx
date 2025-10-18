@@ -56,7 +56,7 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 relative">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b relative">
       {/* === LOGIN FORM === */}
       <form
         onSubmit={handleSubmit}
@@ -165,7 +165,7 @@ const AdminLogin = () => {
             <button
               type="button"
               onClick={autoFillCredentials}
-              className="inline-block px-3 py-2 bg-gradient-to-bl from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
+              className="inline-block px-3 py-2 bg-gradient-to-b from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
             >
               ✨ Auto-fill Demo Credentials ✨
             </button>

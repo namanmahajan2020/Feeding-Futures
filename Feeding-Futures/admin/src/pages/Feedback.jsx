@@ -15,7 +15,7 @@ const Feedback = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <div className="m-10">
-            <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-pink-400">Dashboard Overview</h2>
+            <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">User Feedback</h2>
       {/* Pass the feedback columns to the TableComponent */}
       <TableComponent
         title="Feedback"
