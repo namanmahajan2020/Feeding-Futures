@@ -1,22 +1,21 @@
 // Feedback.jsx
 
 import React from "react";
-import TableComponent from "../components/TableComponent"; // Ensure TableComponent is imported
+import TableComponent from "../components/TableComponent";
 
 const Feedback = ({ data, isLoading, isDarkMode }) => {
   // Define the columns for the feedback table
   const feedbackColumns = [
     { header: "Feedback ID", field: "id" },
-    { header: "User", field: "user" },
+    { header: "Name", field: "name" },       // Changed from User → Name
     { header: "Message", field: "message" },
+    { header: "Email", field: "email" },     // Added Email after Date
     { header: "Date", field: "date" },
-    { header: "Status", field: "status" }
   ];
 
   return (
     <div className="m-10">
-            <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">User Feedback</h2>
-      {/* Pass the feedback columns to the TableComponent */}
+      <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">User Feedback</h2>
       <TableComponent
         title="Feedback"
         columns={feedbackColumns}
