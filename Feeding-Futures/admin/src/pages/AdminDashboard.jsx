@@ -1,16 +1,14 @@
-// src/pages/Dashboard.jsx
-
 import React from "react";
 import StatCard from "../components/StatCard";
 import TableComponent from "../components/TableComponent";
 import { FaBox, FaClock, FaUsers, FaComments } from "react-icons/fa";
 
 const Dashboard = ({ data, isLoading, isDarkMode }) => {
-  const totalDonations = data.donations.length;
-  const pendingDonations = data.donations.filter(
+  const totalDonations = data?.donations?.length || 0;
+  const pendingDonations = data?.donations?.filter(
     (d) => d.status === "Pending"
-  ).length;
-  const totalUsers = data.users.length;
+  ).length || 0;
+  const totalUsers = data?.users?.length || 0;
 
   // Columns for Donations Table
   const donationColumns = [
@@ -19,19 +17,23 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
     { header: "Type", field: "meal" },
     { header: "Category", field: "category" },
     { header: "Phone No", field: "phoneno" },
-    { header: "Date", field: "createdAt" },
     { header: "Address", field: "address" },
     { header: "District", field: "district" },
     { header: "Quantity", field: "quantity" },
     { header: "Status", field: "status" },
+    { header: "Date", field: "createdAt" },
   ];
 
-  const donations = (data?.donations || []).slice().reverse().slice(0, 5);
+  // Sort donations by createdAt date (latest first), then take top 5
+  const recentDonations = data?.donations
+    ? [...data.donations]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5)
+    : [];
 
   return (
     <main
-      className={`p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"
-        }`}
+      className={`p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
     >
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
@@ -73,19 +75,23 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
 
             <StatCard
               title="Feedbacks"
-              value={data.feedback.length}
+              value={data?.feedback?.length || 0}
               icon={FaComments}
               color="purple"
               isDarkMode={isDarkMode}
             />
           </div>
-          <h2 className="text-3xl mt-15 font-bold text-sky-700 dark:text-sky-400">Recent Donations</h2>
+
+          <h2 className="text-3xl mt-15 font-bold text-sky-700 dark:text-sky-400">
+            Recent Donations
+          </h2>
+
           {/* Donations Table */}
           <div className="mt-6">
             <TableComponent
               title="Recent Donations"
               columns={donationColumns}
-              data={donations}
+              data={recentDonations}
               loading={isLoading}
               isDarkMode={isDarkMode}
             />

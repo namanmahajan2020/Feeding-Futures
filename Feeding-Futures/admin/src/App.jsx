@@ -14,6 +14,7 @@ import Users from "./pages/Users.jsx";
 import Analytics from "./pages/Analytics.jsx";
 import { AppContext } from "./components/AppContext.jsx";
 import { useDataFetcher } from "./hooks";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 
 // ✅ Protected Route Wrapper
@@ -104,6 +105,7 @@ export default function App() {
   return (
     <AppContext.Provider value={providerValue}>
       <Router>
+         <ScrollToTop />
         <AppLayout>
           <Routes>
             {/* Public Route */}

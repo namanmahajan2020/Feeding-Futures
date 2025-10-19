@@ -1,5 +1,3 @@
-// src/pages/Donations.jsx
-
 import React from "react";
 import TableComponent from "../components/TableComponent";
 
@@ -11,15 +9,19 @@ const Donations = ({ data, isLoading, isDarkMode }) => {
     { header: "Type", field: "meal" },
     { header: "Category", field: "category" },
     { header: "Phone No", field: "phoneno" },
-    { header: "Date", field: "createdAt" },
     { header: "Address", field: "address" },
     { header: "District", field: "district" },
     { header: "Quantity", field: "quantity" },
     { header: "Status", field: "status" },
+    { header: "Date", field: "createdAt" },
   ];
 
-  // Handle missing or empty data safely
-  const donations = data?.donations || [];
+  // Handle missing or empty data safely & sort by latest date
+  const sortedDonations = data?.donations
+    ? [...data.donations].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      )
+    : [];
 
   return (
     <div className="m-5">
@@ -29,7 +31,7 @@ const Donations = ({ data, isLoading, isDarkMode }) => {
       <TableComponent
         title="Donations"
         columns={columns}
-        data={donations}
+        data={sortedDonations}
         loading={isLoading}
         isDarkMode={isDarkMode}
       />

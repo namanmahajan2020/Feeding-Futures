@@ -1,4 +1,6 @@
 import React from "react";
+import { useContext } from "react";
+import { AppContext } from "../components/AppContext.jsx";
 import { useDataFetcher } from "../hooks.js";
 import {
   BarChart,
@@ -16,11 +18,18 @@ import {
   AreaChart,
   Area,
   CartesianGrid,
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
 } from "recharts";
+
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 
 const Analytics = () => {
+  const { isDarkMode } = useContext(AppContext); // ✅ get isDarkMode here
   const { data, isLoading, error } = useDataFetcher();
   const { donations = [], feedback = [], users = [] } = data || {};
 
@@ -54,7 +63,7 @@ const Analytics = () => {
 
   // ✅ Donations over time (assuming donation.date)
   const timeData = donations.reduce((acc, d) => {
-    const date = new Date(d.date).toLocaleDateString();
+    const date = new Date(d.createdAt).toLocaleDateString();
     acc[date] = (acc[date] || 0) + 1;
     return acc;
   }, {});
@@ -74,43 +83,39 @@ const Analytics = () => {
     value,
   }));
 
-  // ✅ Feedback sentiment (assuming feedback.rating or sentiment)
-  const feedbackCounts = feedback.reduce((acc, f) => {
-    const key =
-      f.rating >= 4
-        ? "Positive"
-        : f.rating === 3
-        ? "Neutral"
-        : "Negative";
-    acc[key] = (acc[key] || 0) + 1;
+  // ✅ Gender distribution for users
+  const genderCounts = users.reduce((acc, user) => {
+    const gender = user.gender || "Unknown";
+    acc[gender] = (acc[gender] || 0) + 1;
     return acc;
   }, {});
-  const feedbackData = Object.entries(feedbackCounts).map(([name, value]) => ({
+  const genderData = Object.entries(genderCounts).map(([name, value]) => ({
     name,
     value,
   }));
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+    <div className=" min-h-screen m-5">
+      <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">
         📊 Analytics Dashboard
       </h2>
 
       {/* --- Summary Cards --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white shadow-md rounded-2xl p-5 text-center">
-          <h3 className="text-lg font-semibold text-gray-700">Total Donations</h3>
-          <p className="text-3xl font-bold text-blue-600">{totalDonations}</p>
-        </div>
-        <div className="bg-white shadow-md rounded-2xl p-5 text-center">
-          <h3 className="text-lg font-semibold text-gray-700">Total Users</h3>
-          <p className="text-3xl font-bold text-green-600">{totalUsers}</p>
-        </div>
-        <div className="bg-white shadow-md rounded-2xl p-5 text-center">
-          <h3 className="text-lg font-semibold text-gray-700">Total Feedback</h3>
-          <p className="text-3xl font-bold text-yellow-600">{totalFeedback}</p>
-        </div>
-      </div>
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-16 mb-10 justify-center">
+  <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
+    <h3 className="text-lg font-semibold">Total Donations</h3>
+    <p className="text-3xl font-bold text-blue-600">{totalDonations}</p>
+  </div>
+  <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
+    <h3 className="text-lg font-semibold">Total Users</h3>
+    <p className="text-3xl font-bold text-green-600">{totalUsers}</p>
+  </div>
+  <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
+    <h3 className="text-lg font-semibold">Total Feedback</h3>
+    <p className="text-3xl font-bold text-yellow-600">{totalFeedback}</p>
+  </div>
+</div>
+
 
       {/* --- Charts Grid --- */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -157,6 +162,50 @@ const Analytics = () => {
         </ChartCard>
 
         {/* User Growth */}
+        <ChartCard title="User Registrations Over Time (Radar Chart)">
+  <RadarChart cx="50%" cy="50%" outerRadius="80%" data={userTimeline}>
+    <PolarGrid />
+    <PolarAngleAxis dataKey="name" stroke={isDarkMode ? "#bbb" : "#555"} />
+    <PolarRadiusAxis stroke={isDarkMode ? "#bbb" : "#555"} />
+    <Radar
+      name="Users"
+      dataKey="value"
+      stroke="#8884d8"
+      fill="#8884d8"
+      fillOpacity={0.6}
+    />
+    <Legend />
+    <Tooltip />
+  </RadarChart>
+</ChartCard>
+
+
+        {/* User Gender Distribution (New Donut Chart) */}
+        <ChartCard title="User Gender Distribution" isDarkMode={isDarkMode}>
+          <PieChart>
+            <Pie
+              data={genderData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={100}
+              fill="#8884d8"
+              label={{ fill: isDarkMode ? "white" : "black" }}
+              paddingAngle={5}
+            // dataKey="value"
+            >
+              {genderData.map((entry, index) => (
+                <Cell key={`donut-cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Legend />
+            <Tooltip />
+          </PieChart>
+        </ChartCard>
+
+        {/* User Growth */}
         <ChartCard title="User Registrations Over Time">
           <AreaChart data={userTimeline}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -167,39 +216,28 @@ const Analytics = () => {
           </AreaChart>
         </ChartCard>
 
-        {/* Feedback Sentiment */}
-        <ChartCard title="Feedback Sentiment Analysis">
-          <PieChart>
-            <Pie
-              data={feedbackData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              label
-            >
-              {feedbackData.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Legend />
-            <Tooltip />
-          </PieChart>
-        </ChartCard>
       </div>
     </div>
   );
 };
 
 // ✅ Reusable Chart Wrapper
-const ChartCard = ({ title, children }) => (
-  <div className="bg-white shadow-md rounded-2xl p-5">
-    <h3 className="text-lg font-semibold text-gray-700 mb-4">{title}</h3>
-    <ResponsiveContainer width="100%" height={300}>
-      {children}
-    </ResponsiveContainer>
-  </div>
-);
+const ChartCard = ({ title, children }) => {
+  const { isDarkMode } = useContext(AppContext);
+
+  return (
+    <div
+      className={`shadow-2xl rounded-2xl p-5 mb-6 border-1 ${isDarkMode
+        ? "bg-slate-900 border-slate-700"
+        : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-100"
+        }`}
+    >
+      <h3 className="text-lg font-semibold mb-4">{title}</h3>
+      <ResponsiveContainer width="100%" height={300}>
+        {children}
+      </ResponsiveContainer>
+    </div>
+  );
+};
 
 export default Analytics;

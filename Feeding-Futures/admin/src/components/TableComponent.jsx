@@ -34,7 +34,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
             <tr>
               <th className="p-3 text-left text-pink-500">#</th> {/* Serial Number Header */}
               {columns.map((col) => (
-                <th key={col.field} className="p-3 text-left text-pink-500">
+                <th key={col.field} className={`p-3 text-left ${isDarkMode ? "text-pink-500" : " text-pink-500"}`}>
                   {col.header}
                 </th>
               ))}
@@ -45,7 +45,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
             {data.map((item, index) => (
               <tr
                 key={item._id || item.id || `${title}-${index}`}
-                className="border-t border-slate-100 dark:border-purple-400"
+                className={`border-t ${isDarkMode ? "border-sky-800" : "border-purple-400"}`}
               >
                 <td
                   className={`text-sm font-semibold p-3 ${isDarkMode ? "text-slate-300" : "text-sky-800"
@@ -62,10 +62,18 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                   >
                     {(() => {
                       if (col.field === "createdAt") {
-                        return item[col.field]
-                          ? new Date(item[col.field]).toLocaleDateString("en-GB")
-                          : "—";
+                        if (item[col.field]) {
+                          const date = new Date(item[col.field]);
+                          const day = date.getDate();
+                          const month = date.toLocaleString("en-GB", { month: "short" });
+                          const year = date.getFullYear();
+                          return `${month}\u00A0${day},\u00A0${year}`;
+
+                        } else {
+                          return "—";
+                        }
                       }
+
 
                       if (col.field === "status") {
                         const status = item[col.field] || "—";
