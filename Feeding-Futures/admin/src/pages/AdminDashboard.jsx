@@ -30,7 +30,7 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <main
-      className={`p-4 sm:p-8 ${isDarkMode ? "text-slate-200" : "text-slate-800"
+      className={`p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"
         }`}
     >
       {isLoading ? (
