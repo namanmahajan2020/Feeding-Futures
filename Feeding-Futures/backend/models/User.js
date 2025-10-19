@@ -1,16 +1,18 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  gender: { type: String, required: true },
-  location:{ type: String, required: true },
-},
+const userSchema = new mongoose.Schema(
   {
-    timestamps: true, // Optional: adds createdAt and updatedAt
-  });
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    gender: { type: String, required: true },
+    location: { type: String, required: true },
+  },
+  {
+    timestamps: true, // Enables createdAt and updatedAt
+  }
+);
 
 // Hash password before saving
 userSchema.pre("save", async function (next) {

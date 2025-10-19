@@ -10,7 +10,7 @@ const Users = ({ data, isLoading, isDarkMode }) => {
     { header: "Email", field: "email" },
     { header: "Gender", field: "gender" },
     { header: "Location", field: "location" },
-    { header: "Date", field: "lastActive" },
+    { header: "Date", field: "createdAt" },
   ];
 
   return (

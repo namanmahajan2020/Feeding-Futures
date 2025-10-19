@@ -130,7 +130,7 @@ const Navbar = () => {
       {shouldShowSignIn && (
         <NavLink
           to="/start"
-          className="block px-6 py-2 rounded-full border-1 border-emerald-700  bg-gradient-to-b from-green-500 to-black text-white font-bold hover:bg-gradient-to-b hover:from-sky-500 hover:to-black hover:scale-95 transition duration-200"
+          className="block px-5 py-1.5 rounded-full border-1 border-emerald-700  bg-gradient-to-b from-sky-500 to-black text-white font-bold hover:bg-gradient-to-b hover:from-green-500 hover:to-black hover:scale-95 transition duration-200"
           onClick={() => setNavActive(false)}
         >
           Sign In

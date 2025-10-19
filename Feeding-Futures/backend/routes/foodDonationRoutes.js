@@ -36,6 +36,7 @@ router.post("/", async (req, res) => {
       address,
       name,
       email,
+      status: "Pending",
     });
 
     await donation.save();

@@ -11,10 +11,12 @@ const foodDonationSchema = new mongoose.Schema({
   district: { type: String, required: true },
   address: { type: String, required: true },
   name: { type: String, required: true },
-  email: { type: String, required: true }, 
+  email: { type: String, required: true },
+  status: { type: String, default: "Pending", enum: ["Pending", "Collected"] }, // ✅ must be inside schema
 }, {
   timestamps: true
 });
+
 
 const FoodDonation = mongoose.model("FoodDonation", foodDonationSchema);
 
