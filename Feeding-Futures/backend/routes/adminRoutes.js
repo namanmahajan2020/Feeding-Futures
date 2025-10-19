@@ -16,10 +16,11 @@ router.get("/users", async (req, res) => {
 });
 
 // ✅ Get all feedback
+
 router.get("/feedback", async (req, res) => {
   try {
-    const feedback = await Feedback.find();
-    res.json(feedback);
+    const feedback = await Feedback.find().sort({ createdAt: -1 });
+    res.json(feedback); // frontend can use fb.createdAt as date
   } catch (error) {
     res.status(500).json({ message: "Error fetching feedback", error });
   }

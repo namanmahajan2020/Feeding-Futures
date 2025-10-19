@@ -14,24 +14,24 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
 
   // Columns for Donations Table
   const donationColumns = [
-    { header: "ID", field: "id" },
     { header: "Name", field: "name" },
-    { header: "Food", field: "food" },
+    { header: "Food", field: "foodname" },
+    { header: "Type", field: "meal" },
     { header: "Category", field: "category" },
     { header: "Phone No", field: "phoneno" },
-    { header: "Date", field: "date" },
+    { header: "Date", field: "createdAt" },
     { header: "Address", field: "address" },
+    { header: "District", field: "district" },
     { header: "Quantity", field: "quantity" },
     { header: "Status", field: "status" },
   ];
 
-  const donations = data?.donations?.slice(0, 5) || [];
+  const donations = (data?.donations || []).slice().reverse().slice(0, 5);
 
   return (
     <main
-      className={`p-4 sm:p-8 ${
-        isDarkMode ? "text-slate-200" : "text-slate-800"
-      }`}
+      className={`p-4 sm:p-8 ${isDarkMode ? "text-slate-200" : "text-slate-800"
+        }`}
     >
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
@@ -64,7 +64,7 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
             />
 
             <StatCard
-              title="Total Users/Admins"
+              title="Total Users"
               value={totalUsers}
               icon={FaUsers}
               color="blue"
@@ -72,16 +72,16 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
             />
 
             <StatCard
-              title="New Feedback"
+              title="Feedbacks"
               value={data.feedback.length}
               icon={FaComments}
               color="purple"
               isDarkMode={isDarkMode}
             />
           </div>
-
+          <h2 className="text-3xl mt-15 font-bold text-sky-700 dark:text-sky-400">Recent Donations</h2>
           {/* Donations Table */}
-          <div className="mt-10">
+          <div className="mt-6">
             <TableComponent
               title="Recent Donations"
               columns={donationColumns}
