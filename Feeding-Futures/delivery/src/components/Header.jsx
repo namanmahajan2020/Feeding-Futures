@@ -1,44 +1,94 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { LogIn, UserPlus, Package, Map, LogOut, Menu, X, ChevronRight } from 'lucide-react';
+import AppButton from './AppButton';
+import { ACCENT_COLOR_TAILWIND } from '../styles/constants';
 
-const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+const Header = ({ navigate, isLoggedIn, logout, userName, currentView }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navItems = isLoggedIn
+    ? [
+        { name: "Orders", view: 'orders', icon: Package },
+        { name: "My Orders", view: 'myorders', icon: Package },
+        { name: "Map", view: 'map', icon: Map },
+      ]
+    : [
+        { name: "Login", view: 'login', icon: LogIn },
+        { name: "Signup", view: 'signup', icon: UserPlus },
+      ];
+
+  const getLinkClass = (view) =>
+    `text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center 
+     ${view === currentView ? `bg-emerald-100 text-emerald-700 font-bold` : 'hover:bg-gray-100 hover:text-emerald-700'}`;
+
+  const getMobileLinkClass = (view) =>
+    `block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors flex items-center 
+     ${view === currentView ? `bg-emerald-100 text-emerald-700 font-bold` : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'}`;
 
   return (
-    <header className="bg-white shadow-md px-6 py-3 flex justify-between items-center">
-      <div className="text-2xl font-semibold">
-        Feeding <b className="text-green-600">Futures</b>
+    <header className="bg-white shadow-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex-shrink-0 text-2xl font-extrabold text-gray-800">
+            Feeding <b className={`text-${ACCENT_COLOR_TAILWIND}`}>Futures</b>
+          </div>
+
+          <nav className="hidden md:flex space-x-2 items-center">
+            {navItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => navigate(item.view)}
+                className={getLinkClass(item.view)}
+              >
+                <item.icon className="w-4 h-4 mr-1" />
+                {item.name}
+              </button>
+            ))}
+            {isLoggedIn && (
+              <>
+                <span className="text-sm font-semibold text-gray-700 ml-4 border-l pl-4">👋 {userName}</span>
+                <AppButton onClick={logout} className="!w-auto !py-1 !px-3 !text-sm flex items-center">
+                  <LogOut className="w-4 h-4 mr-1" /> Logout
+                </AppButton>
+              </>
+            )}
+          </nav>
+
+          {/* Mobile Menu */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`md:hidden p-2 rounded-md text-gray-500 hover:text-emerald-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${ACCENT_COLOR_TAILWIND}`}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
-      <div
-        className="md:hidden flex flex-col gap-1 cursor-pointer"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        <div className="w-6 h-0.5 bg-gray-800"></div>
-        <div className="w-6 h-0.5 bg-gray-800"></div>
-        <div className="w-6 h-0.5 bg-gray-800"></div>
-      </div>
-      <nav
-        className={`${
-          menuOpen ? "block" : "hidden"
-        } md:block absolute md:static top-14 left-0 w-full md:w-auto bg-white md:bg-transparent`}
-      >
-        <ul className="flex flex-col md:flex-row gap-3 md:gap-6 p-4 md:p-0 text-center">
-          <li>
-            <a href="delivery.php" className="bg-green-600 text-white px-4 py-2 rounded-md">
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="#" className="bg-green-600 text-white px-4 py-2 rounded-md">
-              Map
-            </a>
-          </li>
-          <li>
-            <a href="deliverymyord.php" className="bg-green-600 text-white px-4 py-2 rounded-md">
-              My Orders
-            </a>
-          </li>
-        </ul>
-      </nav>
+
+      {isMenuOpen && (
+        <div className="md:hidden absolute w-full bg-white shadow-xl border-t border-gray-100">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {navItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => {
+                  navigate(item.view);
+                  setIsMenuOpen(false);
+                }}
+                className={getMobileLinkClass(item.view)}
+              >
+                <item.icon className="w-5 h-5 mr-2" />
+                {item.name}
+                <ChevronRight className="w-4 h-4 ml-auto text-gray-400" />
+              </button>
+            ))}
+            {isLoggedIn && (
+              <AppButton onClick={logout} className="!w-full !py-2 !px-3 !text-base mt-2 flex justify-center items-center">
+                <LogOut className="w-5 h-5 mr-2" /> Logout
+              </AppButton>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };
