@@ -1,60 +1,89 @@
 import React, { useState } from 'react';
 
-const Orders = () => {
-  const [search, setSearch] = useState('');
-  
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-  };
-  
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Search Section */}
-      <section className="bg-white p-8 shadow-md mt-6">
-        <div className="container mx-auto flex flex-col items-center space-y-6">
-          <h2 className="text-3xl font-semibold">Find Nearby Food Providers</h2>
-          <input
-            type="text"
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Search for food providers, events, or donations..."
-            className="w-full max-w-md p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Search
-          </button>
-        </div>
-      </section>
+// Sample order data (replace this with actual data or API calls)
+const orders = [
+  { id: 1, customer: 'John Doe', items: ['Pizza', 'Burger'], total: 25.50, status: 'Pending' },
+  { id: 2, customer: 'Jane Smith', items: ['Sushi', 'Spring Rolls'], total: 18.75, status: 'Delivered' },
+  { id: 3, customer: 'Alice Johnson', items: ['Tacos', 'Burrito'], total: 22.30, status: 'In Progress' },
+  { id: 4, customer: 'Bob Brown', items: ['Salad', 'Juice'], total: 12.00, status: 'Delivered' },
+  { id: 5, customer: 'Charlie Lee', items: ['Steak', 'Fries'], total: 30.40, status: 'Pending' },
+];
 
-      {/* Featured Providers Section */}
-      <section className="bg-gray-100 py-12">
-        <div className="container mx-auto text-center">
-          <h2 className="text-2xl font-semibold mb-6">Featured Food Providers</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold">ABC Mess</h3>
-              <p className="text-gray-500">Offering surplus food from 12pm - 3pm.</p>
-              <button className="mt-4 bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700">
-                Claim Surplus
-              </button>
+const Orders = () => {
+  const [selectedStatus, setSelectedStatus] = useState('All');
+
+  // Filter orders based on selected status
+  const filteredOrders = selectedStatus === 'All' 
+    ? orders 
+    : orders.filter(order => order.status === selectedStatus);
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-semibold text-center mb-6">Orders</h2>
+
+      {/* Filter Controls */}
+      <div className="mb-6 flex justify-center space-x-4">
+        <button
+          onClick={() => setSelectedStatus('All')}
+          className={`px-4 py-2 rounded-md text-sm ${selectedStatus === 'All' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setSelectedStatus('Pending')}
+          className={`px-4 py-2 rounded-md text-sm ${selectedStatus === 'Pending' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+        >
+          Pending
+        </button>
+        <button
+          onClick={() => setSelectedStatus('In Progress')}
+          className={`px-4 py-2 rounded-md text-sm ${selectedStatus === 'In Progress' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+        >
+          In Progress
+        </button>
+        <button
+          onClick={() => setSelectedStatus('Delivered')}
+          className={`px-4 py-2 rounded-md text-sm ${selectedStatus === 'Delivered' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+        >
+          Delivered
+        </button>
+      </div>
+
+      {/* Orders List */}
+      <div className="space-y-4">
+        {filteredOrders.map((order) => (
+          <div
+            key={order.id}
+            className="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-lg font-medium">Order #{order.id}</h3>
+              <span className="text-sm text-gray-500">{order.customer}</span>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold">XYZ Cafe</h3>
-              <p className="text-gray-500">Donating meals every day at 6pm.</p>
-              <button className="mt-4 bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700">
-                Claim Surplus
-              </button>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold">MNO Party</h3>
-              <p className="text-gray-500">Leftovers from a recent party event.</p>
-              <button className="mt-4 bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700">
-                Claim Surplus
-              </button>
+            
+            <ul className="space-y-1 mb-3">
+              {order.items.map((item, index) => (
+                <li key={index} className="text-sm text-gray-700">{item}</li>
+              ))}
+            </ul>
+            
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-lg text-indigo-600">Total: ${order.total.toFixed(2)}</span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm ${
+                  order.status === 'Delivered'
+                    ? 'bg-green-100 text-green-600'
+                    : order.status === 'Pending'
+                    ? 'bg-yellow-100 text-yellow-600'
+                    : 'bg-blue-100 text-blue-600'
+                }`}
+              >
+                {order.status}
+              </span>
             </div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
     </div>
   );
 };

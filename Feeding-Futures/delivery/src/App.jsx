@@ -6,6 +6,8 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import About from "./pages/About.jsx";
 import Footer from "./components/Footer.jsx";
 import Navbar from "./components/Navbar.jsx"; 
+import Contact from "./pages/Contact.jsx";
+import PastOrders from "./pages/PastOrders.jsx";
 
 function App() {
   // State to track if the user is logged in
@@ -30,8 +32,10 @@ function App() {
         {/* Redirect to signup if not logged in */}
         <Route path="/" element={isLoggedIn ? <Orders /> : <Navigate to="/signup" />} />
         <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <Signup />} />
-
         <Route path="/about" element={<About />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/past-orders" element={<PastOrders />} />
       </Routes>
 
       <Footer />

@@ -19,7 +19,7 @@ const Header = ({ isLoggedIn = false, logout, userName = "", currentView }) => {
      { name: "Orders", path: "/orders", icon: Package },
     { name: "History", path: "/past-orders", icon: Package },
     { name: "About Us", path: "/about", icon: Package },
-      { name: "Contact", path: "/about", icon: Map },
+      { name: "Contact", path: "/contact", icon: Map },
     { name: "Join Us", path: "/about", icon: UserPlus },
   ];
 

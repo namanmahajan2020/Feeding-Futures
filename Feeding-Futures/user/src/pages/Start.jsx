@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from "react-router-dom";
 const Start = () => {
   return (
-    <div className="h-screen w-full bg-gradient-to-t from-green-50 to-white flex flex-col items-center font-poppins px-4">
+    <div className="pb-28 w-full bg-gradient-to-t from-green-50 to-white flex flex-col items-center font-poppins px-4">
       {/* Title */}
       <p className="text-3xl md:text-5xl font-bold mb-6 mt-32 text-center text-black">
         Welcome to Feeding <span className="text-[#06C167] font-extrabold">Futures</span>

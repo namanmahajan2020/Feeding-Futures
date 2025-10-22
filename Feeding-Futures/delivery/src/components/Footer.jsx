@@ -18,11 +18,11 @@ const Footer = () => {
             <div className="flex flex-col space-x-6">
                 {/* Mail Icon */}
                 <a
-                    href="mailto:contact@feedingfutures.org"
+                    href="mailto:feedingfutures@gmail.com"
                     className="flex items-center text-white hover:text-emerald-500 transition-colors duration-200 text-sm"
                 >
                     <Mail className="w-3 h-3 mr-2" />
-                    contact@feedingfutures.org
+                    feedingfutures@gmail.com
                 </a>
 
                 {/* Phone Icon */}
