@@ -1,19 +1,19 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import Delivery from "../models/delivery.js";
+import DeliveryPartner from "../models/delivery.js";
 
 const router = express.Router();
 
 // ------------------------
-// DELIVERY SIGNUP
+// DELIVERY PARTNER SIGNUP
 // ------------------------
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password, gender, location } = req.body;
 
     // Check if email already exists
-    const existingDelivery = await Delivery.findOne({ email });
-    if (existingDelivery) {
+    const existingPartner = await DeliveryPartner.findOne({ email });
+    if (existingPartner) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save new delivery partner
-    const newDelivery = new Delivery({
+    const newPartner = new DeliveryPartner({
       name,
       email,
       password: hashedPassword,
@@ -29,15 +29,15 @@ router.post("/signup", async (req, res) => {
       location,
     });
 
-    await newDelivery.save();
+    await newPartner.save();
 
     res.status(201).json({
       message: "Delivery partner registered successfully",
       user: {
-        name: newDelivery.name,
-        email: newDelivery.email,
-        gender: newDelivery.gender,
-        location: newDelivery.location,
+        name: newPartner.name,
+        email: newPartner.email,
+        gender: newPartner.gender,
+        location: newPartner.location,
       },
     });
   } catch (err) {
@@ -46,18 +46,18 @@ router.post("/signup", async (req, res) => {
 });
 
 // ------------------------
-// DELIVERY LOGIN
+// DELIVERY PARTNER LOGIN
 // ------------------------
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const delivery = await Delivery.findOne({ email });
-    if (!delivery) {
+    const partner = await DeliveryPartner.findOne({ email });
+    if (!partner) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, delivery.password);
+    const isPasswordValid = await bcrypt.compare(password, partner.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -65,10 +65,10 @@ router.post("/login", async (req, res) => {
     res.json({
       message: "Login successful",
       user: {
-        name: delivery.name,
-        email: delivery.email,
-        gender: delivery.gender,
-        location: delivery.location,
+        name: partner.name,
+        email: partner.email,
+        gender: partner.gender,
+        location: partner.location,
       },
     });
   } catch (err) {
