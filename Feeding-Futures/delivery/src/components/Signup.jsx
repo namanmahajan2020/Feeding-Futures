@@ -164,10 +164,10 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 py-15">
+    <div className={`flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 ${isSignup ? "" : "py-22"}`}>
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-gradient-to-t from-green-100 mt-5 to-white p-6 rounded-xl shadow-xl border border-green-200"
+        className="w-full max-w-md bg-gradient-to-t from-green-100 mt-4 mb-5 to-white p-6 rounded-xl shadow-xl border border-green-200"
       >
         <h2 className="text-2xl font-bold text-green-600 text-center mb-5">
           {isSignup ? "Create Your Account" : "Login to Your Account"}
