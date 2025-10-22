@@ -19,12 +19,16 @@ const GenderSelect = ({ value, onChange }) => {
   return (
     <div className="relative w-full mb-3" ref={ref}>
       <div
-        className={`w-full p-3 rounded-lg border border-green-500 bg-gray-50 flex justify-between items-center cursor-pointer ${value ? "text-gray-800" : "text-gray-500"}`}
+        className={`w-full p-3 rounded-lg border border-green-500 bg-gray-50 flex justify-between items-center cursor-pointer ${
+          value ? "text-gray-800" : "text-gray-500"
+        }`}
         onClick={() => setOpen(!open)}
       >
         {value || "Select gender"}
         <svg
-          className={`w-5 h-5 text-green-600 transform ${open ? "rotate-180" : ""} transition-transform duration-200`}
+          className={`w-5 h-5 text-green-600 transform ${
+            open ? "rotate-180" : ""
+          } transition-transform duration-200`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -71,12 +75,16 @@ const LocationSelect = ({ value, onChange }) => {
   return (
     <div className="relative w-full mb-3" ref={ref}>
       <div
-        className={`w-full p-3 rounded-lg border border-green-500 bg-gray-50 flex justify-between items-center cursor-pointer ${value ? "text-gray-800" : "text-gray-500"}`}
+        className={`w-full p-3 rounded-lg border border-green-500 bg-gray-50 flex justify-between items-center cursor-pointer ${
+          value ? "text-gray-800" : "text-gray-500"
+        }`}
         onClick={() => setOpen(!open)}
       >
         {value || "Select location"}
         <svg
-          className={`w-5 h-5 text-green-600 transform ${open ? "rotate-180" : ""} transition-transform duration-200`}
+          className={`w-5 h-5 text-green-600 transform ${
+            open ? "rotate-180" : ""
+          } transition-transform duration-200`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -129,9 +137,10 @@ const AuthForm = () => {
     setSuccess("");
 
     try {
+      // 🔹 Changed API URLs from /api/users/... to /api/delivery/...
       const url = isSignup
-        ? "http://localhost:5000/api/users/signup"
-        : "http://localhost:5000/api/users/login";
+        ? "http://localhost:5000/api/delivery/signup"
+        : "http://localhost:5000/api/delivery/login";
 
       const res = await axios.post(url, formData);
       setSuccess(res.data.message);
@@ -145,10 +154,13 @@ const AuthForm = () => {
         localStorage.setItem("location", user.location);
         navigate("/Orders");
       } else if (isSignup) {
-        const loginRes = await axios.post("http://localhost:5000/api/users/login", {
-          email: formData.email,
-          password: formData.password,
-        });
+        const loginRes = await axios.post(
+          "http://localhost:5000/api/delivery/login",
+          {
+            email: formData.email,
+            password: formData.password,
+          }
+        );
 
         const loginUser = loginRes.data.user;
 
@@ -164,7 +176,11 @@ const AuthForm = () => {
   };
 
   return (
-    <div className={`flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 ${isSignup ? "" : "py-22"}`}>
+    <div
+      className={`flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 ${
+        isSignup ? "" : "py-22"
+      }`}
+    >
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-gradient-to-t from-green-100 mt-4 mb-5 to-white p-6 rounded-xl shadow-xl border border-green-200"
