@@ -143,7 +143,7 @@ const AuthForm = () => {
         localStorage.setItem("email", user.email);
         localStorage.setItem("gender", user.gender);
         localStorage.setItem("location", user.location);
-        navigate("/");
+        navigate("/Orders");
       } else if (isSignup) {
         const loginRes = await axios.post("http://localhost:5000/api/users/login", {
           email: formData.email,
@@ -156,7 +156,7 @@ const AuthForm = () => {
         localStorage.setItem("email", loginUser.email);
         localStorage.setItem("gender", loginUser.gender);
         localStorage.setItem("location", loginUser.location);
-        navigate("/");
+        navigate("/Orders");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

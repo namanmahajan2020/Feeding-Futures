@@ -31,11 +31,11 @@ function App() {
       <Routes>
         {/* Redirect to signup if not logged in */}
         <Route path="/" element={isLoggedIn ? <Orders /> : <Navigate to="/signup" />} />
+        <Route path="/orders" element={isLoggedIn ? <Orders /> : <Navigate to="/signup" />} />
+        <Route path="/past-orders" element={isLoggedIn ? <PastOrders /> : <Navigate to="/signup" />} />
         <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <Signup />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/past-orders" element={<PastOrders />} />
+        <Route path="/about" element={isLoggedIn ? <About /> : <Navigate to="/signup" />} />
+        <Route path="/contact" element={isLoggedIn ? <Contact /> : <Navigate to="/signup" />} />
       </Routes>
 
       <Footer />

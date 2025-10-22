@@ -1,39 +1,57 @@
-import React, { useState } from "react";
-import {
-  LogIn,
-  UserPlus,
-  Package,
-  Map,
-  LogOut,
-  Menu,
-  X,
-  ChevronRight,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { LogIn, UserPlus, Package, Map, Info, Mail, Archive, File, LogOut, Menu, X, ChevronRight } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const Header = ({ isLoggedIn = false, logout, userName = "", currentView }) => {
+const Header = ({ isLoggedIn = false, currentView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");  // Corrected the state variable name
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const email = localStorage.getItem("email");
+      if (email) {
+        setUserEmail(email);  // Set email if it exists in localStorage
+      }
+    };
+
+    // Listen to localStorage changes (cross-tab)
+    window.addEventListener("storage", checkLoginStatus);
+
+    // Check immediately on mount
+    checkLoginStatus();
+
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  },[]);  // Empty dependency array ensures effect runs only on mount/unmount
 
   const navItems = [
-     { name: "Orders", path: "/orders", icon: Package },
-    { name: "History", path: "/past-orders", icon: Package },
-    { name: "About Us", path: "/about", icon: Package },
-      { name: "Contact", path: "/contact", icon: Map },
-    { name: "Join Us", path: "/about", icon: UserPlus },
+    { name: "Orders", path: "/orders", icon: Package },
+    { name: "History", path: "/past-orders", icon: File },
+    { name: "About Us", path: "/about", icon: Info },
+    { name: "Contact", path: "/contact", icon: Mail },
+    { name: "Join Us", path: "/join-us", icon: UserPlus },
   ];
 
-  const getLinkClass = (view) =>
-    `text-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center 
-     ${view === currentView
-       ? "bg-emerald-100 text-emerald-700 font-bold"
-       : "hover:bg-gray-100 hover:text-emerald-700"}`;
+  const getLinkClass = (path) =>
+    `px-3 py-2 rounded-md text-sm transition-colors flex items-center 
+     ${location.pathname === path
+      ? "text-emerald-600 font-bold"
+      : "hover:bg-emerald-50 text-gray-600 font-medium hover:text-emerald-700"}`;
 
-  const getMobileLinkClass = (view) =>
+  const getMobileLinkClass = (path) =>
     `block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors flex items-center 
-     ${view === currentView
-       ? "bg-emerald-100 text-emerald-700 font-bold"
-       : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"}`;
+     ${location.pathname === path
+      ? "bg-emerald-100 text-emerald-700 font-bold"
+      : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"}`;
+
+  const logout = () => {
+    localStorage.clear();
+    navigate("/Signup"); 
+  };
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -52,7 +70,7 @@ const Header = ({ isLoggedIn = false, logout, userName = "", currentView }) => {
               <button
                 key={item.name}
                 onClick={() => navigate(item.path)}
-                className={getLinkClass(item.name)}
+                className={getLinkClass(item.path)} // Use item.path here
               >
                 <item.icon className="w-4 h-4 mr-1" />
                 {item.name}
@@ -62,7 +80,7 @@ const Header = ({ isLoggedIn = false, logout, userName = "", currentView }) => {
             {isLoggedIn && (
               <>
                 <span className="text-sm font-semibold text-gray-700 ml-4 border-l pl-4">
-                  👋 {userName}
+                  👋 {"name"} 
                 </span>
                 <button
                   onClick={logout}
@@ -95,7 +113,7 @@ const Header = ({ isLoggedIn = false, logout, userName = "", currentView }) => {
                   navigate(item.path);
                   setIsMenuOpen(false);
                 }}
-                className={getMobileLinkClass(item.name)}
+                className={getMobileLinkClass(item.path)} // Use item.path here
               >
                 <item.icon className="w-5 h-5 mr-2" />
                 {item.name}
