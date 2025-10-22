@@ -14,7 +14,7 @@ const Feedback = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <div className="m-5">
-      <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">User Feedback</h2>
+      <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">Feedback</h2>
       <TableComponent
         columns={feedbackColumns}
         data={data.feedback} // Assuming data.feedback contains the feedback data
