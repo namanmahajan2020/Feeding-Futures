@@ -177,7 +177,7 @@ const AuthForm = () => {
 
   return (
     <div
-      className={`flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 ${
+      className={`flex items-center justify-center bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 px-4 ${
         isSignup ? "" : "py-22"
       }`}
     >

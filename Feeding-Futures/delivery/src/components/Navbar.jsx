@@ -64,7 +64,7 @@ const Header = ({ isLoggedIn = false }) => {
   };
 
   return (
-    <header className="bg-white border-b-2 border-green-500 shadow-lg sticky top-0 z-50">
+   <header className="border-b-1 border-white shadow-lg sticky top-0 z-50 bg-transparent backdrop-blur-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -103,7 +103,7 @@ const Header = ({ isLoggedIn = false }) => {
             {(!isLoggedIn || isSignupPage) && (
               <button
                 onClick={() => navigate("/orders")}
-                className="ml-3 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
+                className="ml-3 bg-gradient-to-tl from-sky-500 via-indigo-500 to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
               >
                 <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />
                 Login as Admin/User

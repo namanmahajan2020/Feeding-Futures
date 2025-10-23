@@ -48,7 +48,7 @@ function Contact() {
   };
 
   return (
-    <div className=" bg-gradient-to-b from-blue-50 to-white font-poppins">
+    <div className=" bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 font-poppins">
       {/* Heading */}
       <div className="flex justify-center">
         <p className="text-4xl font-extrabold leading-tight my-6 mb-10 border-b-4 border-b-green-600 pb-1 inline-block">
@@ -57,7 +57,7 @@ function Contact() {
       </div>
 
       {/* Contact Form and Info */}
-      <div className="max-w-4xl mx-auto px-6 md:px-0 grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+      <div className="max-w-4xl mx-auto px-6 md:px-0 grid grid-cols-1 md:grid-cols-2 gap-10 pb-9">
         {/* Form */}
         <form
           onSubmit={handleSubmit}
