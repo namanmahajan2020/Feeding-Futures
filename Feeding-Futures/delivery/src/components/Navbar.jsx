@@ -102,7 +102,7 @@ const Header = ({ isLoggedIn = false }) => {
             {/* ✅ On signup page, show “Login as Admin/User” button */}
             {(!isLoggedIn || isSignupPage) && (
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/orders")}
                 className="ml-3 bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
               >
                 <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />

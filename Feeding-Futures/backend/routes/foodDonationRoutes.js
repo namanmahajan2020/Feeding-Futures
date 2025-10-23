@@ -1,12 +1,9 @@
-// routes/foodDonationRoutes.js
-
 import express from "express";
 import FoodDonation from "../models/foodDonation.js";
 
 const router = express.Router();
 
-// @route   POST /api/food-donation
-// @desc    Create a new food donation entry
+// POST /api/food-donation — create a new donation
 router.post("/", async (req, res) => {
   const {
     foodname,
@@ -20,7 +17,6 @@ router.post("/", async (req, res) => {
     email,
   } = req.body;
 
-  // Basic validation
   if (!foodname || !meal || !category || !quantity || !phoneno || !district || !address || !name) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -47,9 +43,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Add this to your existing router
-
-// Route to fetch donations by email
+// POST /api/food-donation/get — get donations by email
 router.post("/get", async (req, res) => {
   const { email } = req.body;
 
@@ -66,6 +60,15 @@ router.post("/get", async (req, res) => {
   }
 });
 
-
+// NEW: GET /api/food-donation — get all donations (for orders page)
+router.get("/", async (req, res) => {
+  try {
+    const donations = await FoodDonation.find().sort({ createdAt: -1 });
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("Error fetching all donations:", error);
+    res.status(500).json({ message: "Server error while fetching donations" });
+  }
+});
 
 export default router;

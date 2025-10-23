@@ -34,7 +34,7 @@ function App() {
        {/* Redirect to signup if not logged in */}
         <Route path="/orders" element={isLoggedIn ? <Orders /> : <Navigate to="/signup" />} />
         <Route path="/past-orders" element={isLoggedIn ? <PastOrders /> : <Navigate to="/signup" />} />
-        <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <Signup />} />
+        <Route path="/signup" element={isLoggedIn ? <Navigate to="/orders" /> : <Signup />} />
         <Route path="/contact" element={isLoggedIn ? <Contact /> : <Navigate to="/signup" />} />
       </Routes>
 
