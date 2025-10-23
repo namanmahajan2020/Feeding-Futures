@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <footer
             id="contact"
-            className="bg-gradient-to-b from-blue-900 to-indigo-900 py-3 px-6 text-center text-white flex justify-between items-center"
+            className="bg-gradient-to-b from-blue-900 to-indigo-900 py-3 px-6 text-center text-white flex justify-between items-center border-t-1"
         >
             <div className="flex-shrink-0 text-2xl font-extrabold text-white cursor-pointer">
                 Feeding <b className="text-emerald-500">Futures</b>

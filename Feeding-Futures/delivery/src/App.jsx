@@ -29,12 +29,12 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} /> {/* Passing auth state to Navbar */}
 
       <Routes>
-        {/* Redirect to signup if not logged in */}
-        <Route path="/" element={isLoggedIn ? <Orders /> : <Navigate to="/signup" />} />
+       <Route path="/" element={<About />} />
+       <Route path="/about" element={<About />} />
+       {/* Redirect to signup if not logged in */}
         <Route path="/orders" element={isLoggedIn ? <Orders /> : <Navigate to="/signup" />} />
         <Route path="/past-orders" element={isLoggedIn ? <PastOrders /> : <Navigate to="/signup" />} />
         <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <Signup />} />
-        <Route path="/about" element={isLoggedIn ? <About /> : <Navigate to="/signup" />} />
         <Route path="/contact" element={isLoggedIn ? <Contact /> : <Navigate to="/signup" />} />
       </Routes>
 

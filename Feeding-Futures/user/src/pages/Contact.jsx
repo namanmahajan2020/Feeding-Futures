@@ -98,7 +98,7 @@ function Contact() {
       {/* Heading */}
       <div className="flex justify-center">
         <p className="text-4xl font-extrabold leading-tight pt-24 my-6 mb-10 border-b-4 border-b-green-600 pb-1 inline-block">
-          Contact <span className='text-green-800'>Us</span>
+          Contact <span className='text-green-600'>Us</span>
         </p>
       </div>
 

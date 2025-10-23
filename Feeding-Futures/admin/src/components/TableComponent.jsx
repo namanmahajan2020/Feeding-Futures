@@ -83,9 +83,8 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                             "bg-[#d0fae5] text-[#006045]",
                           Pending:
                             "bg-[#fef3c6] text-[#973c00]",
-                          Default: isDarkMode
-                            ? "bg-slate-600 text-white"
-                            : "bg-slate-300 text-black",
+                          Default:
+                            "bg-blue-200 text-blue-600"
                         };
 
                         const statusClass = statusStyles[status] || statusStyles.Default;
