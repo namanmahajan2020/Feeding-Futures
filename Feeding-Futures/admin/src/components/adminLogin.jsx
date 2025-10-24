@@ -117,7 +117,7 @@ const AdminLogin = () => {
         className="pointer-events-auto select-none absolute bottom-6 left-6 transform-gpu md:left-12 md:bottom-12"
       >
         <div
-          className="relative w-72 md:w-80 p-4 rounded-3xl bg-gradient-to-b from-black via-teal-900 to-green-500 text-white ring-2 ring-pink-300 overflow-hidden"
+          className="relative w-72 md:w-80 p-4 rounded-3xl bg-gradient-to-b from-black via-teal-900 to-green-500 text-white ring-2 overflow-hidden"
           role="region"
           aria-label="Demo credentials (for demo only)"
         >
@@ -165,7 +165,7 @@ const AdminLogin = () => {
             <button
               type="button"
               onClick={autoFillCredentials}
-              className="inline-block px-3 py-2 bg-gradient-to-b from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
+              className="border inline-block px-3 py-2 bg-gradient-to-b from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
             >
               ✨ Auto-fill Demo Credentials ✨
             </button>

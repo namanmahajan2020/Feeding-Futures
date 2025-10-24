@@ -12,7 +12,9 @@ const foodDonationSchema = new mongoose.Schema({
   address: { type: String, required: true },
   name: { type: String, required: true },
   email: { type: String, required: true },
-  status: { type: String, default: "Pending", enum: ["Pending", "Collected","Processing"] }, // ✅ must be inside schema
+  status: { type: String, default: "Pending", enum: ["Pending", "Collected", "Processing"] }, // ✅ must be inside schema
+  rating: { type: Number, default: 0 },
+  deliveryPartner: { type: String, default: "" },
 }, {
   timestamps: true
 });

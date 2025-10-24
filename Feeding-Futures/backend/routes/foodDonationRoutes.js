@@ -71,4 +71,35 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Update delivery partner email
+router.put("/assign/:id", async (req, res) => {
+  const { deliveryPartner } = req.body;
+  try {
+    const donation = await FoodDonation.findByIdAndUpdate(
+      req.params.id,
+      { deliveryPartner },
+      { new: true }
+    );
+    res.json(donation);
+  } catch (error) {
+    res.status(500).json({ message: "Error assigning delivery partner" });
+  }
+});
+
+// Update rating
+router.put("/rate/:id", async (req, res) => {
+  const { rating } = req.body;
+  try {
+    const donation = await FoodDonation.findByIdAndUpdate(
+      req.params.id,
+      { rating },
+      { new: true }
+    );
+    res.json(donation);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating rating" });
+  }
+});
+
+
 export default router;

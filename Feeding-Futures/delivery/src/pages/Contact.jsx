@@ -48,16 +48,16 @@ function Contact() {
   };
 
   return (
-    <div className=" bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 font-poppins">
+    <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 font-poppins">
       {/* Heading */}
       <div className="flex justify-center">
-        <p className="text-4xl font-extrabold leading-tight my-6 mb-10 border-b-4 border-b-green-600 pb-1 inline-block">
+        <p className="text-4xl font-extrabold leading-tight my-6 pt-8 mb-15 border-b-4 border-b-green-600 pb-1 inline-block">
           Contact <span className='text-green-800'>Us</span>
         </p>
       </div>
 
       {/* Contact Form and Info */}
-      <div className="max-w-4xl mx-auto px-6 md:px-0 grid grid-cols-1 md:grid-cols-2 gap-10 pb-9">
+      <div className="max-w-4xl mx-auto px-6 md:px-0 grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Form */}
         <form
           onSubmit={handleSubmit}

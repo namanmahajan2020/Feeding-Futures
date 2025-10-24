@@ -64,9 +64,9 @@ const Orders = () => {
   };
 
   return (
-    <div className="bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
+    <div className=" min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
       <div className="max-w-5xl mx-auto p-6">
-        <h2 className="text-2xl font-semibold text-center mb-6">Orders</h2>
+        <h2 className="text-3xl text-indigo-700 font-semibold text-center underline-offset-6 underline mb-6">ORDERS</h2>
 
         {/* Filter Controls */}
         <div className="mb-6 flex justify-center space-x-4">
@@ -100,7 +100,7 @@ const Orders = () => {
                     <span className="text-indigo-600 font-semibold">
                       #{index + 1}
                     </span>
-                    <span>{order.foodname}</span>
+                    <span className="text-indigo-600 font-semibold">{order.foodname}</span>
                   </h3>
                   <div className="flex flex-col gap-2 text-right">
                     <span className="text-indigo-700 font-semibold">{order.name}</span>
