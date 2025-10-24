@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { FaStar } from "react-icons/fa";
 
 const PastOrder = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [yourEmail, setYourEmail] = useState("");
+  const [ratings, setRatings] = useState({}); // temporary (user-selected)
+  const [submittedRatings, setSubmittedRatings] = useState({}); // actually submitted ones
+  const [showRatingBox, setShowRatingBox] = useState({});
+  const [hoveredStars, setHoveredStars] = useState({});
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
@@ -23,7 +28,6 @@ const PastOrder = () => {
 
         const data = await response.json();
 
-        // ✅ Only include collected orders for this delivery partner
         const collectedOrders = data.filter(
           (order) =>
             order.deliveryPartner === storedEmail &&
@@ -34,6 +38,13 @@ const PastOrder = () => {
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
 
+        // Initialize submitted ratings (from DB)
+        const initialSubmittedRatings = sorted.reduce((acc, order) => {
+          if (order.rating && order.rating > 0) acc[order._id] = order.rating;
+          return acc;
+        }, {});
+
+        setSubmittedRatings(initialSubmittedRatings);
         setOrders(sorted);
       } catch (err) {
         console.error("❌ Error fetching orders:", err);
@@ -47,26 +58,70 @@ const PastOrder = () => {
   }, []);
 
   const formatDate = (dateString) => {
-    const options = {
+    return new Date(dateString).toLocaleString(undefined, {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    };
-    return new Date(dateString).toLocaleString(undefined, options);
+    });
+  };
+
+  const handleShowRating = (orderId) => {
+    setShowRatingBox((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId],
+    }));
+  };
+
+  const handleSetRating = (orderId, value) => {
+    setRatings((prev) => ({
+      ...prev,
+      [orderId]: value,
+    }));
+  };
+
+  const handleSubmitRating = async (orderId) => {
+    const rating = ratings[orderId];
+    if (!rating) return alert("Please select a rating before submitting.");
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/food-donation/rate/${orderId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rating }),
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to update rating");
+
+      setShowRatingBox((prev) => ({ ...prev, [orderId]: false }));
+      setSubmittedRatings((prev) => ({ ...prev, [orderId]: rating }));
+
+      setOrders((prev) =>
+        prev.map((order) =>
+          order._id === orderId ? { ...order, rating } : order
+        )
+      );
+    } catch (err) {
+      console.error("❌ Error submitting rating:", err);
+      alert("Failed to submit rating. Please try again later.");
+    }
   };
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-64 text-lg font-medium">
+      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center h-64 text-lg font-medium">
         Loading your collected orders...
       </div>
     );
 
   if (error)
     return (
-      <div className="flex justify-center items-center h-64 text-red-600 font-medium text-center">
+      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center h-64 text-red-600 font-medium text-center">
         {error}
       </div>
     );
@@ -74,7 +129,6 @@ const PastOrder = () => {
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
       <div className="max-w-5xl mx-auto p-6">
-        {/* 🌟 Stylish Title Section */}
         <div className="text-center mb-10">
           <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-transparent drop-shadow-sm">
             Your Past Collected Orders
@@ -92,7 +146,6 @@ const PastOrder = () => {
           )}
         </div>
 
-        {/* Orders List */}
         <div className="space-y-4">
           {orders.length === 0 ? (
             <p className="text-center text-gray-500">
@@ -102,52 +155,126 @@ const PastOrder = () => {
             orders.map((order, index) => (
               <div
                 key={order._id}
-                className="p-4 bg-white border border-slate-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                className="bg-slate-100 border-2 border-white rounded-lg shadow-sm overflow-hidden"
               >
-                {/* Header */}
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-semibold text-indigo-700 flex items-center space-x-2">
-                    <span className="text-sky-500">#{index + 1}</span>
-                    <span>{order.foodname}</span>
-                  </h3>
-                  <div className="text-right">
-                    <span className="text-indigo-700 font-semibold block">
-                      {order.name}
-                    </span>
-                    <span className="text-sm text-gray-400">
-                      {formatDate(order.createdAt)}
-                    </span>
+                <div className="flex flex-col md:flex-row">
+                  {/* Left Section */}
+                  <div className="flex-1 p-6">
+                    <div className="flex items-center mb-4">
+                      <span className="text-sky-500 font-semibold text-lg mr-3">
+                        #{index + 1}
+                      </span>
+                      <h3 className="text-xl font-bold text-indigo-600">
+                        {order.foodname}
+                      </h3>
+                    </div>
+
+                    <div className="space-y-2 text-sm">
+                      <div><span className="font-semibold text-gray-700">Meal :</span> <span className="text-gray-600">{order.meal}</span></div>
+                      <div><span className="font-semibold text-gray-700">Category :</span> <span className="text-gray-600">{order.category}</span></div>
+                      <div><span className="font-semibold text-gray-700">Quantity :</span> <span className="text-gray-600">{order.quantity} kg</span></div>
+                      <div><span className="font-semibold text-gray-700">Address :</span> <span className="text-gray-600">{order.address}</span></div>
+                      <div><span className="font-semibold text-gray-700">District :</span> <span className="text-gray-600">{order.district}</span></div>
+                      <div><span className="font-semibold text-gray-700">Phone :</span> <span className="text-gray-600">{order.phoneno}</span></div>
+                      <div><span className="font-semibold text-gray-700">Email :</span> <span className="text-green-600 font-medium">{order.email}</span></div>
+                    </div>
+
+                    <div className="mt-6 flex flex-row text-lg items-center">
+                      <span className="text-sm mr-2 mt-1.5 font-semibold text-gray-700">
+                        Current Status :
+                      </span>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === "Collected"
+                            ? "bg-green-100 text-green-600"
+                            : order.status === "Pending"
+                              ? "bg-yellow-100 text-yellow-600"
+                              : "bg-blue-100 text-blue-600"
+                          }`}
+                      >
+                        {order.status}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                {/* Details */}
-                <ul className="space-y-1 mb-1 text-sm text-gray-700">
-                  <li>
-                    <span className="font-semibold">Meal:</span> {order.meal}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Category:</span> {order.category}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Quantity:</span> {order.quantity} kg
-                  </li>
-                  <li>
-                    <span className="font-semibold">Address:</span> {order.address}
-                  </li>
-                  <li>
-                    <span className="font-semibold">District:</span> {order.district}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Phone:</span> {order.phoneno}
-                  </li>
-                </ul>
+                  {/* Right Section */}
+                  <div className="min-w-1/3 p-6">
+                    <div className="flex flex-col gap-5 h-full justify-between items-end">
+                      <div className="mb-6 flex flex-col items-end">
+                        <h4 className="text-lg font-bold text-indigo-700 ">
+                          {order.name}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {formatDate(order.createdAt)}
+                        </p>
+                      </div>
 
-                {/* Email + Status */}
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-green-600 font-semibold">{order.email}</span>
-                  <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-600">
-                    {order.status}
-                  </span>
+                      {/* ⭐ Rating Section */}
+                      <div className="text-yellow-500 font-semibold flex flex-col items-end space-y-2">
+                        {submittedRatings[order._id] ? (
+                          // ⭐ Show saved rating
+                          <div className="flex space-x-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <FaStar
+                                key={star}
+                                size={24}
+                                className={
+                                  star <= submittedRatings[order._id]
+                                    ? "text-yellow-400"
+                                    : "text-gray-300"
+                                }
+                              />
+                            ))}
+                          </div>
+                        ) : !showRatingBox[order._id] ? (
+                          <button
+                            onClick={() => handleShowRating(order._id)}
+                            className="text-sm px-4 py-1 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg hover:bg-yellow-200 transition"
+                          >
+                            ⭐ Give Rating
+                          </button>
+                        ) : (
+                          <div className="flex flex-col items-center">
+                            <div className="flex space-x-1 mb-2">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <FaStar
+                                  key={star}
+                                  size={24}
+                                  className={`cursor-pointer transition ${star <=
+                                      (hoveredStars[order._id] ||
+                                        ratings[order._id] ||
+                                        0)
+                                      ? "text-yellow-400"
+                                      : "text-gray-300"
+                                    }`}
+                                  onMouseEnter={() =>
+                                    setHoveredStars((prev) => ({
+                                      ...prev,
+                                      [order._id]: star,
+                                    }))
+                                  }
+                                  onMouseLeave={() =>
+                                    setHoveredStars((prev) => ({
+                                      ...prev,
+                                      [order._id]: null,
+                                    }))
+                                  }
+                                  onClick={() =>
+                                    handleSetRating(order._id, star)
+                                  }
+                                />
+                              ))}
+                            </div>
+                            <button
+                              onClick={() => handleSubmitRating(order._id)}
+                              className="text-xs px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                            >
+                              Submit
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))

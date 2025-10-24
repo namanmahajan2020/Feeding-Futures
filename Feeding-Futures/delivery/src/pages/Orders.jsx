@@ -9,6 +9,7 @@ const Orders = () => {
   const [error, setError] = useState(null);
   const [deliveryPartner, setDeliveryPartner] = useState("");
   const [userLocation, setUserLocation] = useState("");
+  const [infoMessage, setInfoMessage] = useState(null);
 
   // Fetch delivery partner email and location from localStorage
   useEffect(() => {
@@ -17,6 +18,25 @@ const Orders = () => {
     if (email) setDeliveryPartner(email);
     if (location) setUserLocation(location);
   }, []);
+  
+useEffect(() => {
+  const timers = [];
+
+  orders.forEach((order) => {
+    if (order.showConfirm) {
+      const timer = setTimeout(() => {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o._id === order._id ? { ...o, showConfirm: false } : o
+          )
+        );
+      }, 3000);
+      timers.push(timer);
+    }
+  });
+
+  return () => timers.forEach((t) => clearTimeout(t));
+}, [orders]);
 
   // Fetch orders
   useEffect(() => {
@@ -40,9 +60,26 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  // Inline info message handler
+  const showTemporaryMessage = (text) => {
+    setInfoMessage(text);
+    setTimeout(() => setInfoMessage(null), 3000);
+  };
+
   const handleStatusChange = async (id, currentStatus) => {
     if (!deliveryPartner) {
-      alert("Delivery partner email not found. Please log in.");
+      showTemporaryMessage("Please log in first.");
+      return;
+    }
+
+    // Check if user already has a processing order
+    const hasProcessing = orders.some(
+      (order) =>
+        order.status === "Processing" && order.deliveryPartner === deliveryPartner
+    );
+
+    if (currentStatus === "Pending" && hasProcessing) {
+      showTemporaryMessage("You already have one processing order.");
       return;
     }
 
@@ -70,37 +107,58 @@ const Orders = () => {
       setOrders((prev) =>
         prev.map((order) => (order._id === id ? updated : order))
       );
+
+      showTemporaryMessage(
+        nextStatus === "Processing"
+          ? "Order accepted!"
+          : "Order marked as collected!"
+      );
     } catch (error) {
       console.error("❌ Error updating status:", error);
-      alert("Failed to update status. Please try again.");
+      showTemporaryMessage("Failed to update status. Try again.");
     }
   };
 
   // Filter logic
   const filteredOrders = orders.filter((order) => {
-    const matchesStatus =
-      selectedStatus === "All"
-        ? order.status !== "Collected"
-        : order.status === selectedStatus;
+    if (selectedStatus === "Processing") {
+      return (
+        order.status === "Processing" &&
+        order.deliveryPartner === deliveryPartner
+      );
+    }
 
-    const matchesLocation =
-      locationFilter === "All"
-        ? true
-        : order.district === userLocation && order.status !== "Collected";
+    if (selectedStatus === "All") {
+      return (
+        (order.status === "Pending" ||
+          (order.status === "Processing" &&
+            order.deliveryPartner === deliveryPartner)) &&
+        (locationFilter === "All" ||
+          (order.district === userLocation && order.status !== "Collected"))
+      );
+    }
 
-    return matchesStatus && matchesLocation;
+    if (selectedStatus === "Pending") {
+      return (
+        order.status === "Pending" &&
+        (locationFilter === "All" ||
+          (order.district === userLocation && order.status !== "Collected"))
+      );
+    }
+
+    return false;
   });
 
   if (loading)
     return (
-      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center h-64 text-lg font-medium">
+      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center text-lg font-medium">
         Loading orders...
       </div>
     );
 
   if (error)
     return (
-      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center h-64 text-red-600 font-medium">
+      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center text-red-600 font-medium">
         {error}
       </div>
     );
@@ -117,10 +175,19 @@ const Orders = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
+    <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
+      {/* Inline info message */}
+      {infoMessage && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+  bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 text-sm font-medium text-center transition-opacity duration-300 opacity-100">
+          {infoMessage}
+        </div>
+
+      )}
+
       <div className="max-w-6xl mx-auto p-6">
         {/* Title */}
-        <div className="flex flex-col text-center justify-center ">
+        <div className="flex flex-col text-center justify-center">
           <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-transparent drop-shadow-sm">
             Orders
           </h2>
@@ -199,35 +266,36 @@ const Orders = () => {
                     </div>
 
                     <div className="space-y-2 text-sm">
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">Meal :</span>
                         <span className="text-gray-600">{order.meal}</span>
                       </div>
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">Category :</span>
                         <span className="text-gray-600">{order.category}</span>
                       </div>
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">Quantity :</span>
                         <span className="text-gray-600">{order.quantity} kg</span>
                       </div>
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">Address :</span>
-                        <span className="text-gray-600 text-right max-w-xs">{order.address}</span>
+                        <span className="text-gray-600">{order.address}</span>
                       </div>
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">District :</span>
                         <span className="text-gray-600">{order.district}</span>
                       </div>
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">Phone :</span>
                         <span className="text-gray-600">{order.phoneno}</span>
                       </div>
-                      <div className="flex justify-left gap-1">
+                      <div className="flex gap-1">
                         <span className="font-semibold text-gray-700">Email :</span>
                         <span className="text-green-600 font-medium">{order.email}</span>
                       </div>
                     </div>
+
                     <div className="mt-6 flex flex-row text-lg items-center">
                       <span className="text-sm mr-2 mt-1.5 font-semibold text-gray-700 mb-2 block">
                         Current Status :
@@ -245,12 +313,11 @@ const Orders = () => {
                     </div>
                   </div>
 
-                  {/* Right Section - User Info and Status */}
+                  {/* Right Section */}
                   <div className="min-w-1/3 p-6">
                     <div className="flex flex-col gap-5 h-full justify-between items-end">
-                      {/* User Info */}
                       <div className="mb-6 flex flex-col items-end justify-center">
-                        <h4 className="text-lg font-bold text-indigo-700 ">
+                        <h4 className="text-lg font-bold text-indigo-700">
                           {order.name}
                         </h4>
                         <p className="text-sm text-gray-500">
@@ -258,37 +325,35 @@ const Orders = () => {
                         </p>
                       </div>
 
-                      {/* <div className="flex-1"> */}
-
-                      <div className="flex flex-col justify-center items-center gap-">
-
+                      <div className="flex flex-col justify-center items-center">
                         <div className="mb-2 font-semibold flex items-center space-x-2">
                           <span
-                            className={`text-sm  ${order.status === "Pending"
-                                ? "text-blue-600"
-                                : order.status === "Processing"
-                                  ? "text-green-600"
-                                  : "text-gray-500"
+                            className={`text-sm ${order.status === "Pending"
+                              ? "text-blue-600"
+                              : order.status === "Processing"
+                                ? "text-green-600"
+                                : "text-gray-500"
                               }`}
                           >
                             {order.status === "Pending"
-                              ? "swipe to accept order"
+                              ? "Swipe to accept order"
                               : order.status === "Processing"
-                                ? "swipe if order collected"
+                                ? "Swipe if order collected"
                                 : ""}
                           </span>
-
-                          {(order.status === "Pending" || order.status === "Processing") && (
-                            <span
-                              className={`text-lg ${order.status === "Pending" ? "text-blue-600" : "text-green-600"
-                                }`}
-                            >
-                              →
-                            </span>
-                          )}
+                          {(order.status === "Pending" ||
+                            order.status === "Processing") && (
+                              <span
+                                className={`text-lg ${order.status === "Pending"
+                                  ? "text-blue-600"
+                                  : "text-green-600"
+                                  }`}
+                              >
+                                →
+                              </span>
+                            )}
                         </div>
 
-                        {/* Status Slider */}
                         <div className="mb-4 min-w-50">
                           <div className="relative w-full">
                             <input
@@ -306,15 +371,19 @@ const Orders = () => {
                               onChange={() =>
                                 setOrders((prev) =>
                                   prev.map((o) =>
-                                    o._id === order._id ? { ...o, showConfirm: true } : o
+                                    o._id === order._id
+                                      ? { ...o, showConfirm: true }
+                                      : o
                                   )
                                 )
                               }
-                              className={`w-full h-8 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 accent-white ${deliveryPartner ? "ring-2 ring-indigo-300" : "opacity-60 cursor-not-allowed"
+                              className={`w-full h-8 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 accent-white ${deliveryPartner
+                                ? "ring-2 ring-indigo-300"
+                                : "opacity-60 cursor-not-allowed"
                                 }`}
                             />
 
-                            {/* Labels with icons */}
+                            {/* Labels */}
                             <div className="flex justify-between text-xs mt-2">
                               <span className="flex flex-col items-center text-yellow-600">
                                 <FaClock className="mb-1" />
@@ -332,18 +401,18 @@ const Orders = () => {
                           </div>
                         </div>
 
-                        {/* Confirmation Popup */}
+                        {/* Auto-close confirmation */}
                         {order.showConfirm && (
-                          <div className="fixed inset-0 flex items-center justify-center z-10">
-                            <div className="bg-indigo-50 border border-indigo-200 rounded-md shadow-lg p-4 w-64">
-                              <p className="text-sm text-center text-indigo-700 font-medium mb-3">
+                          <div className="fixed inset-0 flex items-center justify-center z-50">
+                            <div className="bg-indigo-50 border border-indigo-200 rounded-md shadow-lg p-6 w-72 text-center">
+                              <p className="text-sm text-indigo-700 font-medium mb-4">
                                 {order.status === "Pending"
                                   ? "Do you want to accept this order?"
                                   : order.status === "Processing"
-                                    ? "Order completed?"
+                                    ? "Order Collected?"
                                     : ""}
                               </p>
-                              <div className="flex justify-center space-x-3">
+                              <div className="flex justify-center space-x-4">
                                 <button
                                   onClick={() =>
                                     setOrders((prev) =>
