@@ -23,7 +23,9 @@ import {
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
+  ComposedChart, // <-- Add this
 } from "recharts";
+
 
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
@@ -31,7 +33,12 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 const Analytics = () => {
   const { isDarkMode } = useContext(AppContext); // ✅ get isDarkMode here
   const { data, isLoading, error } = useDataFetcher();
-  const { donations = [], feedback = [], users = [] } = data || {};
+  const { donations = [], users = [] } = data || {};
+  const feedback = donations.filter(d => d.rating != null);
+  const validRatings = feedback.filter(f => f.rating > 0);
+  const avgRating = validRatings.reduce((acc, f) => acc + f.rating, 0) / validRatings.length;
+  // map donations with ratings to feedback
+
 
   if (isLoading) return <p className="text-center mt-10">Loading data...</p>;
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
@@ -101,20 +108,20 @@ const Analytics = () => {
       </h2>
 
       {/* --- Summary Cards --- */}
-<div className="grid grid-cols-1 sm:grid-cols-3 gap-16 mb-10 justify-center">
-  <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
-    <h3 className="text-lg font-semibold">Total Donations</h3>
-    <p className="text-3xl font-bold text-blue-600">{totalDonations}</p>
-  </div>
-  <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
-    <h3 className="text-lg font-semibold">Total Users</h3>
-    <p className="text-3xl font-bold text-green-600">{totalUsers}</p>
-  </div>
-  <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
-    <h3 className="text-lg font-semibold">Total Feedback</h3>
-    <p className="text-3xl font-bold text-yellow-600">{totalFeedback}</p>
-  </div>
-</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-16 mb-10 justify-center">
+        <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
+          <h3 className="text-lg font-semibold">Total Donations</h3>
+          <p className="text-3xl font-bold text-blue-600">{totalDonations}</p>
+        </div>
+        <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
+          <h3 className="text-lg font-semibold">Total Users</h3>
+          <p className="text-3xl font-bold text-green-600">{totalUsers}</p>
+        </div>
+        <div className={`shadow-md rounded-2xl bg-slate-900 p-5 text-center ${isDarkMode ? "bg-sky-900 brightness-90 text-white border border-slate-700" : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"} transition-shadow hover:shadow-xl`}>
+          <h3 className="text-lg font-semibold">Total Feedback</h3>
+          <p className="text-3xl font-bold text-yellow-600">{totalFeedback}</p>
+        </div>
+      </div>
 
 
       {/* --- Charts Grid --- */}
@@ -161,23 +168,23 @@ const Analytics = () => {
           </LineChart>
         </ChartCard>
 
-        {/* User Growth */}
-        <ChartCard title="User Registrations Over Time (Radar Chart)">
-  <RadarChart cx="50%" cy="50%" outerRadius="80%" data={userTimeline}>
-    <PolarGrid />
-    <PolarAngleAxis dataKey="name" stroke={isDarkMode ? "#bbb" : "#555"} />
-    <PolarRadiusAxis stroke={isDarkMode ? "#bbb" : "#555"} />
-    <Radar
-      name="Users"
-      dataKey="value"
-      stroke="#8884d8"
-      fill="#8884d8"
-      fillOpacity={0.6}
-    />
-    <Legend />
-    <Tooltip />
-  </RadarChart>
-</ChartCard>
+        {/* Orders Rating */}
+        <ChartCard title="Orders Rating">
+          {validRatings.length > 0 ? (
+            <RadarChart outerRadius={120} data={validRatings.map((f, idx) => ({
+              name: `Order ${idx + 1}`,
+              rating: f.rating
+            }))}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="name" tick={{ fill: isDarkMode ? "white" : "black", fontSize: 10 }} />
+              <PolarRadiusAxis angle={30} domain={[0, 5]} />
+              <Radar name="Rating" dataKey="rating" stroke="#FF8042" fill="#FF8042" fillOpacity={0.6} />
+              <Tooltip formatter={(value) => `${value} ⭐`} />
+            </RadarChart>
+          ) : (
+            <p className="text-center mt-5">No ratings available</p>
+          )}
+        </ChartCard>
 
 
         {/* User Gender Distribution (New Donut Chart) */}
