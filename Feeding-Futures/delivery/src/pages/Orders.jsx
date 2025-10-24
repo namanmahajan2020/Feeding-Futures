@@ -6,15 +6,14 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const deliveryPartnerEmail = "partner@example.com"; // 🔹 Replace this with logged-in user's email dynamically
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/food-donation");
-        if (!response.ok) {
-          throw new Error("Failed to fetch orders");
-        }
+        if (!response.ok) throw new Error("Failed to fetch orders");
         const data = await response.json();
-        // Sort newest first by createdAt
         const sorted = data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
@@ -30,28 +29,55 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  const handleStatusChange = async (id, currentStatus) => {
+    const nextStatus =
+      currentStatus === "Pending"
+        ? "Processing"
+        : currentStatus === "Processing"
+          ? "Collected"
+          : "Collected"; // final state
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/food-donation/${id}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: nextStatus,
+          deliveryPartnerEmail,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update status");
+
+      const updated = await response.json();
+      setOrders((prev) =>
+        prev.map((order) => (order._id === id ? updated : order))
+      );
+    } catch (error) {
+      console.error("❌ Error updating status:", error);
+      alert("Failed to update status. Please try again.");
+    }
+  };
+
   const filteredOrders =
     selectedStatus === "All"
       ? orders
       : orders.filter((order) => order.status === selectedStatus);
 
-  if (loading) {
+  if (loading)
     return (
       <div className="flex justify-center items-center h-64 text-lg font-medium">
         Loading orders...
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <div className="flex justify-center items-center h-64 text-red-600 font-medium">
         {error}
       </div>
     );
-  }
 
-  // Helper to format date nicely
   const formatDate = (dateString) => {
     const options = {
       year: "numeric",
@@ -64,19 +90,25 @@ const Orders = () => {
   };
 
   return (
-    <div className=" min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
+    <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
       <div className="max-w-5xl mx-auto p-6">
-        <h2 className="text-3xl text-indigo-700 font-semibold text-center underline-offset-6 underline mb-6">ORDERS</h2>
-
+        <div className="flex flex-col text-center justify-center ">
+          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-transparent drop-shadow-sm">
+            Orders
+          </h2>
+          <div className="mt-3 flex justify-center">
+            <span className="w-32 mb-7 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 rounded-full shadow-md"></span>
+          </div>
+        </div>
         {/* Filter Controls */}
         <div className="mb-6 flex justify-center space-x-4">
           {["All", "Pending", "Processing", "Collected"].map((status) => (
             <button
               key={status}
               onClick={() => setSelectedStatus(status)}
-              className={`px-4 py-2 rounded-md border-white border-1 text-sm ${selectedStatus === status
-                  ? "bg-indigo-600 text-white"
-                  : "bg-slate-200 hover:bg-gradient-to-tr hover:from-sky-200  hover:to-green-100"
+              className={`px-4 py-2 rounded-md border-white border text-sm ${selectedStatus === status
+                ? "bg-indigo-600 text-white"
+                : "bg-slate-200 hover:bg-gradient-to-tr hover:from-sky-200 hover:to-green-100"
                 }`}
             >
               {status}
@@ -94,19 +126,42 @@ const Orders = () => {
                 key={order._id}
                 className="p-4 bg-slate-100 border-2 border-white rounded-lg shadow-sm"
               >
-                {/* Header with serial number, foodname, created date */}
+                {/* Header */}
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-lg font-medium flex items-center space-x-2">
                     <span className="text-indigo-600 font-semibold">
                       #{index + 1}
                     </span>
-                    <span className="text-indigo-600 font-semibold">{order.foodname}</span>
+                    <span className="text-indigo-600 font-semibold">
+                      {order.foodname}
+                    </span>
                   </h3>
                   <div className="flex flex-col gap-2 text-right">
-                    <span className="text-indigo-700 font-semibold">{order.name}</span>
+                    <span className="text-indigo-700 font-semibold">
+                      {order.name}
+                    </span>
                     <span className="text-sm text-gray-400">
                       {formatDate(order.createdAt)}
                     </span>
+
+                    {/* 🔹 Slider to change status */}
+                    <input
+                      type="range"
+                      min="0"
+                      max="2"
+                      step="1"
+                      value={
+                        order.status === "Pending"
+                          ? 0
+                          : order.status === "Processing"
+                            ? 1
+                            : 2
+                      }
+                      onChange={() =>
+                        handleStatusChange(order._id, order.status)
+                      }
+                      className="w-24 mt-1 accent-indigo-600 cursor-pointer"
+                    />
                   </div>
                 </div>
 
@@ -134,13 +189,15 @@ const Orders = () => {
 
                 {/* Email and Status */}
                 <div className="flex justify-between items-center">
-                  <span className="text-green-600  font-semibold">{order.email}</span>
+                  <span className="text-green-600 font-semibold">
+                    {order.email}
+                  </span>
                   <span
                     className={`px-3 py-1 rounded-full text-sm ${order.status === "Collected"
-                        ? "bg-green-100 text-green-600"
-                        : order.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-blue-100 text-blue-600"
+                      ? "bg-green-100 text-green-600"
+                      : order.status === "Pending"
+                        ? "bg-yellow-100 text-yellow-600"
+                        : "bg-blue-100 text-blue-600"
                       }`}
                   >
                     {order.status}
