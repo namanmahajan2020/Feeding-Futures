@@ -3,14 +3,18 @@ import React, { useState, useEffect } from "react";
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [locationFilter, setLocationFilter] = useState("All"); // "All" or "Nearby"
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deliveryPartner, setDeliveryPartner] = useState("");
+  const [userLocation, setUserLocation] = useState("");
 
-  // Fetch delivery partner email from localStorage
+  // Fetch delivery partner email and location from localStorage
   useEffect(() => {
-    const email = localStorage.getItem("email"); // Replace "userEmail" with your actual key
+    const email = localStorage.getItem("email");
+    const location = localStorage.getItem("location");
     if (email) setDeliveryPartner(email);
+    if (location) setUserLocation(location);
   }, []);
 
   // Fetch orders
@@ -46,17 +50,20 @@ const Orders = () => {
         ? "Processing"
         : currentStatus === "Processing"
         ? "Collected"
-        : "Collected"; // final state
+        : "Collected";
 
     try {
-      const response = await fetch(`http://localhost:5000/api/food-donation/${id}/status`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: nextStatus,
-          deliveryPartner,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/food-donation/${id}/status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: nextStatus,
+            deliveryPartner,
+          }),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to update status");
 
@@ -70,10 +77,20 @@ const Orders = () => {
     }
   };
 
-  const filteredOrders =
-    selectedStatus === "All"
-      ? orders
-      : orders.filter((order) => order.status === selectedStatus);
+  // Filter logic (combined status + location)
+  const filteredOrders = orders.filter((order) => {
+    const matchesStatus =
+      selectedStatus === "All"
+        ? order.status !== "Collected"
+        : order.status === selectedStatus;
+
+    const matchesLocation =
+      locationFilter === "All"
+        ? true
+        : order.district === userLocation && order.status !== "Collected";
+
+    return matchesStatus && matchesLocation;
+  });
 
   if (loading)
     return (
@@ -103,6 +120,7 @@ const Orders = () => {
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
       <div className="max-w-5xl mx-auto p-6">
+        {/* Title */}
         <div className="flex flex-col text-center justify-center ">
           <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-transparent drop-shadow-sm">
             Orders
@@ -112,21 +130,62 @@ const Orders = () => {
           </div>
         </div>
 
-        {/* Filter Controls */}
-        <div className="mb-6 flex justify-center space-x-4">
-          {["All", "Pending", "Processing", "Collected"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setSelectedStatus(status)}
-              className={`px-4 py-2 rounded-md border-white border text-sm ${
-                selectedStatus === status
-                  ? "bg-indigo-600 text-white"
-                  : "bg-slate-200 hover:bg-gradient-to-tr hover:from-sky-200 hover:to-green-100"
+        {/* 🌈 Filters and Toggle Layout */}
+        <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-6 max-w-2/3">
+          {/* Left: Enhanced Location Toggle */}
+          <div className="flex items-center space-x-3">
+            <span className="text-sm font-medium text-gray-700">Show:</span>
+
+            <div
+              onClick={() =>
+                setLocationFilter(locationFilter === "All" ? "Nearby" : "All")
+              }
+              className={`relative w-16 h-8 flex items-center rounded-full p-1 cursor-pointer transition-all duration-300 ${
+                locationFilter === "Nearby"
+                  ? "bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400"
+                  : "bg-gray-300"
               }`}
             >
-              {status}
-            </button>
-          ))}
+              <div
+                className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${
+                  locationFilter === "Nearby"
+                    ? "translate-x-8"
+                    : "translate-x-0"
+                }`}
+              ></div>
+            </div>
+
+            <span
+              className={`text-sm font-medium transition-colors duration-300 ${
+                locationFilter === "Nearby"
+                  ? "text-indigo-600"
+                  : "text-gray-600"
+              }`}
+            >
+              {locationFilter === "Nearby"
+                ? "Nearby Only"
+                : "All Locations"}
+            </span>
+          </div>
+
+          {/* Center: Status Filters */}
+          <div className="flex justify-center w-full sm:w-auto mr-5">
+            <div className="flex space-x-2">
+              {["All", "Pending", "Processing"].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setSelectedStatus(status)}
+                  className={`px-4 py-2 rounded-md border border-white text-sm font-medium transition-all ${
+                    selectedStatus === status
+                      ? "bg-indigo-600 text-white"
+                      : "bg-slate-200 hover:bg-gradient-to-tr hover:from-sky-200 hover:to-green-100"
+                  }`}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Orders List */}
@@ -142,7 +201,7 @@ const Orders = () => {
                 {/* Header */}
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-lg font-medium flex items-center space-x-2">
-                    <span className="text-indigo-600 font-semibold">
+                    <span className="text-sky-500 font-semibold">
                       #{index + 1}
                     </span>
                     <span className="text-indigo-600 font-semibold">
@@ -174,7 +233,7 @@ const Orders = () => {
                         handleStatusChange(order._id, order.status)
                       }
                       className="w-24 mt-1 accent-indigo-600 cursor-pointer"
-                      disabled={!deliveryPartner} // disable until email is loaded
+                      disabled={!deliveryPartner}
                     />
                   </div>
                 </div>

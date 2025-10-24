@@ -80,7 +80,7 @@ const PastOrder = () => {
             Your Past Collected Orders
           </h2>
           <div className="mt-3 flex justify-center">
-            <span className="w-32 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 rounded-full shadow-md"></span>
+            <span className="w-98 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 rounded-full shadow-md"></span>
           </div>
           {orders.length > 0 && (
             <p className="mt-3 text-sm text-gray-600 font-medium">
