@@ -15,14 +15,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = ({ isLoggedIn = false, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [userName, setUserName] = useState(""); // Track user name
   const navigate = useNavigate();
   const location = useLocation();
 
-    useEffect(() => {
+  useEffect(() => {
     const checkLoginStatus = () => {
-      const email = localStorage.getItem("email");
-      setUserEmail(email);
+      const name = localStorage.getItem("name"); // Get the name from localStorage
+      setUserName(name);
     };
 
     // Listen to localStorage changes (cross-tab)
@@ -34,9 +34,8 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
     return () => {
       window.removeEventListener("storage", checkLoginStatus);
     };
-  }, [userEmail, navigate]);
+  }, [userName, navigate]);
 
-  // Detect if we're on the signup page
   const isSignupPage = location.pathname === "/signup";
 
   const loggedInNavItems = [
@@ -65,27 +64,28 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
       : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"}`;
 
   const logout = () => {
-  localStorage.removeItem("email");
-  if (onLogout) onLogout(); // update parent immediately
-  navigate("/signup");
-};
-
+    localStorage.removeItem("email");
+    localStorage.removeItem("name"); // Remove name from localStorage as well
+    if (onLogout) onLogout(); // update parent immediately
+    navigate("/signup");
+  };
 
   return (
-   <header className="border-b-1 border-white shadow-lg sticky top-0 z-50 bg-transparent backdrop-blur-2xl">
+    <header className="border-b-1 border-white shadow-lg sticky top-0 z-50 bg-transparent backdrop-blur-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div
-            className="flex-shrink-0 text-2xl font-extrabold text-gray-800 cursor-pointer"
-            onClick={() => navigate("/")}
+            className="flex-shrink-0 text-2xl mr-64 font-extrabold text-gray-800 cursor-pointer"
+            onClick={() => navigate("/orders")}
           >
             Feeding <b className="text-emerald-500">Futures</b>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-3 items-center">
-            {activeNavItems.map((item) => (
+          <nav className="hidden md:flex items-center space-x-6 w-full justify-center">
+            {/* Centered Navigation Items */}
+            {isLoggedIn && activeNavItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => navigate(item.path)}
@@ -96,41 +96,44 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
               </button>
             ))}
 
-            {/* ✅ Show “Join Us” button only if logged out and NOT on signup page */}
-            {!isLoggedIn && !isSignupPage && (
-              <button
-                onClick={() => navigate("/signup")}
-                className="ml-2 bg-emerald-500 text-sm text-white font-semibold px-4 py-2 rounded-md shadow hover:bg-emerald-600 transition"
-              >
-                <UserPlus className="w-4 h-4 inline-block mr-1" />
-                Join Us
-              </button>
-            )}
-
-            {/* ✅ On signup page, show “Login as Admin/User” button */}
-            {(!isLoggedIn || isSignupPage) && (
-              <button
-                onClick={() => navigate("/orders")}
-                className="ml-3 bg-gradient-to-tl from-sky-500 via-indigo-500 to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
-              >
-                <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />
-                Login as Admin/User
-              </button>
-            )}
-
-            {isLoggedIn && (
-              <>
-                <span className="text-sm font-semibold text-gray-700 ml-4 border-l pl-4">
-                  👋 {userEmail || "User"}
-                </span>
+            {/* Rest of Navigation Items */}
+            <div className="flex items-center space-x-4 ml-auto">
+              {/* Show “Join Us” button only if logged out and NOT on signup page */}
+              {!isLoggedIn && !isSignupPage && (
                 <button
-                  onClick={logout}
-                  className="!w-auto !py-1 !px-3 !text-sm flex items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
+                  onClick={() => navigate("/signup")}
+                  className="ml-2 bg-emerald-500 text-sm text-white font-semibold px-4 py-2 rounded-md shadow hover:bg-emerald-600 transition"
                 >
-                  <LogOut className="w-4 h-4 mr-1" /> Logout
+                  <UserPlus className="w-4 h-4 inline-block mr-1" />
+                  Join Us
                 </button>
-              </>
-            )}
+              )}
+
+              {/* On signup page, show “Login as Admin/User” button */}
+              {(!isLoggedIn || isSignupPage) && (
+                <button
+                  onClick={() => navigate("/orders")}
+                  className="ml-3 bg-gradient-to-tl from-sky-500 via-indigo-500 to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
+                >
+                  <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />
+                  Login as Admin/User
+                </button>
+              )}
+
+              {isLoggedIn && (
+                <>
+                  <span className="text-sm font-semibold text-gray-700 ml-4">
+                    👋 {userName || "User"} {/* Show the user's name */}
+                  </span>
+                  <button
+                    onClick={logout}
+                    className="!w-auto !py-1 !px-3 !text-sm flex items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" /> Logout
+                  </button>
+                </>
+              )}
+            </div>
           </nav>
 
           {/* Mobile Menu Toggle */}
