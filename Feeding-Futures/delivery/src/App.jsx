@@ -52,9 +52,9 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Navbar
-  isLoggedIn={isLoggedIn}
-  onLogout={() => setIsLoggedIn(false)} // 👈 new callback
-/>
+        isLoggedIn={isLoggedIn}
+        onLogout={() => setIsLoggedIn(false)} // 👈 new callback
+      />
 
 
       <Routes>
@@ -91,9 +91,10 @@ function App() {
         {/* Signup route: If the user is already logged in (from localStorage) then redirect to /orders.
             Because we initialize isLoggedIn synchronously, this redirect will only happen if they actually are logged in. */}
         <Route
-          path="/signup"
-          element={isLoggedIn ? <Navigate to="/orders" replace /> : <Signup onLogin={() => setIsLoggedIn(true)} />}
-        />
+  path="/signup"
+  element={isLoggedIn ? <Navigate to="/orders" replace /> : <Signup onLogin={() => setIsLoggedIn(true)} />}
+/>
+
       </Routes>
 
       <Footer />

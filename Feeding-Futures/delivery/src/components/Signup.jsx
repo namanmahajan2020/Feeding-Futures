@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// Gender Select Component
+// ==================== Gender Select ====================
 const GenderSelect = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
   const options = ["Male", "Female", "Other", "Prefer not to say"];
@@ -58,7 +58,7 @@ const GenderSelect = ({ value, onChange }) => {
   );
 };
 
-// Location Select Component
+// ==================== Location Select ====================
 const LocationSelect = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
   const options = ["Chennai", "Coimbatore", "Madurai"];
@@ -114,8 +114,8 @@ const LocationSelect = ({ value, onChange }) => {
   );
 };
 
-// Auth Form Component
-const AuthForm = () => {
+// ==================== Auth Form (Signup / Login) ====================
+const AuthForm = ({ onLogin }) => {
   const [isSignup, setIsSignup] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -137,23 +137,25 @@ const AuthForm = () => {
     setSuccess("");
 
     try {
-      // 🔹 Changed API URLs from /api/users/... to /api/delivery/...
       const url = isSignup
         ? "http://localhost:5000/api/delivery/signup"
         : "http://localhost:5000/api/delivery/login";
 
       const res = await axios.post(url, formData);
       setSuccess(res.data.message);
-
       const user = res.data.user;
 
       if (user) {
+        // ✅ Save user details
         localStorage.setItem("name", user.name);
         localStorage.setItem("email", user.email);
         localStorage.setItem("gender", user.gender);
         localStorage.setItem("location", user.location);
-        navigate("/Orders");
+
+        if (onLogin) onLogin(); // ✅ Notify parent (App.jsx)
+        navigate("/orders");
       } else if (isSignup) {
+        // ✅ Auto-login after signup
         const loginRes = await axios.post(
           "http://localhost:5000/api/delivery/login",
           {
@@ -163,12 +165,13 @@ const AuthForm = () => {
         );
 
         const loginUser = loginRes.data.user;
-
         localStorage.setItem("name", loginUser.name);
         localStorage.setItem("email", loginUser.email);
         localStorage.setItem("gender", loginUser.gender);
         localStorage.setItem("location", loginUser.location);
-        navigate("/Orders");
+
+        if (onLogin) onLogin(); // ✅ Notify parent (App.jsx)
+        navigate("/orders");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
