@@ -13,22 +13,28 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Header = ({ isLoggedIn = false }) => {
+const Header = ({ isLoggedIn = false, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
+    useEffect(() => {
     const checkLoginStatus = () => {
       const email = localStorage.getItem("email");
-      if (email) setUserEmail(email);
-      else setUserEmail("");
+      setUserEmail(email);
     };
+
+    // Listen to localStorage changes (cross-tab)
     window.addEventListener("storage", checkLoginStatus);
+
+    // Also check immediately on mount
     checkLoginStatus();
-    return () => window.removeEventListener("storage", checkLoginStatus);
-  }, []);
+
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  }, [userEmail, navigate]);
 
   // Detect if we're on the signup page
   const isSignupPage = location.pathname === "/signup";
@@ -59,9 +65,11 @@ const Header = ({ isLoggedIn = false }) => {
       : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"}`;
 
   const logout = () => {
-    localStorage.clear();
-    navigate("/signup");
-  };
+  localStorage.removeItem("email");
+  if (onLogout) onLogout(); // update parent immediately
+  navigate("/signup");
+};
+
 
   return (
    <header className="border-b-1 border-white shadow-lg sticky top-0 z-50 bg-transparent backdrop-blur-2xl">

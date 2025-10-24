@@ -3,7 +3,6 @@ import React, { useState, useMemo, useEffect, useContext } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
 
 import AdminDashboard from "./pages/AdminDashboard.jsx";
-import AdminDashboard1 from "./pages/AdminDashboard1.jsx";
 import AdminLogin from "./components/adminLogin.jsx";
 import Footer from "./components/AdminFooter.jsx";
 import Sidebar from "./components/Sidebar.jsx";
@@ -116,7 +115,7 @@ export default function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <AdminDashboard1
+                  <AdminDashboard
                     data={data}
                     isLoading={isLoading}
                     isDarkMode={isDarkMode}
