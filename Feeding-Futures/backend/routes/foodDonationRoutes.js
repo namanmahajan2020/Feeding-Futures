@@ -3,7 +3,7 @@ import FoodDonation from "../models/foodDonation.js";
 
 const router = express.Router();
 
-// POST /api/food-donation — create a new donation
+// ✅ POST /api/food-donation — Create a new donation
 router.post("/", async (req, res) => {
   const {
     foodname,
@@ -17,7 +17,16 @@ router.post("/", async (req, res) => {
     email,
   } = req.body;
 
-  if (!foodname || !meal || !category || !quantity || !phoneno || !district || !address || !name) {
+  if (
+    !foodname ||
+    !meal ||
+    !category ||
+    !quantity ||
+    !phoneno ||
+    !district ||
+    !address ||
+    !name
+  ) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -43,7 +52,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// POST /api/food-donation/get — get donations by email
+
+// ✅ POST /api/food-donation/get — Get donations by email
 router.post("/get", async (req, res) => {
   const { email } = req.body;
 
@@ -60,7 +70,8 @@ router.post("/get", async (req, res) => {
   }
 });
 
-// NEW: GET /api/food-donation — get all donations (for orders page)
+
+// ✅ GET /api/food-donation — Get all donations (for Orders page)
 router.get("/", async (req, res) => {
   try {
     const donations = await FoodDonation.find().sort({ createdAt: -1 });
@@ -71,7 +82,35 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Update delivery partner email
+
+// ✅ PUT /api/food-donation/:id/status — Update order status + delivery partner email
+router.put("/:id/status", async (req, res) => {
+  const { status, deliveryPartner } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ message: "Status is required" });
+  }
+
+  try {
+    const updatedDonation = await FoodDonation.findByIdAndUpdate(
+      req.params.id,
+      { status, deliveryPartner },
+      { new: true }
+    );
+
+    if (!updatedDonation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    res.status(200).json(updatedDonation);
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ message: "Server error while updating status" });
+  }
+});
+
+
+// ✅ PUT /api/food-donation/assign/:id — Assign delivery partner manually
 router.put("/assign/:id", async (req, res) => {
   const { deliveryPartner } = req.body;
   try {
@@ -82,11 +121,13 @@ router.put("/assign/:id", async (req, res) => {
     );
     res.json(donation);
   } catch (error) {
+    console.error("Error assigning delivery partner:", error);
     res.status(500).json({ message: "Error assigning delivery partner" });
   }
 });
 
-// Update rating
+
+// ✅ PUT /api/food-donation/rate/:id — Update rating
 router.put("/rate/:id", async (req, res) => {
   const { rating } = req.body;
   try {
@@ -97,9 +138,9 @@ router.put("/rate/:id", async (req, res) => {
     );
     res.json(donation);
   } catch (error) {
+    console.error("Error updating rating:", error);
     res.status(500).json({ message: "Error updating rating" });
   }
 });
-
 
 export default router;

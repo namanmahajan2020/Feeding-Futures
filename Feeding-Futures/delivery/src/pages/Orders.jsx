@@ -5,9 +5,15 @@ const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deliveryPartner, setDeliveryPartner] = useState("");
 
-  const deliveryPartnerEmail = "partner@example.com"; // 🔹 Replace this with logged-in user's email dynamically
+  // Fetch delivery partner email from localStorage
+  useEffect(() => {
+    const email = localStorage.getItem("email"); // Replace "userEmail" with your actual key
+    if (email) setDeliveryPartner(email);
+  }, []);
 
+  // Fetch orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -30,12 +36,17 @@ const Orders = () => {
   }, []);
 
   const handleStatusChange = async (id, currentStatus) => {
+    if (!deliveryPartner) {
+      alert("Delivery partner email not found. Please log in.");
+      return;
+    }
+
     const nextStatus =
       currentStatus === "Pending"
         ? "Processing"
         : currentStatus === "Processing"
-          ? "Collected"
-          : "Collected"; // final state
+        ? "Collected"
+        : "Collected"; // final state
 
     try {
       const response = await fetch(`http://localhost:5000/api/food-donation/${id}/status`, {
@@ -43,7 +54,7 @@ const Orders = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           status: nextStatus,
-          deliveryPartnerEmail,
+          deliveryPartner,
         }),
       });
 
@@ -100,16 +111,18 @@ const Orders = () => {
             <span className="w-32 mb-7 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 rounded-full shadow-md"></span>
           </div>
         </div>
+
         {/* Filter Controls */}
         <div className="mb-6 flex justify-center space-x-4">
           {["All", "Pending", "Processing", "Collected"].map((status) => (
             <button
               key={status}
               onClick={() => setSelectedStatus(status)}
-              className={`px-4 py-2 rounded-md border-white border text-sm ${selectedStatus === status
-                ? "bg-indigo-600 text-white"
-                : "bg-slate-200 hover:bg-gradient-to-tr hover:from-sky-200 hover:to-green-100"
-                }`}
+              className={`px-4 py-2 rounded-md border-white border text-sm ${
+                selectedStatus === status
+                  ? "bg-indigo-600 text-white"
+                  : "bg-slate-200 hover:bg-gradient-to-tr hover:from-sky-200 hover:to-green-100"
+              }`}
             >
               {status}
             </button>
@@ -144,7 +157,7 @@ const Orders = () => {
                       {formatDate(order.createdAt)}
                     </span>
 
-                    {/* 🔹 Slider to change status */}
+                    {/* Slider to change status */}
                     <input
                       type="range"
                       min="0"
@@ -154,13 +167,14 @@ const Orders = () => {
                         order.status === "Pending"
                           ? 0
                           : order.status === "Processing"
-                            ? 1
-                            : 2
+                          ? 1
+                          : 2
                       }
                       onChange={() =>
                         handleStatusChange(order._id, order.status)
                       }
                       className="w-24 mt-1 accent-indigo-600 cursor-pointer"
+                      disabled={!deliveryPartner} // disable until email is loaded
                     />
                   </div>
                 </div>
@@ -171,19 +185,24 @@ const Orders = () => {
                     <span className="font-semibold">Meal:</span> {order.meal}
                   </li>
                   <li>
-                    <span className="font-semibold">Category:</span> {order.category}
+                    <span className="font-semibold">Category:</span>{" "}
+                    {order.category}
                   </li>
                   <li>
-                    <span className="font-semibold">Quantity:</span> {order.quantity} kg
+                    <span className="font-semibold">Quantity:</span>{" "}
+                    {order.quantity} kg
                   </li>
                   <li>
-                    <span className="font-semibold">Address:</span> {order.address}
+                    <span className="font-semibold">Address:</span>{" "}
+                    {order.address}
                   </li>
                   <li>
-                    <span className="font-semibold">District:</span> {order.district}
+                    <span className="font-semibold">District:</span>{" "}
+                    {order.district}
                   </li>
                   <li>
-                    <span className="font-semibold">Phone:</span> {order.phoneno}
+                    <span className="font-semibold">Phone:</span>{" "}
+                    {order.phoneno}
                   </li>
                 </ul>
 
@@ -193,12 +212,13 @@ const Orders = () => {
                     {order.email}
                   </span>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm ${order.status === "Collected"
-                      ? "bg-green-100 text-green-600"
-                      : order.status === "Pending"
+                    className={`px-3 py-1 rounded-full text-sm ${
+                      order.status === "Collected"
+                        ? "bg-green-100 text-green-600"
+                        : order.status === "Pending"
                         ? "bg-yellow-100 text-yellow-600"
                         : "bg-blue-100 text-blue-600"
-                      }`}
+                    }`}
                   >
                     {order.status}
                   </span>
