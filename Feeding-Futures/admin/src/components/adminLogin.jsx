@@ -102,13 +102,14 @@ const AdminLogin = () => {
         {error && <p className="text-red-500 text-center mb-2">{error}</p>}
 
         <p className="text-gray-600 text-center">
-          <span
-            onClick={() => navigate("/start")}
-            className="text-red-400 cursor-pointer ml-2 font-semibold hover:underline"
-          >
-            Not an admin?
-          </span>
-        </p>
+  <span
+    onClick={() => navigate(import.meta.env.VITE_API_START)}
+    className="text-red-400 cursor-pointer ml-2 font-semibold hover:underline"
+  >
+    Not an admin?
+  </span>
+</p>
+
       </form>
 
       {/* === DEMO CREDENTIAL CARD === */}
