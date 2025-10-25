@@ -112,12 +112,20 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
               {/* On signup page, show “Login as Admin/User” button */}
               {(!isLoggedIn || isSignupPage) && (
                 <button
-                  onClick={() => navigate("/orders")}
+                  onClick={() => {
+                    const apiStart = import.meta.env.VITE_API_START;
+                    if (apiStart.startsWith("http")) {
+                      window.location.href = apiStart;
+                    } else {
+                      navigate(apiStart);
+                    }
+                  }}
                   className="ml-3 bg-gradient-to-tl from-sky-500 via-indigo-500 to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
                 >
                   <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />
                   Login as Admin/User
                 </button>
+
               )}
 
               {isLoggedIn && (

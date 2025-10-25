@@ -23,7 +23,7 @@ const PastOrder = () => {
 
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/food-donation");
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/food-donation`);
         if (!response.ok) throw new Error("Failed to fetch orders");
 
         const data = await response.json();
@@ -87,7 +87,7 @@ const PastOrder = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/food-donation/rate/${orderId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/food-donation/rate/${orderId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

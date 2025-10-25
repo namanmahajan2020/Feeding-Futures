@@ -42,7 +42,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/food-donation");
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/food-donation`);
         if (!response.ok) throw new Error("Failed to fetch orders");
         const data = await response.json();
         const sorted = data.sort(
@@ -90,7 +90,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/food-donation/${id}/status`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/food-donation/${id}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

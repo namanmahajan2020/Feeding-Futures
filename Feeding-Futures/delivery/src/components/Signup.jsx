@@ -138,8 +138,8 @@ const AuthForm = ({ onLogin }) => {
 
     try {
       const url = isSignup
-        ? "http://localhost:5000/api/delivery/signup"
-        : "http://localhost:5000/api/delivery/login";
+        ? `${import.meta.env.VITE_API_BASE_URL}/api/delivery/signup`
+        : `${import.meta.env.VITE_API_BASE_URL}/api/delivery/login`;
 
       const res = await axios.post(url, formData);
       setSuccess(res.data.message);
@@ -157,7 +157,7 @@ const AuthForm = ({ onLogin }) => {
       } else if (isSignup) {
         // ✅ Auto-login after signup
         const loginRes = await axios.post(
-          "http://localhost:5000/api/delivery/login",
+          `${import.meta.env.VITE_API_BASE_URL}/api/delivery/login`,
           {
             email: formData.email,
             password: formData.password,
