@@ -130,8 +130,8 @@ const AuthForm = () => {
 
     try {
       const url = isSignup
-        ? "http://localhost:5000/api/users/signup"
-        : "http://localhost:5000/api/users/login";
+        ? `${import.meta.env.VITE_API_BASE_URL}/api/users/signup`
+        : `${import.meta.env.VITE_API_BASE_URL}/api/users/login`;
 
       const res = await axios.post(url, formData);
       setSuccess(res.data.message);
@@ -145,7 +145,7 @@ const AuthForm = () => {
         localStorage.setItem("location", user.location);
         navigate("/");
       } else if (isSignup) {
-        const loginRes = await axios.post("http://localhost:5000/api/users/login", {
+        const loginRes = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
           email: formData.email,
           password: formData.password,
         });

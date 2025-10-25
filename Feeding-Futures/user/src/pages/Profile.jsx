@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {LogOut} from 'lucide-react';
+import { LogOut } from 'lucide-react';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -21,7 +21,8 @@ const Profile = () => {
 
     const fetchDonations = async () => {
         try {
-            const res = await axios.post("http://localhost:5000/api/food-donation/get", {
+            const res = await axios.post(
+                `${import.meta.env.VITE_API_BASE_URL}/api/food-donation/get`, {
                 email: localStorage.getItem("email"),
             });
             setDonations(res.data); // Store donations in state
@@ -56,9 +57,9 @@ const Profile = () => {
                         onClick={handleLogout}
                         className="mt-4 bg-red-600 text-white font-bold pr-4 pl-2 py-2 flex flex-row gap-2 rounded-md hover:scale-105 hover:bg-red-500"
                     >
-                    {/* Logout */}
-                         <LogOut className="w-8 h-6" />
-                          Logout
+                        {/* Logout */}
+                        <LogOut className="w-8 h-6" />
+                        Logout
                     </button>
 
                     <hr className="my-6" />
