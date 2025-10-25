@@ -24,8 +24,8 @@ const Start = () => {
         </NavLink>
 
         <a
-          href={import.meta.env.VITE_API_ADMIN}
-          className="bg-[#058547] font-semibold text-white px-11 py-2.5 tracking-[2px] text-xl transition-all duration-200"
+          onClick={() => (window.location.href = import.meta.env.VITE_API_ADMIN)}
+          className="bg-[#058547] cursor-pointer font-semibold text-white px-11 py-2.5 tracking-[2px] text-xl transition-all duration-200"
           style={{ letterSpacing: '2px' }}
           onMouseEnter={e => (e.currentTarget.style.letterSpacing = '6px')}
           onMouseLeave={e => (e.currentTarget.style.letterSpacing = '2px')}
@@ -34,14 +34,15 @@ const Start = () => {
         </a>
 
         <a
-          href={import.meta.env.VITE_API_DELIVERY}
-          className="bg-[#06C167] font-normal text-white px-13 py-2.5 tracking-[2px] text-2xl transition-all duration-200"
+          onClick={() => (window.location.href = import.meta.env.VITE_API_DELIVERY)}
+          className="bg-[#06C167] font-normal cursor-pointer text-white px-13 py-2.5 tracking-[2px] text-2xl transition-all duration-200"
           style={{ letterSpacing: '2px' }}
           onMouseEnter={e => (e.currentTarget.style.letterSpacing = '6px')}
           onMouseLeave={e => (e.currentTarget.style.letterSpacing = '2px')}
         >
           Delivery
         </a>
+
 
       </div>
     </div>
