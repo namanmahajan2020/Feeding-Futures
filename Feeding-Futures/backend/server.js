@@ -38,13 +38,11 @@ app.use("/api/admin", adminRoutes);
 // ✅ Delivery API routes
 app.use("/api/delivery", deliveryRoutes);
 
+
 // Root Endpoint
 app.get("/", (req, res) => {
   res.send("🌍 Feeding Futures Backend Running with Delivery API");
 });
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running at http://localhost:${PORT}`)
-);
+// ✅ Export the app for Vercel serverless
+export default app;
