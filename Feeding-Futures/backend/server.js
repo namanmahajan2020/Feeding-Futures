@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import connectToDatabase from "./utils/db.js";
+import serverless from "serverless-http";
 
 // Normal routes
 import userRoutes from "./routes/userRoutes.js";
@@ -20,14 +22,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+// MongoDB Connection (cached for serverless)
+connectToDatabase()
+	.then(() => console.log("✅ MongoDB Connected"))
+	.catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Routes
 app.use("/api/users", userRoutes);
@@ -44,5 +42,6 @@ app.get("/", (req, res) => {
   res.send("🌍 Feeding Futures Backend Running with Delivery API");
 });
 
-// ✅ Export the app for Vercel serverless
-export default app;
+// ✅ Export the handler for Vercel serverless
+const handler = serverless(app);
+export default handler;
