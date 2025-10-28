@@ -19,6 +19,8 @@ import deliveryRoutes from "./routes/deliveryRoutes.js";
 dotenv.config();
 const app = express();
 
+app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
+
 app.use(cors());
 app.use(express.json());
 
