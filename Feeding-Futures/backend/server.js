@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectToDatabase from "./utils/db.js";
-import serverless from "serverless-http";
 
 // Normal routes
 import userRoutes from "./routes/userRoutes.js";
@@ -23,6 +22,9 @@ app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
 
 app.use(cors());
 app.use(express.json());
+
+// Basic favicon route to avoid 500 on /favicon.ico
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // MongoDB Connection (cached for serverless)
 connectToDatabase()
@@ -44,6 +46,12 @@ app.get("/", (req, res) => {
   res.send("🌍 Feeding Futures Backend Running with Delivery API");
 });
 
-// ✅ Export the handler for Vercel serverless
-const handler = serverless(app);
-export default handler;
+// ✅ Export the handler for Vercel serverless (no extra wrapper libs)
+export default async function handler(req, res) {
+	try {
+		await connectToDatabase();
+	} catch (err) {
+		console.error("❌ MongoDB connection error:", err);
+	}
+	return app(req, res);
+}
