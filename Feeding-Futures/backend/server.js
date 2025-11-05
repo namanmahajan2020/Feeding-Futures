@@ -1,9 +1,10 @@
+// server.js
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
+import mongoose from "mongoose";
+import "dotenv/config";
 
-// Normal routes
+
 import userRoutes from "./routes/userRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import foodDonationRoutes from "./routes/foodDonationRoutes.js";
@@ -14,37 +15,37 @@ import adminRoutes from "./routes/adminRoutes.js";
 // ✅ New delivery routes
 import deliveryRoutes from "./routes/deliveryRoutes.js";
 
-dotenv.config();
 const app = express();
 
-app.use(cors());
+// Middlewares
 app.use(express.json());
+app.use(cors());
 
-// MongoDB Connection
+// DB connect (use MONGO_URI in your Vercel env)
+const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+if (!mongoUri) {
+  console.error("❌ Missing MONGO_URI (or MONGODB_URI) env var");
+}
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .connect(mongoUri, { dbName: process.env.MONGO_DB || "app" })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
 // Routes
 app.use("/api/users", userRoutes);
-app.use("/api/feedback", feedbackRoutes);
-app.use("/api/food-donation", foodDonationRoutes);
 app.use("/api/admin", adminRoutes);
-
-// ✅ Delivery API routes
 app.use("/api/delivery", deliveryRoutes);
+app.use("/api/feedback", feedbackRoutes);
+app.use("/api/donations", foodDonationRoutes);
 
-// Root Endpoint
-app.get("/", (req, res) => {
-  res.send("🌍 Feeding Futures Backend Running with Delivery API");
-});
+// Health check
+app.get("/", (_req, res) => res.send("API Working"));
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running at http://localhost:${PORT}`)
-);
+// Local dev: listen. On Vercel, export the app.
+const port = process.env.PORT || 4000;
+if (process.env.VERCEL !== "1") {
+  app.listen(port, () => console.log("Server started on PORT:", port));
+}
+
+// ✅ Export for Vercel
+export default app;
