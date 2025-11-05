@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import favicon from "serve-favicon";
 import connectToDatabase from "./utils/db.js";
 
 // Normal routes
@@ -18,40 +21,46 @@ import deliveryRoutes from "./routes/deliveryRoutes.js";
 dotenv.config();
 const app = express();
 
-app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
+// ✅ Fix __dirname for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ✅ Use favicon middleware safely
+app.use(favicon(path.join(__dirname, "./Public", "favicon.ico")));
 
 app.use(cors());
 app.use(express.json());
 
-// Basic favicon route to avoid 500 on /favicon.ico
-app.get('/favicon.ico', (req, res) => res.status(204).end());
+// Avoid 500 on missing favicon requests
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
-// MongoDB Connection (cached for serverless)
+// ✅ MongoDB Connection
 connectToDatabase()
-	.then(() => console.log("✅ MongoDB Connected"))
-	.catch((err) => console.error("❌ MongoDB connection error:", err));
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Routes
+// ✅ API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/food-donation", foodDonationRoutes);
 app.use("/api/admin", adminRoutes);
-
-// ✅ Delivery API routes
 app.use("/api/delivery", deliveryRoutes);
-
 
 // Root Endpoint
 app.get("/", (req, res) => {
   res.send("🌍 Feeding Futures Backend Running with Delivery API");
 });
 
-// ✅ Export the handler for Vercel serverless (no extra wrapper libs)
+// ✅ For Vercel Serverless Environment
 export default async function handler(req, res) {
-	try {
-		await connectToDatabase();
-	} catch (err) {
-		console.error("❌ MongoDB connection error:", err);
-	}
-	return app(req, res);
+  try {
+    await connectToDatabase();
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err);
+  }
+  return app(req, res);
 }
+
+// ✅ If running locally, uncomment below:
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
