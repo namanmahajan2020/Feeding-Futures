@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs22.x"
+    }
+  },
+  "installCommand": "npm --prefix backend install",
+  "buildCommand": "echo \"no build step\"",
+  "ignoreCommand": "echo \"include all\""
+}
