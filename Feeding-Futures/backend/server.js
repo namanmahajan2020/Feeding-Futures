@@ -1,51 +1,71 @@
-// server.js
 import express from "express";
-import cors from "cors";
 import mongoose from "mongoose";
-import "dotenv/config";
-
+import cors from "cors";
+import dotenv from "dotenv";
 
 import userRoutes from "./routes/userRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import foodDonationRoutes from "./routes/foodDonationRoutes.js";
-
-// Admin routes
 import adminRoutes from "./routes/adminRoutes.js";
-
-// ✅ New delivery routes
 import deliveryRoutes from "./routes/deliveryRoutes.js";
 
+dotenv.config();
 const app = express();
 
-// Middlewares
+// ---------- CORS config ----------
+const FRONTEND_ORIGIN = process.env.FRONTEND_URL || "https://feeding-futures-user.vercel.app";
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // allow requests with no origin (e.g., mobile apps, curl) or from allowed origin
+    if (!origin || origin === FRONTEND_ORIGIN) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));         // use configured cors
+app.options("*", cors(corsOptions)); // preflight for all routes
+
+// A fallback middleware to always set headers (helps when some adapter swallows the cors middleware)
+app.use((req, res, next) => {
+  // If you use credentials, don't set '*' here — echo the origin
+  const origin = req.headers.origin || FRONTEND_ORIGIN;
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
+// ---------- Body parser ----------
 app.use(express.json());
-app.use(cors());
 
-// DB connect (use MONGO_URI in your Vercel env)
-const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
-if (!mongoUri) {
-  console.error("❌ Missing MONGO_URI (or MONGODB_URI) env var");
-}
+// ---------- MongoDB ----------
 mongoose
-  .connect(mongoUri, { dbName: process.env.MONGO_DB || "app" })
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err.message));
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Routes
+// ---------- Routes ----------
 app.use("/api/users", userRoutes);
+app.use("/api/feedback", feedbackRoutes);
+app.use("/api/food-donation", foodDonationRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/delivery", deliveryRoutes);
-app.use("/api/feedback", feedbackRoutes);
-app.use("/api/donations", foodDonationRoutes);
 
-// Health check
-app.get("/", (_req, res) => res.send("API Working"));
+app.get("/", (req, res) => {
+  res.send("🌍 Feeding Futures Backend Running with Delivery API");
+});
 
-// Local dev: listen. On Vercel, export the app.
-const port = process.env.PORT || 4000;
-if (process.env.VERCEL !== "1") {
-  app.listen(port, () => console.log("Server started on PORT:", port));
-}
-
-// ✅ Export for Vercel
-export default app;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+  console.log(`🚀 Server running at http://localhost:${PORT}`)
+);
