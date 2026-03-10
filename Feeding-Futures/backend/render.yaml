@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: feeding-futures-backend
+    env: node
+    region: oregon
+    branch: main
+    root: backend       # <-- change this to the folder with package.json
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    instanceType: free
+    healthCheckPath: "/"
+    envVars:
+      - key: FRONTEND_URL
+        value: "https://feeding-futures-user.vercel.app"
+      - key: MONGO_URI
+        fromDatabase: ""
