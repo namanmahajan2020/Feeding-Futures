@@ -1,4 +1,3 @@
-// src/hooks.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -13,14 +12,15 @@ export const useDataFetcher = () => {
       setError(null);
 
       try {
-        // 🧩 Use environment variable or fallback to localhost
-        const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+        const baseUrl =
+          import.meta.env.VITE_API_URL ||
+          import.meta.env.VITE_API_BASE_URL ||
+          "http://localhost:5000";
 
-        // 🔐 Admin API routes (avoid clashes with user routes)
         const [donationsRes, feedbackRes, usersRes] = await Promise.all([
-          axios.get(`${BASE_URL}/api/admin/donations`),
-          axios.get(`${BASE_URL}/api/admin/feedback`),
-          axios.get(`${BASE_URL}/api/admin/users`),
+          axios.get(`${baseUrl}/api/admin/donations`),
+          axios.get(`${baseUrl}/api/admin/feedback`),
+          axios.get(`${baseUrl}/api/admin/users`),
         ]);
 
         setData({
@@ -29,7 +29,7 @@ export const useDataFetcher = () => {
           users: usersRes.data || [],
         });
       } catch (err) {
-        console.error("❌ Error fetching admin data:", err);
+        console.error("Error fetching admin data:", err);
         setError("Failed to fetch admin data from server.");
       } finally {
         setIsLoading(false);
