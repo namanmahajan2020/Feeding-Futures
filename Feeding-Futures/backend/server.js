@@ -1,7 +1,7 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import connectDb from "./lib/connectDb.js";
 
 import userRoutes from "./routes/userRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
@@ -92,10 +92,15 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+app.use(async (req, res, next) => {
+  try {
+    await connectDb();
+    return next();
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    return res.status(500).json({ message: "Database connection failed" });
+  }
+});
 
 app.use("/api/users", userRoutes);
 app.use("/api/feedback", feedbackRoutes);
