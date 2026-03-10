@@ -32,9 +32,32 @@ const originAllowlist = new Set(
   configuredOrigins.length ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS
 );
 
+const allowVercelPreviewOrigins = process.env.ALLOW_VERCEL_PREVIEWS !== "false";
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) {
+    return true;
+  }
+
+  if (originAllowlist.has(origin)) {
+    return true;
+  }
+
+  if (!allowVercelPreviewOrigins) {
+    return false;
+  }
+
+  try {
+    const { protocol, hostname } = new URL(origin);
+    return protocol === "https:" && hostname.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+};
+
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || originAllowlist.has(origin)) {
+    if (isAllowedOrigin(origin)) {
       return callback(null, true);
     }
 
@@ -52,7 +75,7 @@ app.options(/.*/, cors(corsOptions));
 app.use((req, res, next) => {
   const requestOrigin = req.headers.origin;
 
-  if (requestOrigin && originAllowlist.has(requestOrigin)) {
+  if (requestOrigin && isAllowedOrigin(requestOrigin)) {
     res.setHeader("Access-Control-Allow-Origin", requestOrigin);
   }
 

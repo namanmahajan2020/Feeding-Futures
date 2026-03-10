@@ -23,12 +23,15 @@ Environment variables:
 
 - `MONGO_URI`
 - `FRONTEND_URLS`
+- `ALLOW_VERCEL_PREVIEWS` (optional)
 
 Example `FRONTEND_URLS` value:
 
 ```text
 https://feeding-futures-user.vercel.app,https://feeding-futures-admin.vercel.app,https://feeding-futures-delivery.vercel.app
 ```
+
+`ALLOW_VERCEL_PREVIEWS` defaults to `true`, so Vercel preview deployments under `*.vercel.app` can call the backend without being blocked by CORS. Set it to `false` only if you want to require exact origins from `FRONTEND_URLS`.
 
 After deploy, note the backend URL. You will use it in all frontend projects.
 
