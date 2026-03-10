@@ -1,7 +1,7 @@
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import connectDb from "./lib/connectDb.js";
 
 import userRoutes from "./routes/userRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
@@ -31,6 +31,40 @@ const configuredOrigins = (
 const originAllowlist = new Set(
   configuredOrigins.length ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS
 );
+
+const globalForMongoose = globalThis;
+const mongooseCache = globalForMongoose.__feedingFuturesMongoose ?? {
+  connection: null,
+  promise: null,
+};
+
+globalForMongoose.__feedingFuturesMongoose = mongooseCache;
+
+const connectDb = async () => {
+  if (mongooseCache.connection && mongoose.connection.readyState === 1) {
+    return mongooseCache.connection;
+  }
+
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI is not configured");
+  }
+
+  if (!mongooseCache.promise) {
+    mongooseCache.promise = mongoose
+      .connect(process.env.MONGO_URI)
+      .then((mongooseInstance) => {
+        console.log("MongoDB connected");
+        return mongooseInstance;
+      })
+      .catch((error) => {
+        mongooseCache.promise = null;
+        throw error;
+      });
+  }
+
+  mongooseCache.connection = await mongooseCache.promise;
+  return mongooseCache.connection;
+};
 
 const allowVercelPreviewOrigins = process.env.ALLOW_VERCEL_PREVIEWS !== "false";
 
