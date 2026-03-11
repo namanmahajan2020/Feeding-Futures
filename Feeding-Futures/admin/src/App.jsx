@@ -28,6 +28,9 @@ function AppLayout({ children }) {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
   const { isDarkMode, isSidebarOpen } = useContext(AppContext);
+  const layoutOffsetClass = !isLoginPage
+    ? (isSidebarOpen ? "ml-20 md:ml-64" : "ml-20 md:ml-20")
+    : "";
 
   return (
     <div
@@ -41,9 +44,7 @@ function AppLayout({ children }) {
       {!isLoginPage && <Sidebar />}
 
       <div
-        className={`flex flex-col flex-1 transition-all duration-300 ${
-          !isLoginPage ? (isSidebarOpen ? "md:ml-64" : "md:ml-20") : ""
-        }`}
+        className={`flex flex-col flex-1 transition-all duration-300 ${layoutOffsetClass}`}
       >
         {!isLoginPage && <Header />}
 
