@@ -161,13 +161,13 @@ const Analytics = () => {
   return (
     <div className="admin-page min-h-screen m-5">
       <h2 className="admin-fade-up mb-6 text-3xl font-bold text-sky-700 dark:text-sky-400">
-        Analytics Dashboard
+        📊 Analytics Dashboard
       </h2>
 
       <div className="mb-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <SummaryCard isDarkMode={isDarkMode} label="Total Donations" value={totalDonations} />
-        <SummaryCard isDarkMode={isDarkMode} label="Total Users" value={totalUsers} />
-        <SummaryCard isDarkMode={isDarkMode} label="Total Feedback" value={totalFeedback} />
+        <SummaryCard isDarkMode={isDarkMode} label="Total Donations" value={totalDonations} valueClass="text-blue-600" />
+        <SummaryCard isDarkMode={isDarkMode} label="Total Users" value={totalUsers} valueClass="text-green-600" />
+        <SummaryCard isDarkMode={isDarkMode} label="Total Feedback" value={totalFeedback} valueClass="text-yellow-600" />
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -176,7 +176,7 @@ const Analytics = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="value" fill="#0ea5e9" radius={[5, 5, 0, 0]} isAnimationActive={false} />
+            <Bar dataKey="value" fill="#8884d8" radius={[5, 5, 0, 0]} isAnimationActive={false} />
           </BarChart>
         </ChartCard>
 
@@ -198,7 +198,7 @@ const Analytics = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#14b8a6" isAnimationActive={false} />
+            <Line type="monotone" dataKey="value" stroke="#00C49F" isAnimationActive={false} />
           </LineChart>
         </ChartCard>
 
@@ -214,8 +214,8 @@ const Analytics = () => {
               <PolarGrid />
               <PolarAngleAxis dataKey="name" tick={{ fill: isDarkMode ? "white" : "black", fontSize: 10 }} />
               <PolarRadiusAxis angle={30} domain={[0, 5]} />
-              <Radar name="Rating" dataKey="rating" stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.45} isAnimationActive={false} />
-              <Tooltip formatter={(value) => `${value} stars`} />
+              <Radar name="Rating" dataKey="rating" stroke="#FF8042" fill="#FF8042" fillOpacity={0.6} isAnimationActive={false} />
+              <Tooltip formatter={(value) => `${value} ⭐`} />
             </RadarChart>
           ) : (
             <p className="mt-5 text-center">No ratings available</p>
@@ -252,7 +252,7 @@ const Analytics = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Area type="monotone" dataKey="value" fill="#38bdf8" stroke="#14b8a6" isAnimationActive={false} />
+            <Area type="monotone" dataKey="value" fill="#82ca9d" stroke="#82ca9d" isAnimationActive={false} />
           </AreaChart>
         </ChartCard>
       </div>
@@ -260,16 +260,16 @@ const Analytics = () => {
   );
 };
 
-const SummaryCard = ({ isDarkMode, label, value }) => (
+const SummaryCard = ({ isDarkMode, label, value, valueClass }) => (
   <div
-    className={`admin-card admin-fade-up rounded-2xl p-5 text-center shadow-md hover:shadow-xl ${
+    className={`admin-card admin-fade-up rounded-2xl bg-slate-900 p-5 text-center shadow-md hover:shadow-xl ${
       isDarkMode
         ? "bg-sky-900 brightness-90 text-white border border-slate-700"
         : "border-sky-50 bg-gradient-to-t from-blue-100 to-green-50 text-slate-900"
     }`}
   >
     <h3 className="text-lg font-semibold">{label}</h3>
-    <p className="text-3xl font-bold text-sky-500">{value}</p>
+    <p className={`text-3xl font-bold ${valueClass}`}>{value}</p>
   </div>
 );
 
