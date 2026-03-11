@@ -179,14 +179,13 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                 : "border-sky-200 bg-white/75"
             }`}
           >
-            <div className={`mb-3 grid items-center ${columns.some((col) => col.field === "status") ? "grid-cols-[1fr_auto_1fr]" : "grid-cols-1"}`}>
+            <div className={`mb-3 flex items-center ${columns.some((col) => col.field === "status") ? "justify-between" : "justify-start"}`}>
               <span className="text-sm font-bold text-pink-500">#{index + 1}</span>
               {columns.some((col) => col.field === "status") ? (
-                <div className="flex justify-center">
+                <div className="flex justify-end">
                   {renderCellValue(item, { field: "status" })}
                 </div>
               ) : null}
-              {columns.some((col) => col.field === "status") ? <span /> : null}
             </div>
 
             <div className="grid gap-3">
@@ -194,7 +193,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                   col.field === "status" ? null :
                   <div
                     key={`${col.field}-${item._id || item.id || index}`}
-                    className="grid grid-cols-[88px_1fr] gap-8 text-sm"
+                    className="grid grid-cols-[78px_1fr] gap-16 text-sm"
                   >
                     <span className={`font-semibold ${isDarkMode ? "text-pink-400" : "text-pink-500"}`}>
                       {col.header}

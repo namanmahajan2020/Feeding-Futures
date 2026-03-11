@@ -49,7 +49,7 @@ function AppLayout({ children }) {
         {!isLoginPage && <Header />}
 
         {/* Page Content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-1.5 md:p-6 pb-20">
+        <main id="admin-scroll-container" className="flex-1 overflow-x-hidden overflow-y-auto p-1.5 md:p-6 pb-20">
           {children}
         </main>
 
