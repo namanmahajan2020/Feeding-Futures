@@ -77,7 +77,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
           {/* Logo */}
           <div
             className="flex-shrink-0 text-2xl mr-64 font-extrabold text-gray-800 cursor-pointer"
-            onClick={() => navigate("/orders")}
+            onClick={() => navigate(isLoggedIn ? "/orders" : "/")}
           >
             Feeding <b className="text-emerald-500">Futures</b>
           </div>
