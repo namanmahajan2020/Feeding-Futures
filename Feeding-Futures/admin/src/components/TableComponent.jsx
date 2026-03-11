@@ -99,7 +99,33 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
             : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
         }`}
       >
-        <div className="space-y-4">
+        <div className="space-y-5 md:hidden">
+          {Array.from({ length: 3 }).map((_, cardIndex) => (
+            <div
+              key={cardIndex}
+              className={`rounded-2xl border p-4 ${
+                isDarkMode
+                  ? "border-sky-800 bg-slate-800/80"
+                  : "border-sky-200 bg-white/75"
+              }`}
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div className="admin-skeleton h-5 w-12 rounded-md" />
+                <div className="admin-skeleton h-8 w-24 rounded-full" />
+              </div>
+              <div className="space-y-3">
+                {Array.from({ length: Math.min(columns.length, 6) }).map((__, rowIndex) => (
+                  <div key={rowIndex} className="grid grid-cols-[88px_1fr] gap-3">
+                    <div className="admin-skeleton h-4 rounded-md" />
+                    <div className="admin-skeleton h-4 rounded-md" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="hidden space-y-4 md:block">
           <div className="flex gap-3">
             {Array.from({ length: Math.min(columns.length + 1, 6) }).map((_, index) => (
               <div key={index} className="admin-skeleton h-5 flex-1 rounded-md" />
@@ -143,7 +169,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
           : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
       }`}
     >
-      <div className="space-y-3 md:hidden">
+      <div className="space-y-5 md:hidden">
         {data.map((item, index) => (
           <article
             key={item._id || item.id || `${title}-${index}`}
@@ -168,7 +194,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                   col.field === "status" ? null :
                   <div
                     key={`${col.field}-${item._id || item.id || index}`}
-                    className="grid grid-cols-[72px_1fr] gap-2 text-sm"
+                    className="grid grid-cols-[88px_1fr] gap-3 text-sm"
                   >
                     <span className={`font-semibold ${isDarkMode ? "text-pink-400" : "text-pink-500"}`}>
                       {col.header}
