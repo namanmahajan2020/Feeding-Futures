@@ -32,38 +32,52 @@ const Navbar = () => {
     !isLoggedIn && currentPath !== "/start" && currentPath !== "/signup";
 
   return (
-    <header className="w-full h-18 bg-gradient-to-b from-white to-green-100 flex justify-between items-center px-24 md:px-12 sm:px-6 fixed top-0 z-50 shadow-sm">
+    <header className="fixed top-0 z-50 flex h-18 w-full items-center justify-between bg-gradient-to-b from-white to-green-100 px-4 shadow-sm sm:px-6 md:px-12 lg:px-24">
       <NavLink
         to="/"
         end
         className={({ isActive }) =>
           isActive
-            ? "block px-6 py-2 rounded-full bg-black text-white md:bg-transparent md:text-green-600 font-semibold"
-            : "block px-6 py-2 rounded-full hover:scale-110 transition-transform duration-300"
+            ? "block rounded-full px-3 py-2 font-semibold md:px-6 md:bg-transparent md:text-green-600"
+            : "block rounded-full px-3 py-2 transition-transform duration-300 hover:scale-110 md:px-6"
         }
         onClick={() => setNavActive(false)} // close nav on click
       >
-        <div className="text-3xl font-extrabold text-black select-none">
+        <div className="select-none text-2xl font-extrabold text-black sm:text-3xl md:whitespace-nowrap">
           Feeding <span className="text-green-600">Futures</span>
         </div>
       </NavLink>
 
-      {/* Hamburger for small screens */}
-      <div
-        className="hamburger cursor-pointer block md:hidden"
-        onClick={() => setNavActive(!navActive)}
-      >
-        <div className="w-8 h-0.5 bg-black my-1"></div>
-        <div className="w-8 h-0.5 bg-black my-1"></div>
-        <div className="w-8 h-0.5 bg-black my-1"></div>
+      <div className="flex items-center gap-3 md:hidden">
+        {shouldShowSignIn && (
+          <NavLink
+            to="/start"
+            className="whitespace-nowrap rounded-full border border-emerald-700 bg-gradient-to-b from-sky-500 to-black px-4 py-2 text-sm font-bold text-white transition duration-200 hover:scale-95 hover:bg-gradient-to-b hover:from-green-500 hover:to-black"
+            onClick={() => setNavActive(false)}
+          >
+            Sign In
+          </NavLink>
+        )}
+
+        {/* Hamburger for small screens */}
+        <button
+          type="button"
+          className="hamburger block cursor-pointer rounded-md p-1 md:hidden"
+          onClick={() => setNavActive(!navActive)}
+          aria-label="Toggle navigation menu"
+        >
+          <div className="my-1 h-0.5 w-7 bg-black"></div>
+          <div className="my-1 h-0.5 w-7 bg-black"></div>
+          <div className="my-1 h-0.5 w-7 bg-black"></div>
+        </button>
       </div>
 
       {/* Main container for navigation and Sign In */}
-      <div className="flex flex-1 justify-center items-center">
+      <div className="flex flex-1 items-center justify-center">
         {/* Nav Bar */}
         <nav
-          className={`nav-bar md:flex md:items-center md:static absolute top-20 left-0 w-full md:w-auto bg-green-600 md:bg-transparent overflow-hidden transition-[height] duration-200 ease-in ${navActive ? "h-[180px]" : "h-0"
-            } md:h-auto ${shouldShowSignIn?"":"mr-25"}`}
+          className={`nav-bar absolute left-0 top-18 w-full overflow-hidden bg-green-600 transition-[height] duration-200 ease-in md:static md:w-auto md:bg-transparent md:flex md:items-center ${navActive ? "h-[180px]" : "h-0"
+            } md:h-auto ${shouldShowSignIn ? "" : "md:mr-25"}`}
         >
           <ul className="md:flex md:space-x-6 text-white md:text-black text-lg text-center">
             <li>
@@ -130,7 +144,7 @@ const Navbar = () => {
       {shouldShowSignIn && (
         <NavLink
           to="/start"
-          className="block px-5 py-1.5 rounded-full border-1 border-emerald-700  bg-gradient-to-b from-sky-500 to-black text-white font-bold hover:bg-gradient-to-b hover:from-green-500 hover:to-black hover:scale-95 transition duration-200"
+          className="hidden md:block px-5 py-1.5 rounded-full border-1 border-emerald-700  bg-gradient-to-b from-sky-500 to-black text-white font-bold hover:bg-gradient-to-b hover:from-green-500 hover:to-black hover:scale-95 transition duration-200"
           onClick={() => setNavActive(false)}
         >
           Sign In
