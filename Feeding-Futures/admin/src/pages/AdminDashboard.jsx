@@ -33,7 +33,7 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <main
-      className={`p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
+      className={`admin-page p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
     >
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
@@ -43,7 +43,7 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
         </div>
       ) : (
         <>
-          <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">
+          <h2 className="admin-fade-up text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">
             Dashboard Overview
           </h2>
 
@@ -82,7 +82,7 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
             />
           </div>
 
-          <h2 className="text-3xl mt-15 font-bold text-sky-700 dark:text-sky-400">
+          <h2 className="admin-fade-up text-3xl mt-15 font-bold text-sky-700 dark:text-sky-400">
             Recent Donations
           </h2>
 

@@ -24,8 +24,8 @@ const Donations = ({ data, isLoading, isDarkMode }) => {
     : [];
 
   return (
-    <div className="m-5">
-      <h2 className="text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">
+    <div className="admin-page m-5">
+      <h2 className="admin-fade-up text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">
         User Donations
       </h2>
       <TableComponent

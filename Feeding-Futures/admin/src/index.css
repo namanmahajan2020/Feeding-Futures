@@ -8,6 +8,10 @@ html, body, #root {
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .font-poppins {
   font-family: 'Poppins', sans-serif;
 }
@@ -25,3 +29,97 @@ body {
   scrollbar-color: #024a71 #0f172b;
 }
 
+@keyframes adminFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminSoftPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.12);
+  }
+}
+
+.admin-page {
+  animation: adminFadeUp 0.45s ease-out;
+}
+
+.admin-fade-up {
+  animation: adminFadeUp 0.55s ease-out both;
+}
+
+.admin-card {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease,
+    background-color 0.28s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+}
+
+.admin-table-shell {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.admin-table-shell:hover {
+  transform: translateY(-2px);
+}
+
+.admin-interactive {
+  transition:
+    transform 0.22s ease,
+    opacity 0.22s ease,
+    background-color 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.admin-interactive:hover {
+  transform: translateY(-1px);
+}
+
+.admin-glow {
+  animation: adminSoftPulse 3.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .admin-page,
+  .admin-fade-up,
+  .admin-glow {
+    animation: none;
+  }
+
+  .admin-card,
+  .admin-table-shell,
+  .admin-interactive {
+    transition: none;
+  }
+
+  .admin-card:hover,
+  .admin-table-shell:hover,
+  .admin-interactive:hover {
+    transform: none;
+  }
+}

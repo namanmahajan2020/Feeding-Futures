@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Link, useNavigate } from "react-router-dom";
-import { Home, BarChart, Users, MessageSquare, Briefcase, Menu, Sun, Moon, LogOut, Package, Mail } from 'lucide-react';
-import { AppContext } from './AppContext'; // Assuming the context is exported
+import { NavLink, useNavigate } from "react-router-dom";
+import { Home, BarChart, Users, MessageSquare, Briefcase, Menu, Sun, Moon, LogOut } from 'lucide-react';
+import { AppContext } from './AppContext';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -11,7 +10,7 @@ const Sidebar = () => {
     navigate("/login");
   };
 
-  const { isSidebarOpen, setIsSidebarOpen, isDarkMode, activePage, setIsDarkMode } = useContext(AppContext);
+  const { isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode } = useContext(AppContext);
 
   const navItems = [
     { name: 'Dashboard', icon: Home, path: '/dashboard' },
@@ -27,7 +26,7 @@ const Sidebar = () => {
       p-4 transition-all duration-300 z-30 shadow-xl md:shadow-none`}>
 
       <div className="flex items-center space-x-3 cursor-pointer overflow-hidden">
-        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`${isSidebarOpen ? 'ml-1 p-3 rounded-xl pr-45' : 'p-3 '} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
+        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`admin-interactive ${isSidebarOpen ? 'ml-1 p-3 rounded-xl pr-45' : 'p-3 '} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
           <Menu className="w-6 h-6" />
         </button>
       </div>
@@ -38,7 +37,7 @@ const Sidebar = () => {
             <NavLink
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center p-3 rounded-xl transition duration-100 
+                `admin-interactive flex items-center p-3 rounded-xl transition duration-100 
                   ${isActive ? 'text-emerald-500' : 'hover:bg-sky-700 hover:text-white'}
                   ${isSidebarOpen ? '' : 'justify-center'}`
               }
@@ -54,7 +53,7 @@ const Sidebar = () => {
 
      <div className="absolute bottom-6 left-4 right-4 space-y-2">
   <div
-    className={`flex items-center p-3 rounded-xl cursor-pointer
+    className={`admin-interactive flex items-center p-3 rounded-xl cursor-pointer
       ${isDarkMode ? 'hover:bg-slate-600' : 'hover:bg-sky-500 hover:text-white'}
       ${isSidebarOpen ? 'justify-start' : ''}`}
     onClick={() => setIsDarkMode(prev => !prev)}
@@ -80,7 +79,7 @@ const Sidebar = () => {
 
   <button
     onClick={handleLogout}
-    className={`flex items-center p-3 rounded-xl w-full
+    className={`admin-interactive flex items-center p-3 rounded-xl w-full
       ${isDarkMode ? 'hover:bg-red-700' : 'hover:bg-red-600 hover:text-white'}
       ${isSidebarOpen ? 'justify-start' : ''}`}
   >

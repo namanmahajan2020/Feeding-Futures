@@ -6,7 +6,7 @@ const Header = () => {
   const { isDarkMode } = useContext(AppContext);
 
   return (
-    <header className={`sticky top-0 h-16 border-b flex items-center justify-between px-4 sm:px-6 z-20 shadow-sm 
+    <header className={`sticky top-0 h-16 border-b flex items-center justify-between px-4 sm:px-6 z-20 shadow-sm backdrop-blur-sm transition-all duration-300 
       ${isDarkMode ? 'bg-slate-900 text-slate-100 border-slate-700' : 'bg-gradient-to-t from-green-50 to-blue-50 text-sky-900 border-sky-900'}`}>
       <div className="flex items-center space-x-2">
 
@@ -18,7 +18,7 @@ const Header = () => {
       </div>
       <div className="flex items-center space-x-4">
         <span className={`text-sm font-semibold hidden sm:inline ${isDarkMode ? "text-slate-100" : " text-slate-800"}`}>Status: Logged In -<span className='text-green-500'> Naman Mahajan</span></span>
-        <img className='w-10 h-10' src="img/admin.png" alt="profile pic" />
+        <img className='admin-glow w-10 h-10 rounded-full object-cover ring-2 ring-white/30' src="img/admin.png" alt="profile pic" />
       </div>
     </header>
   );

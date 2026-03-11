@@ -20,10 +20,10 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
 
   return (
     <section
-      className={`${isDarkMode
+      className={`admin-table-shell admin-fade-up ${isDarkMode
         ? "bg-slate-900 border-slate-700"
         : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
-        } border rounded-lg p-4`}
+        } border rounded-lg p-4 shadow-md hover:shadow-lg`}
     >
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
@@ -45,7 +45,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
             {data.map((item, index) => (
               <tr
                 key={item._id || item.id || `${title}-${index}`}
-                className={`border-t ${isDarkMode ? "border-sky-800" : "border-purple-400"}`}
+                className={`admin-interactive border-t ${isDarkMode ? "border-sky-800 hover:bg-slate-800/70" : "border-purple-400 hover:bg-white/45"}`}
               >
                 <td
                   className={`text-sm font-semibold p-3 ${isDarkMode ? "text-slate-300" : "text-sky-800"

@@ -56,11 +56,11 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b relative">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b relative admin-page">
       {/* === LOGIN FORM === */}
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-gradient-to-b from-white to-green-100 p-8 rounded-2xl shadow-2xl border border-green-200 z-10"
+        className="admin-card admin-fade-up w-full max-w-md bg-gradient-to-b from-white to-green-100 p-8 rounded-2xl shadow-2xl border border-green-200 z-10"
         aria-labelledby="admin-login-title"
       >
         <h2
@@ -78,7 +78,7 @@ const AdminLogin = () => {
           onChange={handleChange}
           placeholder="Enter your email"
           required
-          className="w-full mb-4 p-3 rounded-lg border border-green-500 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-600"
+          className="admin-interactive w-full mb-4 p-3 rounded-lg border border-green-500 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-600"
         />
 
         <label className="block text-gray-700 mb-1">Password</label>
@@ -89,12 +89,12 @@ const AdminLogin = () => {
           onChange={handleChange}
           placeholder="Enter password"
           required
-          className="w-full mb-4 p-3 rounded-lg bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600"
+          className="admin-interactive w-full mb-4 p-3 rounded-lg bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600"
         />
 
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold mb-4 shadow-lg transition-all duration-200 transform hover:-translate-y-1"
+          className="admin-interactive w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold mb-4 shadow-lg hover:-translate-y-1"
         >
           Login
         </button>
@@ -116,10 +116,10 @@ const AdminLogin = () => {
       {/* === DEMO CREDENTIAL CARD === */}
       <div
         aria-hidden="false"
-        className="pointer-events-auto select-none absolute bottom-6 left-6 transform-gpu md:left-12 md:bottom-12"
+          className="pointer-events-auto select-none absolute bottom-6 left-6 transform-gpu md:left-12 md:bottom-12"
       >
         <div
-          className="relative w-72 md:w-80 p-4 rounded-3xl bg-gradient-to-b from-black via-teal-900 to-green-500 text-white ring-2 overflow-hidden"
+          className="admin-card admin-fade-up relative w-72 md:w-80 p-4 rounded-3xl bg-gradient-to-b from-black via-teal-900 to-green-500 text-white ring-2 overflow-hidden"
           role="region"
           aria-label="Demo credentials (for demo only)"
         >
@@ -167,7 +167,7 @@ const AdminLogin = () => {
             <button
               type="button"
               onClick={autoFillCredentials}
-              className="border inline-block px-3 py-2 bg-gradient-to-b from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
+              className="admin-interactive border inline-block px-3 py-2 bg-gradient-to-b from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
             >
               ✨ Auto-fill Demo Credentials ✨
             </button>
