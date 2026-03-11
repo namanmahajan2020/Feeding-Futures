@@ -29,7 +29,7 @@ function AppLayout({ children }) {
   const isLoginPage = location.pathname === "/login";
   const { isDarkMode, isSidebarOpen } = useContext(AppContext);
   const layoutOffsetClass = !isLoginPage
-    ? (isSidebarOpen ? "ml-20 md:ml-64" : "ml-20 md:ml-20")
+    ? (isSidebarOpen ? "ml-16 md:ml-64" : "ml-16 md:ml-20")
     : "";
 
   return (
@@ -49,7 +49,7 @@ function AppLayout({ children }) {
         {!isLoginPage && <Header />}
 
         {/* Page Content */}
-        <main className="flex-1 p-4 md:p-6 pb-20 overflow-auto">
+        <main className="flex-1 p-3 md:p-6 pb-20 overflow-auto">
           {children}
         </main>
 
@@ -67,7 +67,10 @@ export default function App() {
 
   // Theme & Layout State
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("mode") !== "light");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.innerWidth >= 768;
+  });
   const [activePage, setActivePage] = useState("dashboard");
 
   // Login State

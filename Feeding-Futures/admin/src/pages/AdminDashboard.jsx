@@ -47,7 +47,7 @@ const Dashboard = ({ data, isLoading, isDarkMode }) => {
 
   return (
     <main
-      className={`admin-page p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
+      className={`admin-page p-3 md:p-4 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
     >
       {isLoading ? (
         showLoadingSkeleton ? (

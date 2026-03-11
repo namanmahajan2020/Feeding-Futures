@@ -1,5 +1,37 @@
-// TableComponent.jsx
 import React, { useEffect, useState } from "react";
+
+const renderCellValue = (item, col) => {
+  if (col.field === "createdAt") {
+    if (item[col.field]) {
+      const date = new Date(item[col.field]);
+      const day = date.getDate();
+      const month = date.toLocaleString("en-GB", { month: "short" });
+      const year = date.getFullYear();
+      return `${month}\u00A0${day},\u00A0${year}`;
+    }
+
+    return "—";
+  }
+
+  if (col.field === "status") {
+    const status = item[col.field] || "—";
+    const baseBadge = "px-3 py-1 rounded-full text-xs font-bold";
+    const statusStyles = {
+      Collected: "bg-[#d0fae5] text-[#006045]",
+      Pending: "bg-[#fef3c6] text-[#973c00]",
+      Default: "bg-blue-200 text-blue-600",
+    };
+
+    const statusClass = statusStyles[status] || statusStyles.Default;
+    return <span className={`${baseBadge} ${statusClass}`}>{status}</span>;
+  }
+
+  if (col.field === "quantity") {
+    return item[col.field] ? `${item[col.field]} kg` : "—";
+  }
+
+  return item[col.field] || "—";
+};
 
 const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
   const [showLoadingSkeleton, setShowLoadingSkeleton] = useState(true);
@@ -81,21 +113,55 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
 
   return (
     <section
-      className={`admin-table-shell admin-fade-up ${isDarkMode
-        ? "bg-slate-900 border-slate-700"
-        : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
-        } border rounded-lg p-4 shadow-md hover:shadow-lg`}
+      className={`admin-table-shell admin-fade-up border rounded-lg p-3 md:p-4 shadow-md hover:shadow-lg ${
+        isDarkMode
+          ? "bg-slate-900 border-slate-700"
+          : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
+      }`}
     >
-      <div className="overflow-x-auto">
-        <table className="w-full table-auto">
-          <thead
-            className={`text-sm ${isDarkMode ? "text-slate-300" : "text-sky-900"
-              } uppercase`}
+      <div className="space-y-3 md:hidden">
+        {data.map((item, index) => (
+          <article
+            key={item._id || item.id || `${title}-${index}`}
+            className={`rounded-2xl border p-4 ${
+              isDarkMode
+                ? "border-sky-800 bg-slate-800/80"
+                : "border-sky-200 bg-white/75"
+            }`}
           >
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-sm font-bold text-pink-500">#{index + 1}</span>
+              {columns.some((col) => col.field === "status") && renderCellValue(item, { field: "status" })}
+            </div>
+
+            <div className="grid gap-3">
+              {columns
+                .filter((col) => col.field !== "status")
+                .map((col) => (
+                  <div
+                    key={`${col.field}-${item._id || item.id || index}`}
+                    className="grid grid-cols-[92px_1fr] gap-3 text-sm"
+                  >
+                    <span className={`font-semibold ${isDarkMode ? "text-pink-400" : "text-pink-500"}`}>
+                      {col.header}
+                    </span>
+                    <div className={`${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
+                      {renderCellValue(item, col)}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto md:block">
+        <table className="w-full table-auto">
+          <thead className={`text-sm uppercase ${isDarkMode ? "text-slate-300" : "text-sky-900"}`}>
             <tr>
-              <th className="p-3 text-left text-pink-500">#</th> {/* Serial Number Header */}
+              <th className="p-3 text-left text-pink-500">#</th>
               {columns.map((col) => (
-                <th key={col.field} className={`p-3 text-left ${isDarkMode ? "text-pink-500" : " text-pink-500"}`}>
+                <th key={col.field} className="p-3 text-left text-pink-500">
                   {col.header}
                 </th>
               ))}
@@ -106,59 +172,20 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
             {data.map((item, index) => (
               <tr
                 key={item._id || item.id || `${title}-${index}`}
-                className={`admin-interactive border-t ${isDarkMode ? "border-sky-800 hover:bg-slate-800/70" : "border-purple-400 hover:bg-white/45"}`}
+                className={`admin-interactive border-t ${
+                  isDarkMode ? "border-sky-800 hover:bg-slate-800/70" : "border-purple-400 hover:bg-white/45"
+                }`}
               >
-                <td
-                  className={`text-sm font-semibold p-3 ${isDarkMode ? "text-slate-300" : "text-sky-800"
-                    }`}
-                >
-                  {index + 1} {/* Serial Number */}
+                <td className={`p-3 text-sm font-semibold ${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
+                  {index + 1}
                 </td>
 
                 {columns.map((col) => (
                   <td
                     key={`${col.field}-${item._id || item.id || index}`}
-                    className={`text-sm font-semibold p-3 ${isDarkMode ? "text-slate-300" : "text-sky-800"
-                      }`}
+                    className={`p-3 text-sm font-semibold ${isDarkMode ? "text-slate-300" : "text-sky-800"}`}
                   >
-                    {(() => {
-                      if (col.field === "createdAt") {
-                        if (item[col.field]) {
-                          const date = new Date(item[col.field]);
-                          const day = date.getDate();
-                          const month = date.toLocaleString("en-GB", { month: "short" });
-                          const year = date.getFullYear();
-                          return `${month}\u00A0${day},\u00A0${year}`;
-
-                        } else {
-                          return "—";
-                        }
-                      }
-
-
-                      if (col.field === "status") {
-                        const status = item[col.field] || "—";
-                        const baseBadge = "px-3 py-1 rounded-full text-xs font-bold";
-                        const statusStyles = {
-                          Collected:
-                            "bg-[#d0fae5] text-[#006045]",
-                          Pending:
-                            "bg-[#fef3c6] text-[#973c00]",
-                          Default:
-                            "bg-blue-200 text-blue-600"
-                        };
-
-                        const statusClass = statusStyles[status] || statusStyles.Default;
-
-                        return <span className={`${baseBadge} ${statusClass}`}>{status}</span>;
-                      }
-
-                      if (col.field === "quantity") {
-                        return item[col.field] ? `${item[col.field]} kg` : "—";
-                      }
-
-                      return item[col.field] || "—";
-                    })()}
+                    {renderCellValue(item, col)}
                   </td>
                 ))}
               </tr>

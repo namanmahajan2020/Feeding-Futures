@@ -1,16 +1,19 @@
-import React, { useContext } from 'react';
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useRef } from 'react';
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Home, BarChart, Users, MessageSquare, Briefcase, Menu, Sun, Moon, LogOut } from 'lucide-react';
 import { AppContext } from './AppContext';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const sidebarRef = useRef(null);
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
   };
 
   const { isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode } = useContext(AppContext);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   const navItems = [
     { name: 'Dashboard', icon: Home, path: '/dashboard' },
@@ -20,13 +23,41 @@ const Sidebar = () => {
     { name: 'Analytics', icon: BarChart, path: '/analytics' },
   ];
 
+  useEffect(() => {
+    if (!isSidebarOpen || !isMobile) return;
+
+    const closeSidebar = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    const closeOnScroll = () => {
+      setIsSidebarOpen(false);
+    };
+
+    document.addEventListener("pointerdown", closeSidebar);
+    document.addEventListener("scroll", closeOnScroll, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeSidebar);
+      document.removeEventListener("scroll", closeOnScroll, true);
+    };
+  }, [isSidebarOpen, isMobile, setIsSidebarOpen]);
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    }
+  }, [location.pathname, isMobile, setIsSidebarOpen]);
+
   return (
-    <nav className={`fixed top-0 left-0 border-r h-full ${isSidebarOpen ? 'w-64' : 'w-20'} 
+    <nav ref={sidebarRef} className={`fixed top-0 left-0 border-r h-full ${isSidebarOpen ? 'w-56 md:w-64' : 'w-16 md:w-20'} 
       ${isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-gradient-to-r from-slate-50 to-sky-50 bg-gradient-to-b from-indigo-50 to-sky-100 text-sky-900 border-sky-800'}
       p-4 transition-all duration-300 z-30 shadow-xl md:shadow-none`}>
 
       <div className="flex items-center space-x-3 cursor-pointer overflow-hidden">
-        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`admin-interactive ${isSidebarOpen ? 'ml-1 p-3 rounded-xl pr-45' : 'p-3 '} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
+        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`admin-interactive ${isSidebarOpen ? 'ml-1 p-3 rounded-xl pr-32 md:pr-45' : 'p-2 md:p-3'} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
           <Menu className="w-6 h-6" />
         </button>
       </div>
@@ -41,6 +72,9 @@ const Sidebar = () => {
                   ${isActive ? 'text-emerald-500' : 'hover:bg-sky-700 hover:text-white'}
                   ${isSidebarOpen ? '' : 'justify-center'}`
               }
+              onClick={() => {
+                if (isMobile) setIsSidebarOpen(false);
+              }}
             >
               <item.icon className="w-8 h-6 shrink-0" />
               <span className={`ml-4 text-lg font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'} transition-opacity duration-200`}>
