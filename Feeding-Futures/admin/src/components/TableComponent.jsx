@@ -35,6 +35,7 @@ const renderCellValue = (item, col) => {
 
 const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
   const [showLoadingSkeleton, setShowLoadingSkeleton] = useState(true);
+  const [expandedMessageId, setExpandedMessageId] = useState(null);
 
   useEffect(() => {
     if (!loading) {
@@ -48,6 +49,15 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
 
     return () => clearTimeout(timer);
   }, [loading]);
+
+  useEffect(() => {
+    const closeExpandedMessage = () => setExpandedMessageId(null);
+    document.addEventListener("scroll", closeExpandedMessage, true);
+
+    return () => {
+      document.removeEventListener("scroll", closeExpandedMessage, true);
+    };
+  }, []);
 
   if (loading) {
     if (!showLoadingSkeleton) {
@@ -131,13 +141,10 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
           >
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm font-bold text-pink-500">#{index + 1}</span>
-              {columns.some((col) => col.field === "status") && renderCellValue(item, { field: "status" })}
             </div>
 
             <div className="grid gap-3">
-              {columns
-                .filter((col) => col.field !== "status")
-                .map((col) => (
+              {columns.map((col) => (
                   <div
                     key={`${col.field}-${item._id || item.id || index}`}
                     className="grid grid-cols-[92px_1fr] gap-3 text-sm"
@@ -146,7 +153,39 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                       {col.header}
                     </span>
                     <div className={`${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
-                      {renderCellValue(item, col)}
+                      {col.field === "message" ? (
+                        <div>
+                          <p
+                            style={
+                              expandedMessageId === (item._id || item.id || index)
+                                ? undefined
+                                : {
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 3,
+                                    WebkitBoxOrient: "vertical",
+                                    overflow: "hidden",
+                                  }
+                            }
+                          >
+                            {item[col.field] || "—"}
+                          </p>
+                          {item[col.field] && item[col.field].length > 120 && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setExpandedMessageId((prev) =>
+                                  prev === (item._id || item.id || index) ? null : (item._id || item.id || index)
+                                )
+                              }
+                              className="mt-2 text-xs font-semibold text-cyan-400"
+                            >
+                              {expandedMessageId === (item._id || item.id || index) ? "Show less" : "Show full"}
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        renderCellValue(item, col)
+                      )}
                     </div>
                   </div>
                 ))}
