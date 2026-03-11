@@ -5,10 +5,18 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Scroll to top whenever the route changes
+    const mainScroller = document.querySelector("main");
+
+    if (mainScroller) {
+      mainScroller.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // you can use "auto" for instant scroll
+      behavior: "smooth",
     });
   }, [pathname]);
 

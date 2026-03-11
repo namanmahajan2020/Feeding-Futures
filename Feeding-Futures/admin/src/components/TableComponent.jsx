@@ -194,7 +194,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                   col.field === "status" ? null :
                   <div
                     key={`${col.field}-${item._id || item.id || index}`}
-                    className="grid grid-cols-[96px_1fr] gap-4 text-sm"
+                    className="grid grid-cols-[88px_1fr] gap-8 text-sm"
                   >
                     <span className={`font-semibold ${isDarkMode ? "text-pink-400" : "text-pink-500"}`}>
                       {col.header}

@@ -56,14 +56,9 @@ const Sidebar = () => {
       ${isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-gradient-to-r from-slate-50 to-sky-50 bg-gradient-to-b from-indigo-50 to-sky-100 text-sky-900 border-sky-800'}
       p-4 transition-all duration-300 z-30 shadow-xl md:shadow-none`}>
 
-      <div className="flex items-center cursor-pointer overflow-hidden">
-        <button
-          onClick={() => setIsSidebarOpen(prev => !prev)}
-          className={`admin-interactive flex w-full items-center rounded-xl ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'} ${isSidebarOpen ? 'p-3' : 'p-2 md:p-3'}`}
-        >
-          <span className="flex w-8 justify-center shrink-0">
-            <Menu className="w-6 h-6" />
-          </span>
+      <div className="flex items-center space-x-3 cursor-pointer overflow-hidden">
+        <button onClick={() => setIsSidebarOpen(prev => !prev)} className={`admin-interactive ${isSidebarOpen ? 'ml-1 p-3 rounded-xl pr-32 md:pr-45' : 'p-2 md:p-3'} rounded-lg ml-0 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-sky-100'}`}>
+          <Menu className="w-6 h-6" />
         </button>
       </div>
 
@@ -74,16 +69,15 @@ const Sidebar = () => {
               to={item.path}
               className={({ isActive }) =>
                 `admin-interactive flex items-center p-3 rounded-xl transition duration-100 
-                  ${isActive ? 'text-emerald-500' : 'hover:bg-sky-700 hover:text-white'}`
+                  ${isActive ? 'text-emerald-500' : 'hover:bg-sky-700 hover:text-white'}
+                  ${isSidebarOpen ? '' : 'justify-center'}`
               }
               onClick={() => {
                 if (isMobile) setIsSidebarOpen(false);
               }}
             >
-              <span className="flex w-8 justify-center shrink-0">
-                <item.icon className="w-8 h-6 shrink-0" />
-              </span>
-              <span className={`ml-4 text-lg font-medium overflow-hidden whitespace-nowrap ${isSidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0'} transition-all duration-200`}>
+              <item.icon className="w-8 h-6 shrink-0" />
+              <span className={`ml-4 text-lg font-medium ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'} transition-opacity duration-200`}>
                 {item.name}
               </span>
             </NavLink>
@@ -95,7 +89,7 @@ const Sidebar = () => {
   <div
     className={`admin-interactive flex items-center p-3 rounded-xl cursor-pointer
       ${isDarkMode ? 'hover:bg-slate-600' : 'hover:bg-sky-500 hover:text-white'}
-      `}
+      ${isSidebarOpen ? 'justify-start' : ''}`}
     onClick={() => setIsDarkMode(prev => !prev)}
   >
     {/* Icon container with fixed width to prevent shift */}
@@ -121,7 +115,7 @@ const Sidebar = () => {
     onClick={handleLogout}
     className={`admin-interactive flex items-center p-3 rounded-xl w-full
       ${isDarkMode ? 'hover:bg-red-700' : 'hover:bg-red-600 hover:text-white'}
-      `}
+      ${isSidebarOpen ? 'justify-start' : ''}`}
   >
     <div style={{ minWidth: '32px', display: 'flex', justifyContent: 'center' }}>
       <LogOut className="w-8 h-6 mr-2 text-red-400" />
