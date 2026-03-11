@@ -1,20 +1,81 @@
 // TableComponent.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
+  const [showLoadingSkeleton, setShowLoadingSkeleton] = useState(true);
+
+  useEffect(() => {
+    if (!loading) {
+      setShowLoadingSkeleton(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setShowLoadingSkeleton(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   if (loading) {
+    if (!showLoadingSkeleton) {
+      return (
+        <section
+          className={`admin-table-shell border rounded-lg p-8 text-center shadow-md ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-700 text-slate-200"
+              : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800 text-sky-900"
+          }`}
+        >
+          <h3 className="text-2xl font-bold">{title || "This section"} is taking longer than usual</h3>
+          <p className="mt-2 text-sm opacity-80">
+            We could not load this section yet. Please wait a moment or try refreshing.
+          </p>
+        </section>
+      );
+    }
+
     return (
-      <p className={`text-center text-2xl mt-52 ${isDarkMode ? "text-slate-300" : "text-sky-900"}`}>
-        Loading...
-      </p>
+      <section
+        className={`admin-table-shell border rounded-lg p-4 shadow-md ${
+          isDarkMode
+            ? "bg-slate-900 border-slate-700"
+            : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex gap-3">
+            {Array.from({ length: Math.min(columns.length + 1, 6) }).map((_, index) => (
+              <div key={index} className="admin-skeleton h-5 flex-1 rounded-md" />
+            ))}
+          </div>
+
+          {Array.from({ length: 6 }).map((_, rowIndex) => (
+            <div key={rowIndex} className="flex gap-3">
+              {Array.from({ length: Math.min(columns.length + 1, 6) }).map((__, colIndex) => (
+                <div key={colIndex} className="admin-skeleton h-10 flex-1 rounded-lg" />
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <p className={`text-center ${isDarkMode ? "text-slate-300" : "text-sky-900"}`}>
-        No data available
-      </p>
+      <section
+        className={`admin-table-shell border rounded-lg p-8 text-center shadow-md ${
+          isDarkMode
+            ? "bg-slate-900 border-slate-700 text-slate-300"
+            : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800 text-sky-900"
+        }`}
+      >
+        <h3 className="text-xl font-semibold">{title || "Records"}</h3>
+        <p className="mt-2 text-sm opacity-80">
+          No data is available right now. New records will appear here when the backend returns results.
+        </p>
+      </section>
     );
   }
 

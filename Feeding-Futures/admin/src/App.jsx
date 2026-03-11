@@ -66,7 +66,7 @@ export default function App() {
   const { data, isLoading } = useDataFetcher();
 
   // Theme & Layout State
-  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("mode") === "dark");
+  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("mode") !== "light");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState("dashboard");
 

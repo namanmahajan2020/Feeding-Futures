@@ -1,6 +1,5 @@
 import React from "react";
 
-// Color classes for light mode
 const colorClasses = {
   blue: "text-sky-600 bg-sky-100",
   yellow: "text-yellow-600 bg-yellow-100",
@@ -8,7 +7,6 @@ const colorClasses = {
   green: "text-emerald-600 bg-emerald-100",
 };
 
-// Color classes for dark mode
 const darkClasses = {
   blue: "dark:bg-sky-900 dark:text-sky-300",
   yellow: "dark:bg-yellow-900 dark:text-yellow-300",
@@ -16,7 +14,6 @@ const darkClasses = {
   green: "dark:bg-emerald-900 dark:text-emerald-300",
 };
 
-// StatCard Component
 const StatCard = ({ icon: Icon, title, value, isDarkMode, color }) => {
   return (
     <div

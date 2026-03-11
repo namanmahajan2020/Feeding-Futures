@@ -4,7 +4,7 @@ import React, { createContext, useState, useMemo } from 'react';
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') === 'dark');
+  const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') !== 'light');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('dashboard');
 
