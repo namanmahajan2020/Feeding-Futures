@@ -51,13 +51,27 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
   }, [loading]);
 
   useEffect(() => {
-    const closeExpandedMessage = () => setExpandedMessageId(null);
+    if (!expandedMessageId) return undefined;
+
+    const openedAt = window.scrollY;
+
+    const timer = setTimeout(() => {
+      setExpandedMessageId(null);
+    }, 10000);
+
+    const closeExpandedMessage = () => {
+      if (Math.abs(window.scrollY - openedAt) > 420) {
+        setExpandedMessageId(null);
+      }
+    };
+
     document.addEventListener("scroll", closeExpandedMessage, true);
 
     return () => {
+      clearTimeout(timer);
       document.removeEventListener("scroll", closeExpandedMessage, true);
     };
-  }, []);
+  }, [expandedMessageId]);
 
   if (loading) {
     if (!showLoadingSkeleton) {
@@ -123,7 +137,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
 
   return (
     <section
-      className={`admin-table-shell admin-fade-up border rounded-lg p-3 md:p-4 shadow-md hover:shadow-lg ${
+      className={`admin-table-shell admin-fade-up border rounded-lg p-2 md:p-4 shadow-md hover:shadow-lg ${
         isDarkMode
           ? "bg-slate-900 border-slate-700"
           : "bg-gradient-to-b from-blue-100 to-green-50 border-sky-800"
@@ -133,7 +147,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
         {data.map((item, index) => (
           <article
             key={item._id || item.id || `${title}-${index}`}
-            className={`rounded-2xl border p-4 ${
+            className={`rounded-2xl border p-3 ${
               isDarkMode
                 ? "border-sky-800 bg-slate-800/80"
                 : "border-sky-200 bg-white/75"
@@ -141,21 +155,24 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
           >
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm font-bold text-pink-500">#{index + 1}</span>
+              {columns.some((col) => col.field === "status") && renderCellValue(item, { field: "status" })}
             </div>
 
             <div className="grid gap-3">
               {columns.map((col) => (
+                  col.field === "status" ? null :
                   <div
                     key={`${col.field}-${item._id || item.id || index}`}
-                    className="grid grid-cols-[92px_1fr] gap-3 text-sm"
+                    className="grid grid-cols-[74px_1fr] gap-2 text-sm"
                   >
                     <span className={`font-semibold ${isDarkMode ? "text-pink-400" : "text-pink-500"}`}>
                       {col.header}
                     </span>
-                    <div className={`${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
+                    <div className={`min-w-0 overflow-hidden ${col.field === "email" ? "break-all" : "break-words"} ${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
                       {col.field === "message" ? (
                         <div>
                           <p
+                            className="break-words"
                             style={
                               expandedMessageId === (item._id || item.id || index)
                                 ? undefined
@@ -173,9 +190,13 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                             <button
                               type="button"
                               onClick={() =>
-                                setExpandedMessageId((prev) =>
-                                  prev === (item._id || item.id || index) ? null : (item._id || item.id || index)
-                                )
+                                setExpandedMessageId((prev) => {
+                                  const nextId =
+                                    prev === (item._id || item.id || index)
+                                      ? null
+                                      : (item._id || item.id || index);
+                                  return nextId;
+                                })
                               }
                               className="mt-2 text-xs font-semibold text-cyan-400"
                             >
@@ -188,7 +209,7 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                       )}
                     </div>
                   </div>
-                ))}
+                )).filter(Boolean)}
             </div>
           </article>
         ))}

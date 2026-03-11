@@ -43,7 +43,7 @@ const Header = () => {
         <button
           type="button"
           onClick={() => setShowProfileCard((prev) => !prev)}
-          className="rounded-full"
+          className="flex-none rounded-full leading-none"
           aria-label="Open profile details"
         >
           <img className='admin-glow w-10 h-10 rounded-full object-cover ring-2 ring-white/30' src="img/admin.png" alt="profile pic" />
@@ -51,7 +51,7 @@ const Header = () => {
 
         {showProfileCard && (
           <div
-            className={`absolute right-0 top-13 rounded-xl border px-4 py-2 text-sm font-semibold shadow-lg ${
+            className={`absolute right-0 top-full mt-2 z-30 whitespace-nowrap rounded-xl border px-4 py-2 text-sm font-semibold shadow-lg ${
               isDarkMode
                 ? "border-slate-700 bg-slate-800 text-slate-100"
                 : "border-sky-200 bg-white text-sky-900"

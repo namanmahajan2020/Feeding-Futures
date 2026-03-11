@@ -19,7 +19,7 @@ const Users = ({ data, isLoading, isDarkMode }) => {
     : [];
 
   return (
-    <div className="admin-page m-3 md:m-5">
+    <div className="admin-page m-2 md:m-5">
       <h2 className="admin-fade-up text-3xl font-bold mb-6 text-sky-700 dark:text-sky-400">Users</h2>
       <TableComponent
         title="Users"

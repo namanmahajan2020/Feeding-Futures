@@ -50,7 +50,7 @@ const Analytics = () => {
   if (isLoading) {
     if (!showLoadingSkeleton) {
       return (
-        <div className="admin-page min-h-screen m-3 md:m-5">
+        <div className="admin-page min-h-screen m-2 md:m-5">
           <div
             className={`rounded-2xl border p-8 text-center shadow-md ${
               isDarkMode
@@ -68,7 +68,7 @@ const Analytics = () => {
     }
 
     return (
-      <div className="admin-page min-h-screen m-3 md:m-5 space-y-8">
+      <div className="admin-page min-h-screen m-2 md:m-5 space-y-8">
         <div className="admin-skeleton h-10 w-72 rounded-xl" />
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {Array.from({ length: 3 }).map((_, index) => (
@@ -106,7 +106,7 @@ const Analytics = () => {
 
   if (error) {
     return (
-      <div className="admin-page min-h-screen m-3 md:m-5">
+      <div className="admin-page min-h-screen m-2 md:m-5">
         <div
           className={`rounded-2xl border p-8 text-center shadow-md ${
             isDarkMode
@@ -159,7 +159,7 @@ const Analytics = () => {
   const genderData = Object.entries(genderCounts).map(([name, value]) => ({ name, value }));
 
   return (
-    <div className="admin-page min-h-screen m-3 md:m-5">
+    <div className="admin-page min-h-screen m-2 md:m-5">
       <h2 className="admin-fade-up mb-6 text-3xl font-bold text-sky-700 dark:text-sky-400">
         📊 Analytics Dashboard
       </h2>
