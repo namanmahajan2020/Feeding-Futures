@@ -71,12 +71,12 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   };
 
   return (
-    <header className="border-b-1 border-white shadow-lg sticky top-0 z-50 bg-transparent backdrop-blur-2xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b-1 border-white bg-transparent shadow-lg backdrop-blur-2xl overflow-x-clip">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div
-            className="flex-shrink-0 text-2xl mr-64 font-extrabold text-gray-800 cursor-pointer"
+            className="min-w-0 flex-shrink text-xl sm:text-2xl md:whitespace-nowrap lg:mr-64 font-extrabold text-gray-800 cursor-pointer"
             onClick={() => navigate(isLoggedIn ? "/orders" : "/")}
           >
             Feeding <b className="text-emerald-500">Futures</b>
