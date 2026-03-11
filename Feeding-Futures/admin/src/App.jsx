@@ -1,6 +1,7 @@
 // App.jsx
 import React, { useState, useMemo, useEffect, useContext } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminLogin from "./components/adminLogin.jsx";
@@ -172,6 +173,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AppLayout>
+        <VercelAnalytics />
       </Router>
     </AppContext.Provider>
   );

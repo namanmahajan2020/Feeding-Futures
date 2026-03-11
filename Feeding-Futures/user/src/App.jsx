@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import Home from "./pages/Home.jsx";
 import Signup from "./components/Signup.jsx";
 import Start from "./pages/Start.jsx";
@@ -27,6 +28,7 @@ function App() {
         <Route path="/foodDonationForm" element={<FoodDonationForm />} />
       </Routes>
       <Footer />
+      <Analytics />
     </BrowserRouter>
   );
 }

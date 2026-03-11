@@ -1,6 +1,7 @@
 // App.jsx
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import Orders from "./pages/Orders.jsx";
 import Signup from "./components/Signup.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
@@ -98,6 +99,7 @@ function App() {
       </Routes>
 
       <Footer />
+      <Analytics />
     </BrowserRouter>
   );
 }
