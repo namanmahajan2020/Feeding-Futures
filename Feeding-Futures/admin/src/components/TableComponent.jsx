@@ -153,9 +153,14 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                 : "border-sky-200 bg-white/75"
             }`}
           >
-            <div className="mb-3 flex items-center justify-between">
+            <div className={`mb-3 grid items-center ${columns.some((col) => col.field === "status") ? "grid-cols-[1fr_auto_1fr]" : "grid-cols-1"}`}>
               <span className="text-sm font-bold text-pink-500">#{index + 1}</span>
-              {columns.some((col) => col.field === "status") && renderCellValue(item, { field: "status" })}
+              {columns.some((col) => col.field === "status") ? (
+                <div className="flex justify-center">
+                  {renderCellValue(item, { field: "status" })}
+                </div>
+              ) : null}
+              {columns.some((col) => col.field === "status") ? <span /> : null}
             </div>
 
             <div className="grid gap-3">
@@ -163,12 +168,16 @@ const TableComponent = ({ title, columns, data, loading, isDarkMode }) => {
                   col.field === "status" ? null :
                   <div
                     key={`${col.field}-${item._id || item.id || index}`}
-                    className="grid grid-cols-[74px_1fr] gap-2 text-sm"
+                    className="grid grid-cols-[72px_1fr] gap-2 text-sm"
                   >
                     <span className={`font-semibold ${isDarkMode ? "text-pink-400" : "text-pink-500"}`}>
                       {col.header}
                     </span>
-                    <div className={`min-w-0 overflow-hidden ${col.field === "email" ? "break-all" : "break-words"} ${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
+                    <div className={`min-w-0 overflow-hidden ${
+                      col.field === "email"
+                        ? "truncate text-[13px]"
+                        : "break-words"
+                    } ${isDarkMode ? "text-slate-300" : "text-sky-800"}`}>
                       {col.field === "message" ? (
                         <div>
                           <p
