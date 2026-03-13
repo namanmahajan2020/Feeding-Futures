@@ -54,6 +54,9 @@ const Navbar = () => {
 
   const shouldShowSignIn =
     !isLoggedIn && currentPath !== "/start" && currentPath !== "/signup";
+  const visibleNavItems = navItems.filter(
+    (item) => !(currentPath === "/signup" && item.to === "/profile")
+  );
 
   return (
     <>
@@ -118,7 +121,7 @@ const Navbar = () => {
             }`}
           >
             <ul className="text-lg text-white md:flex md:space-x-6 md:text-black">
-              {navItems.map((item) => (
+              {visibleNavItems.map((item) => (
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
@@ -168,7 +171,7 @@ const Navbar = () => {
         }`}
       >
         <ul className="space-y-2">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
