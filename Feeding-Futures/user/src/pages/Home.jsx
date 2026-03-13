@@ -69,11 +69,11 @@ const Home = () => {
           style={{ backgroundImage: "url('img/coverimage.jpeg')" }}
         >
           <div className="mx-6 mt-12 w-full max-w-2xl rounded-3xl border border-white/40 bg-white/15 px-8 py-5 text-center text-white shadow-[0_24px_60px_rgba(15,23,42,0.26)] backdrop-blur-md lg:mt-20 lg:max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.26em] text-white/90 lg:text-sm">
+            <p className="text-xs uppercase tracking-[0.26em] text-green-300/95 lg:text-sm">
               Share Food. Build Hope.
             </p>
-            <h1 className="mt-3 text-3xl font-extrabold leading-tight lg:text-4xl">
-              Feeding Futures starts with one plate at a time.
+            <h1 className="mt-3 text-3xl font-extrabold leading-tight   lg:text-4xl">
+              A Small Plate Can Make A Big Difference
             </h1>
             <p className="mt-3 text-base text-white/90 lg:text-lg">
               We connect extra food to people who need it, quickly and respectfully.
@@ -91,7 +91,7 @@ const Home = () => {
               Share Food. Build Hope.
             </p>
             <p className="mt-2 text-xl font-bold text-slate-800">
-              Feeding Futures starts with one plate at a time.
+              A Small Plate Can Make A Big Difference
             </p>
           </div>
         </div>
@@ -173,10 +173,10 @@ const Home = () => {
 
       {/* Our Works */}
       <div className="p-6 max-w-6xl mx-auto mt-16 sm:mt-20 md:mt-24">
-        <p className="text-5xl text-center font-black tracking-[-0.02em] text-slate-900">
+        <p className="text-4xl text-center font-black tracking-[-0.02em] text-slate-900 sm:text-5xl">
           Our Works
         </p>
-        <p className="text-center text-3xl mt-8 mb-8 font-medium sm:text-3xl sm:font-medium sm:text-slate-600 sm:max-w-3xl sm:mx-auto sm:leading-snug">
+        <p className="text-center text-2xl mt-8 mb-8 font-medium sm:text-3xl sm:font-medium sm:text-slate-600 sm:max-w-3xl sm:mx-auto sm:leading-snug">
           See what we can achieve together.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
