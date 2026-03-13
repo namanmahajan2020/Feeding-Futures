@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const FoodDonationForm = () => {
     const navigate = useNavigate();
     const [userEmail, setUserEmail] = useState(localStorage.getItem("email"));
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Listen to changes in the localStorage for the userEmail
     useEffect(() => {
@@ -48,6 +49,8 @@ const FoodDonationForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+        setIsSubmitting(true);
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/food-donation`, {
@@ -81,7 +84,9 @@ const FoodDonationForm = () => {
             }
         } catch (error) {
             console.error("Submission error:", error);
-            toast.error(data.message || "Submission failed.");
+            toast.error("Submission failed.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -280,9 +285,42 @@ const FoodDonationForm = () => {
                         <div className="mb-4 mt-10 flex justify-center">
                             <button
                                 type="submit"
-                                className="w-3/5 bg-green-600 text-white p-3 rounded-md text-lg hover:scale-105 hover:bg-green-700"
+                                disabled={isSubmitting}
+                                aria-busy={isSubmitting}
+                                className={`w-3/5 p-3 rounded-md text-lg transition ${
+                                    isSubmitting
+                                        ? "cursor-not-allowed bg-green-400 text-white opacity-80"
+                                        : "bg-green-600 text-white hover:scale-105 hover:bg-green-700"
+                                }`}
                             >
-                                Submit
+                                {isSubmitting ? (
+                                    <span className="inline-flex items-center gap-2">
+                                        <svg
+                                            className="h-5 w-5 animate-spin"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                                stroke="currentColor"
+                                                strokeOpacity="0.25"
+                                                strokeWidth="3"
+                                            />
+                                            <path
+                                                d="M21 12a9 9 0 0 0-9-9"
+                                                stroke="currentColor"
+                                                strokeWidth="3"
+                                                strokeLinecap="round"
+                                            />
+                                        </svg>
+                                        Submitting...
+                                    </span>
+                                ) : (
+                                    "Submit"
+                                )}
                             </button>
                         </div>
                     </form>

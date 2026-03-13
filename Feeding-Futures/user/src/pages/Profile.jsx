@@ -41,10 +41,14 @@ const Profile = () => {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-green-50 to-white">
       <div className="flex flex-grow items-start justify-center px-4 pb-10 pt-24 sm:px-6 md:pt-28">
-        <div className="mt-2 w-full max-w-3xl rounded-2xl bg-gradient-to-t from-green-50 to-teal-50 p-4 shadow-md sm:mt-6 sm:p-6">
+        <div className="mt-2 w-full max-w-3xl rounded-2xl border border-emerald-100 bg-gradient-to-t from-green-50 to-teal-50 p-4 shadow-md sm:mt-6 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="flex items-center text-2xl font-semibold text-gray-800 sm:text-3xl">
-              <img src="img/user.png" alt="user" className="mr-3 h-10 w-10" />
+            <h2 className="flex items-center text-2xl font-semibold text-gray-800 sm:text-5xl sm:font-bold sm:text-slate-900">
+              <span className="mr-3 inline-flex rounded-full bg-[linear-gradient(135deg,#22c55e,#06b6d4)] p-[2px]">
+                <span className="inline-flex rounded-full bg-white p-1">
+                  <img src="img/user.png" alt="user" className="h-8 w-8 sm:h-10 sm:w-10" />
+                </span>
+              </span>
               Your Profile
             </h2>
 
@@ -57,28 +61,28 @@ const Profile = () => {
             </button>
           </div>
 
-          <div className="mt-6 grid gap-3 text-gray-700 sm:grid-cols-3">
-            <div className="rounded-xl bg-white/75 px-4 py-3 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+          <div className="mt-6 grid gap-3 text-gray-700 sm:grid-cols-1 sm:gap-2">
+            <div className="rounded-xl bg-white/75 px-4 py-3 shadow-sm sm:bg-transparent sm:px-0 sm:py-1 sm:shadow-none">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700 sm:inline sm:text-3xl sm:tracking-normal sm:text-slate-700">
                 Name
               </p>
-              <p className="mt-2 break-words text-sm font-medium text-slate-800 sm:text-base">
+              <p className="mt-2 break-words text-sm font-medium text-slate-800 sm:mt-0 sm:inline sm:pl-2 sm:text-3xl">
                 {name}
               </p>
             </div>
-            <div className="rounded-xl bg-white/75 px-4 py-3 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+            <div className="rounded-xl bg-white/75 px-4 py-3 shadow-sm sm:bg-transparent sm:px-0 sm:py-1 sm:shadow-none">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700 sm:inline sm:text-3xl sm:tracking-normal sm:text-slate-700">
                 Email
               </p>
-              <p className="mt-2 break-all text-sm font-medium text-slate-800 sm:text-base">
+              <p className="mt-2 break-all text-sm font-medium text-slate-800 sm:mt-0 sm:inline sm:pl-2 sm:text-3xl">
                 {email}
               </p>
             </div>
-            <div className="rounded-xl bg-white/75 px-4 py-3 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+            <div className="rounded-xl bg-white/75 px-4 py-3 shadow-sm sm:bg-transparent sm:px-0 sm:py-1 sm:shadow-none">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700 sm:inline sm:text-3xl sm:tracking-normal sm:text-slate-700">
                 Gender
               </p>
-              <p className="mt-2 break-words text-sm font-medium capitalize text-slate-800 sm:text-base">
+              <p className="mt-2 break-words text-sm font-medium capitalize text-slate-800 sm:mt-0 sm:inline sm:pl-2 sm:text-3xl">
                 {gender || "Not specified"}
               </p>
             </div>
@@ -96,35 +100,33 @@ const Profile = () => {
                 {donations.map((item, index) => (
                   <div
                     key={index}
-                    className="rounded-xl border border-cyan-100 bg-white/80 p-4 shadow-sm"
+                    className="rounded-2xl border border-cyan-100 bg-[linear-gradient(180deg,#ffffff_0%,#f0fdfa_100%)] p-4 shadow-sm"
                   >
-                    <div className="grid gap-3">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="rounded-xl border border-emerald-100 bg-white/80 p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-green-700">
                           Food
                         </p>
                         <p className="mt-1 text-sm font-medium text-slate-800">
                           {item.foodname}
                         </p>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
-                            Type
-                          </p>
-                          <p className="mt-1 text-sm text-slate-700">{item.meal}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
-                            Category
-                          </p>
-                          <p className="mt-1 text-sm text-slate-700">
-                            {item.category}
-                          </p>
-                        </div>
+                      <div className="rounded-xl border border-emerald-100 bg-white/80 p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-green-700">
+                          Type
+                        </p>
+                        <p className="mt-1 text-sm text-slate-700">{item.meal}</p>
                       </div>
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+                      <div className="rounded-xl border border-emerald-100 bg-white/80 p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-green-700">
+                          Category
+                        </p>
+                        <p className="mt-1 text-sm text-slate-700">
+                          {item.category}
+                        </p>
+                      </div>
+                      <div className="rounded-xl border border-emerald-100 bg-white/80 p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-green-700">
                           Date
                         </p>
                         <p className="mt-1 text-sm text-slate-700">
