@@ -1,54 +1,101 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  FaEnvelope,
+  FaInstagram,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaWhatsapp,
+} from "react-icons/fa";
+
+const contactLinks = [
+  {
+    title: "Email",
+    value: "mahajannaman2020@gmail.com",
+    href: "mailto:mahajannaman2020@gmail.com",
+    icon: FaEnvelope,
+  },
+  {
+    title: "Call",
+    value: "7743071603",
+    href: "tel:7743071603",
+    icon: FaPhoneAlt,
+  },
+  {
+    title: "WhatsApp",
+    value: "Chat on WhatsApp",
+    href: "https://wa.me/917743071603",
+    icon: FaWhatsapp,
+  },
+  {
+    title: "Instagram",
+    value: "@namanmahajan_17",
+    href: "https://www.instagram.com/namanmahajan_17/",
+    icon: FaInstagram,
+  },
+];
 
 const accordionData = [
   {
-    question: 'How to donate food?',
+    question: "How to donate food?",
     answer: (
       <>
-        <p>1) Click on <NavLink
-          to="/foodDonationForm"
-          className="text-red-600 text-base underline hover:text-red-400 transition-colors"
-        >
-          donate
-        </NavLink>
-          {' '}on the home page.</p>
-        <p>2) Fill the details.</p>
-        <p>3) Click on submit.</p>
-        <img src="img/mobile.jpg" alt="mobile instruction" className="w-full bg-green-50 mt-2 rounded" />
+        <p>
+          1. Click on{" "}
+          <NavLink
+            to="/foodDonationForm"
+            className="text-red-600 text-base underline transition-colors hover:text-red-400"
+          >
+            donate
+          </NavLink>{" "}
+          on the home page.
+        </p>
+        <p>2. Fill the details.</p>
+        <p>3. Click on submit.</p>
+        <img
+          src="img/mobile.jpg"
+          alt="mobile instruction"
+          className="mt-2 w-full rounded bg-green-50"
+        />
       </>
-    )
+    ),
   },
   {
-    question: 'How will my donation be used?',
+    question: "How will my donation be used?",
     answer: (
-      <p className="p-2 ">
-        Your donation will be used to support our mission and the various programs and initiatives that we have in place. Your donation will help us to continue providing assistance and support to those in need. You can find more information about our programs and initiatives on our website. If you have any specific questions or concerns, please feel free to contact us.
+      <p className="p-2">
+        Your donation will be used to support our mission and the various
+        programs and initiatives that we have in place. Your donation will help
+        us continue providing assistance and support to those in need.
       </p>
-    )
+    ),
   },
   {
-    question: 'What should I do if my food donation is near or past its expiration date?',
+    question: "What should I do if my food donation is near or past its expiration date?",
     answer: (
-      <p className="p-2 ">
-        We appreciate your willingness to donate, but to ensure the safety of our clients we can't accept food that is near or past its expiration date. We recommend checking expiration dates before making a donation or contact us for further guidance.
+      <p className="p-2">
+        We appreciate your willingness to donate, but to ensure the safety of
+        our clients we cannot accept food that is near or past its expiration
+        date. We recommend checking expiration dates before making a donation or
+        contacting us for further guidance.
       </p>
-    )
-  }
+    ),
+  },
 ];
 
 function Contact() {
   const [activeAccordions, setActiveAccordions] = useState([]);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -56,9 +103,7 @@ function Contact() {
 
   const toggleAccordion = (index) => {
     setActiveAccordions((prev) =>
-      prev.includes(index)
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
 
@@ -72,151 +117,207 @@ function Contact() {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/feedback`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/feedback`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', message: '' });  // Clear form
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
       } else {
-        setSubmitStatus('error');
+        setSubmitStatus("error");
       }
     } catch (error) {
-      console.error('Error submitting feedback:', error);
-      setSubmitStatus('error');
+      console.error("Error submitting feedback:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+      window.setTimeout(() => {
+        setSubmitStatus(null);
+      }, 3000);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-poppins">
-      {/* Heading */}
-      <div className="flex justify-center">
-        <p className="text-4xl font-extrabold leading-tight pt-24 my-6 mb-10 border-b-4 border-b-green-600 pb-1 inline-block">
-          Contact <span className='text-green-600'>Us</span>
-        </p>
+      <div className="flex justify-center px-4">
+        <div className="pb-6 pt-32 text-center sm:pb-8">
+          <p className="text-[1.7rem] font-bold tracking-[0.06em] text-green-800 sm:text-[2.15rem]">
+            Support <span className="text-slate-950">&</span> Connection
+          </p>
+          <div className="mx-auto mt-4 h-0.5 w-full max-w-[18rem] rounded-full bg-green-500/50 sm:max-w-[22rem]" />
+        </div>
       </div>
 
-      {/* Contact Form and Info */}
-      <div className="max-w-4xl mx-auto px-6 md:px-0 grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-        {/* Form */}
+      <div className="mx-auto mb-12 grid max-w-5xl grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-2 md:gap-8">
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 space-y-4 rounded-2xl shadow-md text-gray-700 border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+          className="space-y-4 rounded-2xl border border-gray-200 bg-white p-5 text-gray-700 shadow-md transition-shadow duration-300 hover:shadow-lg sm:p-6"
         >
           <div>
-            <label htmlFor="name" className="block font-semibold mb-1">Name:</label>
+            <label htmlFor="name" className="mb-1 block font-semibold">
+              Name:
+            </label>
             <input
               type="text"
               id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+              disabled={isSubmitting}
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-600"
               required
             />
           </div>
           <div>
-            <label htmlFor="email" className="block font-semibold mb-1">Email:</label>
+            <label htmlFor="email" className="mb-1 block font-semibold">
+              Email:
+            </label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+              disabled={isSubmitting}
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-600"
               required
             />
           </div>
           <div>
-            <label htmlFor="message" className="block font-semibold mb-1">Message:</label>
+            <label htmlFor="message" className="mb-1 block font-semibold">
+              Message:
+            </label>
             <textarea
               id="message"
               name="message"
               value={formData.message}
               onChange={handleChange}
               rows="4"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+              disabled={isSubmitting}
+              className="w-full rounded-xl border border-gray-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-600"
               required
-            ></textarea>
+            />
           </div>
           <button
             type="submit"
             name="send"
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded transition"
+            disabled={isSubmitting}
+            className={`rounded-xl px-6 py-2.5 font-semibold text-white transition ${
+              isSubmitting
+                ? "cursor-not-allowed bg-[linear-gradient(135deg,#22c55e_0%,#16a34a_100%)] shadow-[0_0_0_4px_rgba(34,197,94,0.14),0_12px_24px_rgba(34,197,94,0.18)]"
+                : "bg-[linear-gradient(135deg,#16a34a_0%,#15803d_100%)] shadow-[0_12px_24px_rgba(22,163,74,0.18)] hover:-translate-y-0.5 hover:shadow-[0_16px_26px_rgba(22,163,74,0.22)]"
+            }`}
           >
-            Send
+            {isSubmitting ? "Sending..." : "Send"}
           </button>
 
+          <p className="mt-4 rounded-xl border border-green-100 bg-green-50/80 px-4 py-3 text-sm leading-6 text-slate-700">
+            Your message matters to us. By reaching out, you help us create
+            more smiles and reduce food waste. We&apos;ll get back to you soon.
+          </p>
+
           {submitStatus && (
-            <div className={`mt-4 ${submitStatus === 'success' ? 'text-green-600' : 'text-red-600'}`}>
-              {submitStatus === 'success' ? 'Feedback submitted successfully!' : 'Error submitting feedback. Please try again.'}
+            <div
+              className={`mt-4 rounded-xl border px-4 py-3 text-sm font-medium ${
+                submitStatus === "success"
+                  ? "border-green-200 bg-green-50 text-green-700"
+                  : "border-red-200 bg-red-50 text-red-600"
+              }`}
+            >
+              {submitStatus === "success"
+                ? "Thank you for reaching out!"
+                : "Error submitting feedback. Please try again."}
             </div>
           )}
         </form>
 
-        {/* Contact Info */}
-        <div className="bg-white p-6 rounded-2xl shadow-md text-gray-700 space-y-4 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
-          <p className="text-xl font-semibold text-green-700 border-b pb-2">Get in Touch</p>
+        <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-5 text-gray-700 shadow-md transition-shadow duration-300 hover:shadow-lg sm:p-6">
+          <p className="border-b border-green-200 pb-2 text-xl font-semibold text-green-700">
+            Get in Touch
+          </p>
 
-          <div className="flex items-center space-x-3">
-            <i className="fas fa-envelope text-green-600"></i>
-            <p><strong>Email:</strong> feedingfutures@gmail.com</p>
+          <div className="grid gap-3">
+            {contactLinks.map(({ title, value, href, icon: Icon }) => (
+              <a
+                key={title}
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noreferrer" : undefined}
+                className="flex items-start gap-3 rounded-xl bg-green-50 px-4 py-3 transition hover:bg-green-100"
+              >
+                <span className="mt-0.5 rounded-full bg-white p-2 text-green-600 shadow-sm">
+                  <Icon className="h-4 w-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-green-700">
+                    {title}
+                  </span>
+                  <span className="block break-all text-sm text-gray-700 sm:text-base">
+                    {value}
+                  </span>
+                </span>
+              </a>
+            ))}
           </div>
 
-          <div className="flex items-center space-x-3">
-            <i className="fas fa-phone text-green-600"></i>
-            <p><strong>Phone:</strong> 987-774-3016</p>
+          <div className="flex items-start gap-3 rounded-xl bg-green-50 px-4 py-3">
+            <span className="mt-0.5 rounded-full bg-white p-2 text-green-600 shadow-sm">
+              <FaMapMarkerAlt className="h-4 w-4" />
+            </span>
+            <span>
+              <span className="block text-sm font-semibold text-green-700">
+                Location
+              </span>
+              <span className="block text-sm text-gray-700 sm:text-base">
+                Chennai, Tamil Nadu
+              </span>
+            </span>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <i className="fas fa-map-marker-alt text-green-600"></i>
-            <p><strong>Location:</strong> Chennai, Tamil Nadu</p>
-          </div>
-
-          <div className="pt-4 border-t-1 mt-5 border-green-700">
-            <p className="text-sm mt-3 text-gray-600">
-              We’d love to stay connected! Follow us on social media for updates, events, and stories from <span className="text-green-700 font-semibold">Feeding Futures</span>.
+          <div className="border-t border-green-200 pt-4">
+            <p className="text-sm leading-6 text-gray-600">
+              We would love to stay connected. Reach out anytime for updates,
+              support, and stories from{" "}
+              <span className="font-semibold text-green-700">
+                Feeding Futures
+              </span>
+              .
             </p>
-
-            <div className="flex flex-col sm:flex-row sm:space-x-6 mt-10 justify-center gap-10 sm:space-y-0">
-              <a href="https://www.facebook.com/">
-                <img className='w-12 hover:scale-105 transition-all' src="img/facebook.png" alt="Facebook" />
-              </a>
-              <a href="https://www.instagram.com/">
-                <img className='w-12 hover:scale-105 transition-all' src="img/instagram.png" alt="Instagram" />
-              </a>
-              <a href="https://www.youtube.com/">
-                <img className='w-12 hover:scale-105 transition-all' src="img/youtube.png" alt="Youtube" />
-              </a>
-            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-gradient-to-b from-green-100 to-white p-8 rounded-xl max-w-4xl mx-auto mb-12">
-        {/* Help & FAQs */}
-        <div className="help max-w-2xl mx-auto mt-5">
-          <p className="text-2xl text-gray-700 font-bold text-center mb-7">Help & FAQs?</p>
+      <div className="mx-auto mb-12 max-w-4xl rounded-xl bg-gradient-to-b from-green-100 to-white p-5 sm:p-8">
+        <div className="help mx-auto mt-3 max-w-2xl sm:mt-5">
+          <p className="mb-6 text-center text-2xl font-bold text-gray-700 sm:mb-7">
+            Help & FAQs?
+          </p>
           {accordionData.map(({ question, answer }, index) => {
             const isActive = activeAccordions.includes(index);
             return (
               <div key={index} className="mb-4 rounded">
                 <button
-                  className={`w-full text-left px-4 py-3 border-1 font-semibold text-lg bg-gradient-to-b from-green-400 to-green-700 text-white focus:outline-none hover:scale-x-102 transition-transform duration-300
-                  ${isActive ? 'rounded-t' : 'rounded'}`}
+                  className={`w-full text-left text-base font-semibold text-white transition-transform duration-300 focus:outline-none sm:text-lg ${
+                    isActive ? "rounded-t" : "rounded"
+                  } bg-gradient-to-b from-green-400 to-green-700 px-4 py-3 hover:scale-[1.01]`}
                   onClick={() => toggleAccordion(index)}
                   aria-expanded={isActive}
                 >
                   {question}
                 </button>
                 {isActive && (
-                  <div className="p-4 bg-gradient-to-b from-white to-green-100 mt-1 mb-12 border-t border-green-600">
+                  <div className="mt-1 mb-8 border-t border-green-600 bg-gradient-to-b from-white to-green-100 p-4 sm:mb-12">
                     {answer}
                   </div>
                 )}

@@ -8,6 +8,11 @@ html, body, #root {
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
 .font-poppins {
   font-family: 'Poppins', sans-serif;
 }
@@ -36,13 +41,9 @@ body {
 .profile-page {
   padding-top: 16px; /* Ensure proper spacing for profile page */
 }
-html {
-  overflow-y: scroll;
-}
 /* fallback scrollbar for browsers without custom component */
 * {
   scrollbar-width: thin;
   scrollbar-color: #16a34a94 #f0fdfa;
 }
-
 
