@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const inputClassName =
-  "w-full rounded-2xl border border-emerald-200 bg-[#f4fbf6] px-4 py-3.5 text-sm text-slate-900 shadow-[0_10px_22px_rgba(15,23,42,0.06)] outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100";
+  "w-full rounded-2xl border border-emerald-200 bg-[#f4fbf6] px-4 py-3 text-sm text-slate-900 shadow-[0_10px_22px_rgba(15,23,42,0.06)] outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100 sm:py-3.5";
 
 const fieldLabelClassName =
   "mb-1.5 block text-sm font-semibold tracking-[0.03em] text-slate-800";
@@ -215,8 +215,8 @@ const AuthForm = () => {
     <section
       className={`relative overflow-hidden bg-[#eef5ef] px-4 sm:px-6 lg:px-8 ${
         isSignup
-          ? "flex min-h-[calc(100vh-4.5rem)] items-center pt-24 pb-4 sm:pt-26 sm:pb-5"
-          : "flex flex-1 min-h-full items-center pt-24 pb-0 sm:pt-26 sm:pb-0"
+          ? "flex min-h-[calc(100vh-4.5rem)] items-center pt-22 pb-4 sm:pt-26 sm:pb-5"
+          : "flex flex-1 min-h-full items-center pt-22 pb-0 sm:pt-26 sm:pb-0"
       }`}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(174,230,194,0.45),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(186,231,201,0.35),_transparent_24%)]" />
@@ -230,17 +230,17 @@ const AuthForm = () => {
         >
           <form onSubmit={handleSubmit} className="w-full">
             <div className="mx-auto max-w-2xl">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <span className="inline-flex rounded-full bg-[linear-gradient(135deg,#f4fff6_0%,#d7f4df_100%)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-700 shadow-[0_6px_14px_rgba(34,197,94,0.10)]">
+                  <span className="inline-flex rounded-full bg-[linear-gradient(135deg,#f4fff6_0%,#d7f4df_100%)] px-3.5 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-emerald-700 shadow-[0_6px_14px_rgba(34,197,94,0.10)] sm:px-4 sm:text-xs sm:tracking-[0.26em]">
                     {isSignup ? "New User" : "Existing User"}
                   </span>
-                  <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                  <h2 className="mt-4 text-[2rem] font-black leading-[1.02] tracking-tight text-slate-950 sm:text-3xl">
                     {isSignup ? "Create your account" : "Login to continue"}
                   </h2>
                 </div>
 
-                <div className="inline-flex rounded-full border border-emerald-200 bg-[linear-gradient(135deg,#f4fff6_0%,#d8efe0_100%)] p-1 shadow-[0_10px_20px_rgba(15,23,42,0.06)]">
+                <div className="grid w-full grid-cols-2 rounded-full border border-emerald-200 bg-[linear-gradient(135deg,#f4fff6_0%,#d8efe0_100%)] p-1 shadow-[0_10px_20px_rgba(15,23,42,0.06)] sm:inline-flex sm:w-auto">
                   <button
                     type="button"
                     disabled={isProcessing}
@@ -249,7 +249,7 @@ const AuthForm = () => {
                       setError("");
                       setSuccess("");
                     }}
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    className={`rounded-full px-4 py-2.5 text-sm font-semibold transition sm:py-2 ${
                       isSignup
                         ? "bg-[linear-gradient(135deg,#16a34a_0%,#22c55e_100%)] text-white shadow-[0_10px_18px_rgba(22,163,74,0.24)] ring-2 ring-emerald-100"
                         : "bg-transparent text-slate-700"
@@ -265,7 +265,7 @@ const AuthForm = () => {
                       setError("");
                       setSuccess("");
                     }}
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    className={`rounded-full px-4 py-2.5 text-sm font-semibold transition sm:py-2 ${
                       !isSignup
                         ? "bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] text-white shadow-[0_10px_18px_rgba(15,23,42,0.22)] ring-2 ring-slate-100/80"
                         : "bg-transparent text-slate-700"
@@ -276,7 +276,7 @@ const AuthForm = () => {
                 </div>
               </div>
 
-              <div className="mt-5 space-y-3.5">
+              <div className="mt-5 space-y-3.5 sm:space-y-3.5">
                 {isSignup && (
                   <div className="grid gap-3.5 sm:grid-cols-2">
                     <div className="sm:col-span-2">
