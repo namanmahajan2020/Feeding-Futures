@@ -1,6 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "./AppContext.jsx"; // Import context
+import { AppContext } from "./AppContext.jsx";
+
+const inputClassName =
+  "admin-interactive w-full rounded-2xl border border-emerald-200/24 bg-white/14 px-4 py-3.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_22px_rgba(0,0,0,0.10)] outline-none transition placeholder:text-emerald-50/50 focus:border-emerald-200/45 focus:ring-4 focus:ring-emerald-200/10";
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -8,11 +11,9 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn } = useContext(AppContext);
 
-  // ✅ Environment credentials (for demo/testing)
   const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
   const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
-  // ✅ Redirect if already logged in
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     const role = localStorage.getItem("role");
@@ -30,14 +31,10 @@ const AdminLogin = () => {
     setError("");
 
     try {
-      // Validate credentials
       if (formData.email === adminEmail && formData.password === adminPassword) {
-        // ✅ Store login status
         localStorage.setItem("role", "admin");
         localStorage.setItem("isLoggedIn", "true");
         setIsLoggedIn(true);
-
-        // Redirect to dashboard
         navigate("/dashboard");
       } else {
         setError("Invalid email or password.");
@@ -56,125 +53,132 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b relative admin-page">
-      {/* === LOGIN FORM === */}
-      <form
-        onSubmit={handleSubmit}
-        className="admin-card admin-fade-up w-full max-w-md bg-gradient-to-b from-white to-green-100 p-8 rounded-2xl shadow-2xl border border-green-200 z-10"
-        aria-labelledby="admin-login-title"
-      >
-        <h2
-          id="admin-login-title"
-          className="text-3xl font-bold text-green-600 text-center mb-6"
-        >
-          Admin Login
-        </h2>
-
-        <label className="block text-gray-700 mb-1">Email</label>
-        <input
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter your email"
-          required
-          className="admin-interactive w-full mb-4 p-3 rounded-lg border border-green-500 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-600"
-        />
-
-        <label className="block text-gray-700 mb-1">Password</label>
-        <input
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Enter password"
-          required
-          className="admin-interactive w-full mb-4 p-3 rounded-lg bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600"
-        />
-
-        <button
-          type="submit"
-          className="admin-interactive w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold mb-4 shadow-lg hover:-translate-y-1"
-        >
-          Login
-        </button>
-
-        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
-
-        <p className="text-gray-600 text-center">
-          <span
-            onClick={() => (window.location.href = import.meta.env.VITE_API_START)}
-            className="text-red-400 cursor-pointer ml-2 font-semibold hover:underline"
-          >
-            Not an admin?
-          </span>
-        </p>
-
-
-      </form>
-
-      {/* === DEMO CREDENTIAL CARD === */}
-      <div
-        aria-hidden="false"
-          className="pointer-events-auto select-none absolute bottom-6 left-6 transform-gpu md:left-12 md:bottom-12"
-      >
-        <div
-          className="admin-card admin-fade-up relative w-72 md:w-80 p-4 rounded-3xl bg-gradient-to-b from-black via-teal-900 to-green-500 text-white ring-2 overflow-hidden"
-          role="region"
-          aria-label="Demo credentials (for demo only)"
-        >
-          {/* Decorative animated blobs */}
-          <span className="absolute -left-6 -top-6 w-36 h-36 bg-white/10 rounded-full blur-3xl animate-[spin_10s_linear_infinite]" />
-          <span className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/8 rounded-full blur-2xl animate-[spin_12s_linear_infinite]" />
-
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h3 className="text-lg font-extrabold tracking-tight">
-                DEMO ACCESS
-              </h3>
-              <p className="text-xs opacity-90">
-                Use these for demo / testing only
-              </p>
-            </div>
-            <div
-              title="This is just a demo card"
-              className="text-sm font-semibold px-2 py-1 bg-white/10 rounded-md"
+    <section className="admin-page relative flex min-h-screen items-center overflow-hidden bg-[linear-gradient(180deg,#f8fcf9_0%,#edf5f0_100%)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.08),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(15,23,42,0.06),_transparent_26%)]" />
+      <div className="relative mx-auto w-full max-w-5xl rounded-[1.8rem] shadow-[0_20px_48px_rgba(15,23,42,0.06),0_0_0_1px_rgba(167,243,208,0.22),0_0_14px_rgba(110,231,183,0.08)]">
+        <div className="grid gap-4 rounded-[1.9rem] bg-[#eef3ef]/85 p-4 sm:p-5 lg:grid-cols-[1.02fr_0.78fr] lg:p-6">
+          <div className="mx-auto w-full max-w-2xl">
+            <form
+              onSubmit={handleSubmit}
+              className="admin-card admin-fade-up rounded-[1.6rem] bg-gradient-to-br from-[#355f6f] via-[#4b8c85] to-[#7dc8bc] p-5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-10px_18px_rgba(0,0,0,0.04),0_10px_22px_rgba(10,40,32,0.10)] sm:p-6"
+              aria-labelledby="admin-login-title"
             >
-              demo
-            </div>
+              <span className="inline-flex rounded-full border border-white/12 bg-white/16 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-50">
+                Admin Login
+              </span>
+              <h2
+                id="admin-login-title"
+                className="mt-4 text-2xl font-black tracking-tight text-white sm:text-3xl"
+              >
+                Welcome back
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-emerald-50/88">
+                Secure access for the admin workspace.
+              </p>
+
+              <div className="mt-5 space-y-3.5">
+                <div>
+                  <label className="mb-1.5 block text-sm font-semibold tracking-[0.03em] text-emerald-50/90">
+                    Email
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    required
+                    className={inputClassName}
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-sm font-semibold tracking-[0.03em] text-emerald-50/90">
+                    Password
+                  </label>
+                  <input
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    required
+                    className={inputClassName}
+                  />
+                </div>
+
+                {error && (
+                  <div className="rounded-2xl border border-rose-300/30 bg-rose-500/10 px-4 py-3 text-sm font-medium text-rose-100">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="admin-interactive w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(2,18,38,0.22)] transition hover:-translate-y-0.5 hover:bg-emerald-300 hover:text-slate-950"
+                >
+                  Login to dashboard
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = import.meta.env.VITE_API_START)}
+                  className="admin-interactive w-full rounded-2xl border border-white/15 px-5 py-3 text-sm font-semibold text-emerald-50/90 transition hover:bg-white/8"
+                >
+                  Not an admin? Go back
+                </button>
+
+                <button
+                  type="button"
+                  onClick={autoFillCredentials}
+                  className="admin-interactive w-full rounded-2xl border border-emerald-300/25 bg-white/8 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/12"
+                >
+                  Auto-fill demo credentials
+                </button>
+              </div>
+            </form>
           </div>
 
-          {/* Email row */}
-          <div className="flex items-center justify-between bg-white/10 rounded-md p-2 mb-2">
-            <div className="truncate">
-              <div className="text-xs opacity-90">Email</div>
-              <div className="text-sm font-medium">{adminEmail}</div>
+          <div className="admin-card admin-fade-up overflow-hidden rounded-[1.6rem] bg-gradient-to-br from-[#355f6f] via-[#4b8c85] to-[#86cfc3] p-5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-10px_18px_rgba(0,0,0,0.04),0_10px_22px_rgba(10,40,32,0.10)] sm:p-6">
+            <div className="flex items-start justify-between gap-3">
+              <div className="inline-flex rounded-full bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-50">
+                Demo Access
+              </div>
+              <div className="rounded-full bg-white/14 px-3 py-1 text-sm font-semibold text-white/95">
+                demo
+              </div>
             </div>
-          </div>
 
-          {/* Password row */}
-          <div className="flex items-center justify-between bg-white/10 rounded-md p-2">
-            <div className="truncate">
-              <div className="text-xs opacity-90">Password</div>
-              <div className="text-sm font-medium tracking-wider">
-                {adminPassword}
+            <h3 className="mt-4 text-2xl font-black leading-tight sm:text-3xl">
+              Testing credentials
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-emerald-50/85">
+              Use these values for local demo or testing only.
+            </p>
+
+            <div className="mt-5 space-y-3">
+              <div className="rounded-[1.3rem] bg-white/10 p-4">
+                <div className="text-xs uppercase tracking-[0.24em] text-emerald-100/75">
+                  Email
+                </div>
+                <div className="mt-2 break-all text-lg font-semibold text-white/95">
+                  {adminEmail}
+                </div>
+              </div>
+
+              <div className="rounded-[1.3rem] bg-white/10 p-4">
+                <div className="text-xs uppercase tracking-[0.24em] text-emerald-100/75">
+                  Password
+                </div>
+                <div className="mt-2 break-all text-lg font-semibold tracking-[0.16em] text-white/95">
+                  {adminPassword}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Auto-fill button */}
-          <div className="mt-3 text-center text-xs text-gray-700">
-            <button
-              type="button"
-              onClick={autoFillCredentials}
-              className="admin-interactive border inline-block px-3 py-2 bg-gradient-to-b from-red-500 via-black to-red-500 hover:bg-gradient-to-br hover:from-red-500 hover:via-black hover:to-red-500 text-white font-bold rounded-lg"
-            >
-              ✨ Auto-fill Demo Credentials ✨
-            </button>
-          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

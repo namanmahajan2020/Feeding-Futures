@@ -188,7 +188,12 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
             {!isLoggedIn && isSignupPage && (
               <button
                 onClick={() => {
-                  navigate("/login");
+                  const apiStart = import.meta.env.VITE_API_START;
+                  if (apiStart.startsWith("http")) {
+                    window.location.href = apiStart;
+                  } else {
+                    navigate(apiStart);
+                  }
                   setIsMenuOpen(false);
                 }}
                 className="w-full py-2 px-3 mt-2 bg-blue-500 text-white font-base rounded-md shadow hover:bg-blue-600 transition flex justify-center items-center"

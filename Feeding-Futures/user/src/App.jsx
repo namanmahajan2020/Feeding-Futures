@@ -15,18 +15,22 @@ function App() {
   const [navActive, setNavActive] = useState(false);
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <Navbar navActive={navActive} setNavActive={setNavActive} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/start" element={<Start />} />
-        <Route path="/foodDonationForm" element={<FoodDonationForm />} />
-      </Routes>
-      <Footer />
+      <div className="flex min-h-screen flex-col">
+        <ScrollToTop />
+        <Navbar navActive={navActive} setNavActive={setNavActive} />
+        <main className="flex flex-1 flex-col">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/start" element={<Start />} />
+            <Route path="/foodDonationForm" element={<FoodDonationForm />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }

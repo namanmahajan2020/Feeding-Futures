@@ -2,6 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const inputClassName =
+  "w-full rounded-2xl border border-emerald-200 bg-[#f4fbf6] px-4 py-3.5 text-sm text-slate-900 shadow-[0_10px_22px_rgba(15,23,42,0.06)] outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100";
+
+const fieldLabelClassName =
+  "mb-1.5 block text-sm font-semibold tracking-[0.03em] text-slate-800";
+
 // Gender Select Component
 const GenderSelect = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
@@ -17,29 +23,39 @@ const GenderSelect = ({ value, onChange }) => {
   }, []);
 
   return (
-    <div className="relative w-full mb-3" ref={ref}>
-      <div
-        className={`w-full p-3 rounded-lg border border-green-500 bg-gray-50 flex justify-between items-center cursor-pointer ${value ? "text-gray-800" : "text-gray-500"}`}
-        onClick={() => setOpen(!open)}
+    <div className="relative w-full" ref={ref}>
+      <button
+        type="button"
+        className={`${inputClassName} flex items-center justify-between text-left ${
+          value ? "text-slate-900" : "text-slate-400"
+        }`}
+        onClick={() => setOpen((prev) => !prev)}
       >
-        {value || "Select gender"}
+        <span>{value || "Select gender"}</span>
         <svg
-          className={`w-5 h-5 text-green-600 transform ${open ? "rotate-180" : ""} transition-transform duration-200`}
+          className={`h-5 w-5 text-emerald-600 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
         </svg>
-      </div>
+      </button>
 
       {open && (
-        <ul className="absolute z-10 w-full bg-white border border-green-500 rounded-lg mt-1 shadow-lg max-h-60 overflow-auto">
+        <ul className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-emerald-200 bg-white p-2 shadow-xl">
           {options.map((opt) => (
             <li
               key={opt}
-              className="p-3 hover:bg-gradient-to-b from-green-100 to-green-300 text-gray-700 cursor-pointer transition-colors"
+              className="cursor-pointer rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-emerald-50"
               onClick={() => {
                 onChange(opt);
                 setOpen(false);
@@ -69,29 +85,39 @@ const LocationSelect = ({ value, onChange }) => {
   }, []);
 
   return (
-    <div className="relative w-full mb-3" ref={ref}>
-      <div
-        className={`w-full p-3 rounded-lg border border-green-500 bg-gray-50 flex justify-between items-center cursor-pointer ${value ? "text-gray-800" : "text-gray-500"}`}
-        onClick={() => setOpen(!open)}
+    <div className="relative w-full" ref={ref}>
+      <button
+        type="button"
+        className={`${inputClassName} flex items-center justify-between text-left ${
+          value ? "text-slate-900" : "text-slate-400"
+        }`}
+        onClick={() => setOpen((prev) => !prev)}
       >
-        {value || "Select location"}
+        <span>{value || "Select location"}</span>
         <svg
-          className={`w-5 h-5 text-green-600 transform ${open ? "rotate-180" : ""} transition-transform duration-200`}
+          className={`h-5 w-5 text-emerald-600 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
         </svg>
-      </div>
+      </button>
 
       {open && (
-        <ul className="absolute z-10 w-full bg-white border border-green-500 rounded-lg mt-1 shadow-lg max-h-60 overflow-auto">
+        <ul className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-emerald-200 bg-white p-2 shadow-xl">
           {options.map((opt) => (
             <li
               key={opt}
-              className="p-3 hover:bg-gradient-to-b from-green-100 to-green-300 text-gray-700 cursor-pointer transition-colors"
+              className="cursor-pointer rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-emerald-50"
               onClick={() => {
                 onChange(opt);
                 setOpen(false);
@@ -145,10 +171,13 @@ const AuthForm = () => {
         localStorage.setItem("location", user.location);
         navigate("/");
       } else if (isSignup) {
-        const loginRes = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
-          email: formData.email,
-          password: formData.password,
-        });
+        const loginRes = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/login`,
+          {
+            email: formData.email,
+            password: formData.password,
+          }
+        );
 
         const loginUser = loginRes.data.user;
 
@@ -164,88 +193,160 @@ const AuthForm = () => {
   };
 
   return (
-    <div className={`flex items-center justify-center bg-gradient-to-b from-green-50 to-white px-4 py-15 ${isSignup ? "min-h-screen" : "py-32"}`}>
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-gradient-to-t from-green-100 mt-5 to-white p-6 rounded-xl shadow-xl border border-green-200"
-      >
-        <h2 className="text-2xl font-bold text-green-600 text-center mb-5">
-          {isSignup ? "Create Your Account" : "Login to Your Account"}
-        </h2>
+    <section
+      className={`relative overflow-hidden bg-[#eef5ef] px-4 sm:px-6 lg:px-8 ${
+        isSignup
+          ? "flex min-h-[calc(100vh-4.5rem)] items-center pt-24 pb-4 sm:pt-26 sm:pb-5"
+          : "flex flex-1 min-h-full items-center pt-24 pb-0 sm:pt-26 sm:pb-0"
+      }`}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(174,230,194,0.45),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(186,231,201,0.35),_transparent_24%)]" />
+      <div className="relative mx-auto w-full max-w-2xl rounded-[1.8rem] shadow-[0_20px_42px_rgba(15,23,42,0.08),0_0_0_2px_rgba(167,243,208,0.42),0_0_26px_rgba(134,239,172,0.30)]">
+        <div className="rounded-[1.8rem] bg-[linear-gradient(145deg,#dff3e5_0%,#c8ebd3_42%,#b8e0c8_100%)] p-4 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-10px_18px_rgba(22,101,52,0.05),0_10px_22px_rgba(15,23,42,0.05)] sm:p-5 lg:p-6">
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="mx-auto max-w-2xl">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <span className="inline-flex rounded-full bg-[linear-gradient(135deg,#f4fff6_0%,#d7f4df_100%)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-700 shadow-[0_6px_14px_rgba(34,197,94,0.10)]">
+                    {isSignup ? "New User" : "Existing User"}
+                  </span>
+                  <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                    {isSignup ? "Create your account" : "Login to continue"}
+                  </h2>
+                </div>
 
-        {isSignup && (
-          <>
-            <label className="block text-gray-700 mb-1">Name</label>
-            <input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter your name"
-              required
-              className="w-full mb-3 p-3 rounded-lg border border-green-500 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-600"
-            />
+                <div className="inline-flex rounded-full border border-emerald-200 bg-[linear-gradient(135deg,#f4fff6_0%,#d8efe0_100%)] p-1 shadow-[0_10px_20px_rgba(15,23,42,0.06)]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSignup(true);
+                      setError("");
+                      setSuccess("");
+                    }}
+                    className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                      isSignup
+                        ? "bg-[linear-gradient(135deg,#16a34a_0%,#22c55e_100%)] text-white shadow-[0_10px_18px_rgba(22,163,74,0.24)] ring-2 ring-emerald-100"
+                        : "bg-transparent text-slate-700"
+                    }`}
+                  >
+                    Sign Up
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSignup(false);
+                      setError("");
+                      setSuccess("");
+                    }}
+                    className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                      !isSignup
+                        ? "bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] text-white shadow-[0_10px_18px_rgba(15,23,42,0.22)] ring-2 ring-slate-100/80"
+                        : "bg-transparent text-slate-700"
+                    }`}
+                  >
+                    Login
+                  </button>
+                </div>
+              </div>
 
-            <label className="block text-gray-700 mb-1">Gender</label>
-            <GenderSelect
-              value={formData.gender}
-              onChange={(val) => setFormData({ ...formData, gender: val })}
-            />
+              <div className="mt-5 space-y-3.5">
+                {isSignup && (
+                  <div className="grid gap-3.5 sm:grid-cols-2">
+                    <div className="sm:col-span-2">
+                      <label className={fieldLabelClassName}>Name</label>
+                      <input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Enter your name"
+                        required
+                        className={inputClassName}
+                      />
+                    </div>
 
-            <label className="block text-gray-700 mb-1">Location</label>
-            <LocationSelect
-              value={formData.location}
-              onChange={(val) => setFormData({ ...formData, location: val })}
-            />
-          </>
-        )}
+                    <div>
+                      <label className={fieldLabelClassName}>Gender</label>
+                      <GenderSelect
+                        value={formData.gender}
+                        onChange={(val) => setFormData({ ...formData, gender: val })}
+                      />
+                    </div>
 
-        <label className="block text-gray-700 mb-1">Email</label>
-        <input
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter your email"
-          required
-          className="w-full mb-3 p-3 rounded-lg border border-green-500 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-600"
-        />
+                    <div>
+                      <label className={fieldLabelClassName}>Location</label>
+                      <LocationSelect
+                        value={formData.location}
+                        onChange={(val) => setFormData({ ...formData, location: val })}
+                      />
+                    </div>
+                  </div>
+                )}
 
-        <label className="block text-gray-700 mb-1">Password</label>
-        <input
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Enter password"
-          required
-          className="w-full mb-4 p-3 rounded-lg bg-gray-50 border border-green-500 focus:outline-none focus:ring-1 focus:ring-green-600"
-        />
+                <div>
+                  <label className={fieldLabelClassName}>Email</label>
+                  <input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    required
+                    className={inputClassName}
+                  />
+                </div>
 
-        <button
-          type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-semibold mb-3 shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
-        >
-          {isSignup ? "Sign Up" : "Login"}
-        </button>
+                <div>
+                  <label className={fieldLabelClassName}>Password</label>
+                  <input
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    required
+                    className={inputClassName}
+                  />
+                </div>
 
-        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
-        {success && <p className="text-green-600 text-center mb-2">{success}</p>}
+                {error && (
+                  <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+                    {error}
+                  </div>
+                )}
 
-        <p className="text-gray-600 text-center text-sm">
-          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
-          <span
-            onClick={() => {
-              setIsSignup(!isSignup);
-              setError("");
-              setSuccess("");
-            }}
-            className="text-green-600 cursor-pointer font-semibold hover:underline"
-          >
-            {isSignup ? "Login" : "Sign Up"}
-          </span>
-        </p>
-      </form>
-    </div>
+                {success && (
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+                    {success}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(15,23,42,0.12)] transition hover:-translate-y-0.5 hover:bg-emerald-600"
+                >
+                  {isSignup ? "Create account" : "Login now"}
+                </button>
+
+                <p className="text-center text-sm leading-6 text-slate-600">
+                  {isSignup ? "Already have an account?" : "Do not have an account?"}{" "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSignup(!isSignup);
+                      setError("");
+                      setSuccess("");
+                    }}
+                    className="font-semibold text-emerald-700 underline-offset-4 transition hover:text-emerald-600 hover:underline"
+                  >
+                    {isSignup ? "Login here" : "Sign up here"}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 };
 
