@@ -2,14 +2,14 @@ import React from 'react';
 import { NavLink } from "react-router-dom";
 const Start = () => {
   return (
-    <div className="pb-28 w-full bg-gradient-to-t from-green-50 to-white flex flex-col items-center font-poppins px-4">
+    <div className="flex-1 w-full bg-green-50 flex flex-col items-center justify-center font-poppins px-4 pt-24 pb-12">
       {/* Title */}
-      <p className="text-3xl md:text-5xl font-bold mb-6 mt-32 text-center text-black">
+      <p className="text-3xl md:text-5xl font-bold mb-6 text-center text-black">
         Welcome to Feeding <span className="text-[#06C167] font-extrabold">Futures</span>
       </p>
 
       {/* Subtitle */}
-      <p className="text-3xl mb-12 mt-10 font-bold text-center text-black">Login as</p>
+      <p className="text-3xl mb-12 mt-2 font-bold text-center text-black">Login as</p>
 
       {/* Buttons stacked vertically */}
       <div className="flex flex-col items-center gap-7">

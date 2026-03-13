@@ -60,18 +60,18 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed top-0 z-50 flex h-18 w-full items-center gap-4 bg-gradient-to-b from-white/80 to-green-100/80 px-3 shadow-sm backdrop-blur-md border border-white/40 sm:px-5 md:pl-6 md:pr-14 lg:pl-8 lg:pr-24">
+      <header className="fixed top-0 z-50 flex h-18 w-full items-center gap-3 bg-gradient-to-b from-white/80 to-green-100/80 px-3 shadow-sm backdrop-blur-md border border-white/40 sm:px-5 md:gap-2 md:pl-4 md:pr-5 lg:gap-4 lg:pl-8 lg:pr-24">
         <NavLink
           to="/"
           end
           className={({ isActive }) =>
             isActive
-              ? "block rounded-full px-2 py-2 font-semibold md:px-6 md:bg-transparent md:text-green-600"
-              : "block rounded-full px-2 py-2 transition-transform duration-300 hover:scale-110 md:px-6"
+              ? "block rounded-full px-2 py-2 font-semibold md:px-3 lg:px-6 md:bg-transparent md:text-green-600"
+              : "block rounded-full px-2 py-2 transition-transform duration-300 hover:scale-110 md:px-3 lg:px-6"
           }
           onClick={() => setNavActive(false)}
         >
-          <div className="select-none text-[1.7rem] font-extrabold leading-none text-black sm:text-3xl md:whitespace-nowrap">
+          <div className="select-none text-[1.7rem] font-extrabold leading-none text-black sm:text-3xl md:text-[1.85rem] lg:text-[2.05rem] md:whitespace-nowrap">
             Feeding <span className="text-green-600">Futures</span>
           </div>
         </NavLink>
@@ -117,10 +117,10 @@ const Navbar = () => {
         <div className="hidden flex-1 items-center justify-center md:flex">
           <nav
             className={`md:flex md:w-auto md:items-center md:bg-transparent ${
-              shouldShowSignIn ? "" : "md:mr-25"
+              shouldShowSignIn ? "" : "md:mr-12 lg:mr-25"
             }`}
           >
-            <ul className="text-lg text-white md:flex md:space-x-6 md:text-black">
+            <ul className="text-lg text-white md:flex md:space-x-2 lg:space-x-6 md:text-[1.02rem] lg:text-lg md:text-black">
               {visibleNavItems.map((item) => (
                 <li key={item.to}>
                   <NavLink
@@ -129,11 +129,11 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       item.to === "/profile"
                         ? isActive
-                          ? "block rounded-full px-6 py-2 font-semibold text-white md:text-green-600"
-                          : "block rounded-3xl px-6 py-2 transition hover:bg-gradient-to-t hover:from-green-500 hover:to-black hover:text-white"
+                          ? "block rounded-full px-3 py-2 lg:px-6 font-semibold text-white md:text-green-600"
+                          : "block rounded-3xl px-3 py-2 lg:px-6 transition hover:bg-gradient-to-t hover:from-green-500 hover:to-black hover:text-white"
                         : isActive
-                          ? "block rounded-full bg-black px-6 py-2 font-semibold text-white md:bg-transparent md:text-green-600"
-                          : "block rounded-full px-6 py-2 transition hover:bg-gradient-to-t hover:from-green-500 hover:to-black hover:text-white"
+                          ? "block rounded-full bg-black px-3 py-2 lg:px-6 font-semibold text-white md:bg-transparent md:text-green-600"
+                          : "block rounded-full px-3 py-2 lg:px-6 transition hover:bg-gradient-to-t hover:from-green-500 hover:to-black hover:text-white"
                     }
                     onClick={() => setNavActive(false)}
                   >
@@ -148,7 +148,7 @@ const Navbar = () => {
         {shouldShowSignIn && (
           <NavLink
             to="/start"
-            className="hidden rounded-full border border-emerald-700 bg-gradient-to-b from-sky-500 to-black px-5 py-1.5 font-bold text-white transition duration-200 hover:scale-95 hover:bg-gradient-to-b hover:from-green-500 hover:to-black md:block"
+            className="hidden md:inline-flex md:items-center md:justify-center whitespace-nowrap rounded-full border border-emerald-700 bg-gradient-to-b from-sky-500 to-black px-4 py-1.5 text-[0.95rem] lg:px-5 font-bold text-white transition duration-200 hover:scale-95 hover:bg-gradient-to-b hover:from-green-500 hover:to-black"
             onClick={() => setNavActive(false)}
           >
             Sign In
