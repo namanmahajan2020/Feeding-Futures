@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const Home = () => {
@@ -6,6 +6,8 @@ const Home = () => {
     "A shared meal can carry more hope than words.",
     "When food is saved, futures are saved too.",
     "Kindness tastes better when everyone gets a plate.",
+    "Turning surplus food into shared smiles.",
+    "Sharing food is one of the simplest ways to spread kindness.",
   ];
   const works = [
     {
@@ -28,11 +30,32 @@ const Home = () => {
     },
   ];
   const [activeQuote, setActiveQuote] = useState(0);
+  const swipeStartX = useRef(null);
+
+  const nextQuote = () =>
+    setActiveQuote((prev) => (prev + 1) % quotes.length);
+
+  const prevQuote = () =>
+    setActiveQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
+
+  const handlePointerDown = (event) => {
+    swipeStartX.current = event.clientX;
+  };
+
+  const handlePointerUp = (event) => {
+    if (swipeStartX.current === null) return;
+
+    const diff = event.clientX - swipeStartX.current;
+    if (diff > 55) prevQuote();
+    if (diff < -55) nextQuote();
+
+    swipeStartX.current = null;
+  };
 
   return (
     <div className="bg-gradient-to-b from-green-50 to-white min-h-screen font-poppins">
       {/* Banner */}
-      <section className="w-full pt-16 sm:pt-[4.5rem] sm:-mt-[4.5rem]">
+      <section className="w-full pt-20 sm:pt-[4.5rem] sm:-mt-[4.5rem]">
         <div
           className="hidden sm:flex h-[90vh] w-full bg-cover bg-center items-center justify-center"
           style={{ backgroundImage: "url('img/coverimage.jpeg')" }}
@@ -101,10 +124,72 @@ const Home = () => {
 
       {/* Quote Picker */}
       <div className="mx-auto mb-10 max-w-4xl px-4 sm:px-6">
-        <div className="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm">
-          <p className="text-center text-xl font-semibold italic text-emerald-700 sm:text-2xl">
-            "{quotes[activeQuote]}"
-          </p>
+        <div className="relative rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm">
+          <div
+            className="overflow-hidden"
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={() => {
+              swipeStartX.current = null;
+            }}
+          >
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${activeQuote * 100}%)` }}
+            >
+              {quotes.map((quote) => (
+                <div key={quote} className="w-full shrink-0 px-2">
+                  <p className="text-center text-xl font-semibold italic text-emerald-700 sm:text-2xl">
+                    "{quote}"
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={prevQuote}
+            className="absolute left-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200/70 bg-white/95 text-emerald-700 shadow-[0_10px_24px_rgba(16,185,129,0.22)] backdrop-blur transition hover:-translate-x-0.5 hover:bg-emerald-50 md:inline-flex"
+            aria-label="Previous quote"
+          >
+            <svg
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14.5 6.5 9 12l5.5 5.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={nextQuote}
+            className="absolute right-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200/70 bg-white/95 text-emerald-700 shadow-[0_10px_24px_rgba(16,185,129,0.22)] backdrop-blur transition hover:translate-x-0.5 hover:bg-emerald-50 md:inline-flex"
+            aria-label="Next quote"
+          >
+            <svg
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.5 6.5 15 12l-5.5 5.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             {quotes.map((_, idx) => (
               <button
@@ -123,11 +208,13 @@ const Home = () => {
 
       {/* Our Works */}
       <div className="p-6 max-w-6xl mx-auto mt-16 sm:mt-20 md:mt-24">
-        <p className="text-4xl text-center font-semibold underline decoration-green-500 decoration-4 sm:no-underline sm:text-6xl sm:font-black sm:tracking-[-0.02em] sm:text-slate-900">
+        <p className="text-5xl text-center font-black tracking-[-0.02em] text-slate-900">
           Our Works
         </p>
         <p className="text-center text-3xl mt-8 mb-8 font-medium sm:text-3xl sm:font-medium sm:text-slate-600 sm:max-w-3xl sm:mx-auto sm:leading-snug">
-          "Look what we can do together."
+        
+
+See what we can achieve together.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
           {works.map((work) => (
@@ -158,8 +245,8 @@ const Home = () => {
         <h2 className="text-3xl font-extrabold text-center text-slate-900 sm:text-5xl">
           How Feeding Futures Works
         </h2>
-        <p className="mx-auto mt-4 max-w-3xl text-center text-lg text-slate-600 sm:text-xl">
-          A simple process that turns surplus food into support for those who need it most.
+        <p className="mx-auto mt-4 max-w-3xl text-center text-lg text-slate-600 sm:text-xl lg:max-w-none lg:whitespace-nowrap">
+          A simple process that turns surplus food into meals for those who need it most.
         </p>
         <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
           <article className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
@@ -185,8 +272,10 @@ const Home = () => {
 
       {/* Mission */}
       <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 md:py-12">
+        <h2 className="mb-6 text-center text-3xl font-extrabold text-slate-900 sm:text-4xl">
+          Our Mission
+        </h2>
         <div className="rounded-3xl bg-[linear-gradient(180deg,#ffffff_0%,#f0fdf4_100%)] p-7 shadow-[0_14px_36px_rgba(15,23,42,0.08)]">
-          <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Our Mission</h2>
           <p className="mt-4 text-lg leading-relaxed text-slate-700 sm:text-xl">
             At Feeding Futures, our mission is to reduce food waste while fighting hunger.
             By connecting food donors with NGOs, we ensure that surplus meals are not wasted
@@ -224,38 +313,31 @@ const Home = () => {
           "When food is shared, hope is multiplied."
         </p>
         <p className="mt-3 text-xl italic text-slate-600 sm:text-2xl">
-          "Saving food today creates smiles tomorrow."
+          Saving food today creates smiles tomorrow.
         </p>
       </section>
 
       {/* Call To Action */}
       <section className="mx-auto mb-20 max-w-6xl px-4 py-10 sm:px-6">
-        <div className="rounded-3xl bg-[linear-gradient(135deg,#065f46_0%,#16a34a_100%)] p-8 text-center shadow-[0_18px_44px_rgba(5,150,105,0.28)]">
-          <h2 className="text-3xl font-extrabold text-white sm:text-5xl">
+        <div className="rounded-3xl bg-[linear-gradient(135deg,#0f7b4d_0%,#16a34a_100%)] p-8 text-center shadow-[0_14px_30px_rgba(5,150,105,0.24)]">
+          <h2 className="text-3xl font-bold text-white sm:text-5xl">
             Be The Reason Someone Eats Today
           </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-lg text-emerald-50 sm:text-xl">
-            Join Feeding Futures and help us transform food waste into hope.
-            Together we can make sure no meal goes to waste and no person sleeps hungry.
+          <p className="mx-auto mt-4 max-w-3xl text-lg text-emerald-50 sm:text-xl lg:max-w-none lg:whitespace-nowrap">
+            Join Feeding Futures and help turn surplus food into support for people who need it.
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <NavLink
               to="/foodDonationForm"
-              className="rounded-full bg-white px-6 py-3 font-bold text-emerald-700 transition hover:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-emerald-700 transition hover:scale-[0.98]"
             >
-              Donate Food
+              🍽️ Donate Food
             </NavLink>
             <NavLink
               to="/contact"
-              className="rounded-full border border-white px-6 py-3 font-bold text-white transition hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-full border border-white px-6 py-3 font-bold text-white transition hover:bg-white/10"
             >
-              Join As Volunteer
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className="rounded-full border border-white px-6 py-3 font-bold text-white transition hover:bg-white/10"
-            >
-              Partner With Us
+              🤝 Partner With Us
             </NavLink>
           </div>
         </div>
