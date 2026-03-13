@@ -42,7 +42,7 @@ function App() {
         <ScrollToTop />
         <Navbar isLoggedIn={isLoggedIn} onLogout={() => setIsLoggedIn(false)} />
 
-        <main className="flex-1">
+        <main className="flex flex-1 flex-col">
           <Routes>
             <Route path="/" element={<About />} />
             <Route path="/about" element={<About />} />

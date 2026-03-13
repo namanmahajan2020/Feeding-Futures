@@ -8,11 +8,6 @@ const inputClassName =
 const fieldLabelClassName =
   "mb-1.5 block text-sm font-semibold tracking-wide text-slate-700";
 
-const deliveryHighlights = [
-  { label: "Fast login", value: "Reach orders with fewer steps." },
-  { label: "Compact layout", value: "Cleaner on laptop and mobile." },
-];
-
 // ==================== Gender Select ====================
 const GenderSelect = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
@@ -200,10 +195,16 @@ const AuthForm = ({ onLogin }) => {
   };
 
   return (
-    <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden bg-[linear-gradient(180deg,#f8fcf9_0%,#edf5f0_100%)] px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+    <section
+      className={`relative overflow-hidden bg-[linear-gradient(180deg,#f8fcf9_0%,#edf5f0_100%)] px-4 sm:px-6 lg:px-8 ${
+        isSignup
+          ? "flex min-h-[calc(100vh-4rem)] items-center py-4 sm:py-5"
+          : "flex flex-1 min-h-full items-center py-3 sm:py-4"
+      }`}
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.08),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(15,23,42,0.06),_transparent_26%)]" />
-      <div className="relative mx-auto w-full max-w-4xl rounded-[1.8rem] shadow-[0_20px_48px_rgba(15,23,42,0.06),0_0_0_1px_rgba(167,243,208,0.22),0_0_14px_rgba(110,231,183,0.08)]">
-        <div className="grid gap-4 rounded-[1.9rem] bg-[#eef3ef]/85 p-4 sm:p-5 lg:grid-cols-[1.05fr_0.7fr] lg:p-6">
+      <div className="relative mx-auto w-full max-w-2xl rounded-[1.8rem] shadow-[0_20px_48px_rgba(15,23,42,0.06),0_0_0_1px_rgba(167,243,208,0.22),0_0_14px_rgba(110,231,183,0.08)]">
+        <div className="rounded-[1.9rem] bg-[#eef3ef]/85 p-4 sm:p-5 lg:p-6">
           <form onSubmit={handleSubmit} className="rounded-[1.5rem] bg-[#f5f8f6] p-4 shadow-[0_10px_24px_rgba(15,23,42,0.05)] sm:p-5">
             <div className="mx-auto max-w-2xl">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -214,9 +215,6 @@ const AuthForm = ({ onLogin }) => {
                   <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
                     {isSignup ? "Create delivery access" : "Login to continue"}
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-500 sm:text-base">
-                    Simple and clean access.
-                  </p>
                 </div>
 
                 <div className="inline-flex rounded-full border border-cyan-100 bg-cyan-50 p-1">
@@ -347,31 +345,6 @@ const AuthForm = ({ onLogin }) => {
               </div>
             </div>
           </form>
-
-          <div className="overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#355f6f] via-[#4b8c85] to-[#86cfc3] p-5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-10px_18px_rgba(0,0,0,0.04),0_10px_22px_rgba(10,40,32,0.10)] sm:p-6">
-            <div className="inline-flex rounded-full bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.26em] text-emerald-50">
-              Delivery Access
-            </div>
-            <h3 className="mt-4 text-2xl font-black leading-tight sm:text-3xl">
-              {isSignup ? "Join now" : "Ready to move"}
-            </h3>
-            <p className="mt-3 text-sm leading-7 text-emerald-50/85">
-              {isSignup
-                ? "Create delivery access and start faster."
-                : "Login and head straight to current orders."}
-            </p>
-
-            <div className="mt-5 space-y-3">
-              {deliveryHighlights.map((item) => (
-                <div key={item.label} className="rounded-[1.3rem] bg-white/10 p-4">
-                  <div className="text-xs uppercase tracking-[0.24em] text-emerald-100/75">
-                    {item.label}
-                  </div>
-                  <div className="mt-2 text-sm font-medium text-white/90">{item.value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </section>
