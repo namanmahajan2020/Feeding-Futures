@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const Home = () => {
@@ -52,6 +52,14 @@ const Home = () => {
     swipeStartX.current = null;
   };
 
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveQuote((prev) => (prev + 1) % quotes.length);
+    }, 3800);
+
+    return () => window.clearInterval(timer);
+  }, [quotes.length]);
+
   return (
     <div className="bg-gradient-to-b from-green-50 to-white min-h-screen font-poppins">
       {/* Banner */}
@@ -60,14 +68,14 @@ const Home = () => {
           className="hidden sm:flex h-[90vh] w-full bg-cover bg-center items-center justify-center"
           style={{ backgroundImage: "url('img/coverimage.jpeg')" }}
         >
-          <div className="mx-6 max-w-3xl rounded-3xl border border-white/30 bg-white/20 p-8 text-center text-white shadow-[0_20px_50px_rgba(15,23,42,0.24)] backdrop-blur-sm">
-            <p className="text-sm uppercase tracking-[0.3em] text-white/90">
+          <div className="mx-6 mt-12 w-full max-w-2xl rounded-3xl border border-white/40 bg-white/15 px-8 py-5 text-center text-white shadow-[0_24px_60px_rgba(15,23,42,0.26)] backdrop-blur-md lg:mt-20 lg:max-w-3xl">
+            <p className="text-xs uppercase tracking-[0.26em] text-white/90 lg:text-sm">
               Share Food. Build Hope.
             </p>
-            <h1 className="mt-4 text-5xl font-extrabold leading-tight">
+            <h1 className="mt-3 text-3xl font-extrabold leading-tight lg:text-4xl">
               Feeding Futures starts with one plate at a time.
             </h1>
-            <p className="mt-4 text-xl text-white/90">
+            <p className="mt-3 text-base text-white/90 lg:text-lg">
               We connect extra food to people who need it, quickly and respectfully.
             </p>
           </div>
@@ -147,49 +155,6 @@ const Home = () => {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={prevQuote}
-            className="absolute left-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200/70 bg-white/95 text-emerald-700 shadow-[0_10px_24px_rgba(16,185,129,0.22)] backdrop-blur transition hover:-translate-x-0.5 hover:bg-emerald-50 md:inline-flex"
-            aria-label="Previous quote"
-          >
-            <svg
-              className="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M14.5 6.5 9 12l5.5 5.5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={nextQuote}
-            className="absolute right-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-emerald-200/70 bg-white/95 text-emerald-700 shadow-[0_10px_24px_rgba(16,185,129,0.22)] backdrop-blur transition hover:translate-x-0.5 hover:bg-emerald-50 md:inline-flex"
-            aria-label="Next quote"
-          >
-            <svg
-              className="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9.5 6.5 15 12l-5.5 5.5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             {quotes.map((_, idx) => (
               <button
@@ -212,9 +177,7 @@ const Home = () => {
           Our Works
         </p>
         <p className="text-center text-3xl mt-8 mb-8 font-medium sm:text-3xl sm:font-medium sm:text-slate-600 sm:max-w-3xl sm:mx-auto sm:leading-snug">
-        
-
-See what we can achieve together.
+          See what we can achieve together.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
           {works.map((work) => (
@@ -331,13 +294,13 @@ See what we can achieve together.
               to="/foodDonationForm"
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-emerald-700 transition hover:scale-[0.98]"
             >
-              🍽️ Donate Food
+              {"\uD83C\uDF71"} Donate Food
             </NavLink>
             <NavLink
               to="/contact"
               className="inline-flex items-center gap-2 rounded-full border border-white px-6 py-3 font-bold text-white transition hover:bg-white/10"
             >
-              🤝 Partner With Us
+              {"\uD83E\uDD1D"} Partner With Us
             </NavLink>
           </div>
         </div>
