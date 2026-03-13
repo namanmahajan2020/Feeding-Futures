@@ -153,6 +153,114 @@ const Home = () => {
         </div>
       </div>
 
+      {/* How It Works */}
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16">
+        <h2 className="text-3xl font-extrabold text-center text-slate-900 sm:text-5xl">
+          How Feeding Futures Works
+        </h2>
+        <p className="mx-auto mt-4 max-w-3xl text-center text-lg text-slate-600 sm:text-xl">
+          A simple process that turns surplus food into support for those who need it most.
+        </p>
+        <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <article className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
+            <p className="text-sm font-bold uppercase tracking-wider text-emerald-700">1. Report Surplus Food</p>
+            <p className="mt-3 text-slate-600">
+              Restaurants, messes, or event organizers notify us about extra food available.
+            </p>
+          </article>
+          <article className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
+            <p className="text-sm font-bold uppercase tracking-wider text-emerald-700">2. NGO Coordination</p>
+            <p className="mt-3 text-slate-600">
+              Our partnered NGOs quickly coordinate pickup and distribution.
+            </p>
+          </article>
+          <article className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
+            <p className="text-sm font-bold uppercase tracking-wider text-emerald-700">3. Deliver To Those In Need</p>
+            <p className="mt-3 text-slate-600">
+              Fresh meals reach underprivileged communities and children safely.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      {/* Mission */}
+      <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 md:py-12">
+        <div className="rounded-3xl bg-[linear-gradient(180deg,#ffffff_0%,#f0fdf4_100%)] p-7 shadow-[0_14px_36px_rgba(15,23,42,0.08)]">
+          <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Our Mission</h2>
+          <p className="mt-4 text-lg leading-relaxed text-slate-700 sm:text-xl">
+            At Feeding Futures, our mission is to reduce food waste while fighting hunger.
+            By connecting food donors with NGOs, we ensure that surplus meals are not wasted
+            but shared with those who need them the most.
+          </p>
+          <p className="mt-4 text-lg leading-relaxed text-slate-700 sm:text-xl">
+            Every meal saved means a smile shared, a life supported, and a step closer to a
+            hunger-free future.
+          </p>
+        </div>
+      </section>
+
+      {/* Impact */}
+      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12">
+        <h2 className="text-3xl font-extrabold text-center text-slate-900 sm:text-4xl">Our Impact</h2>
+        <div className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <article className="rounded-2xl bg-white p-6 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+            <h3 className="text-2xl font-bold text-emerald-700">Meals Rescued</h3>
+            <p className="mt-2 text-slate-600">Thousands of meals saved from being wasted.</p>
+          </article>
+          <article className="rounded-2xl bg-white p-6 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+            <h3 className="text-2xl font-bold text-emerald-700">Communities Supported</h3>
+            <p className="mt-2 text-slate-600">Helping underprivileged families and children.</p>
+          </article>
+          <article className="rounded-2xl bg-white p-6 shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+            <h3 className="text-2xl font-bold text-emerald-700">Volunteers And NGOs</h3>
+            <p className="mt-2 text-slate-600">A growing network working together to fight hunger.</p>
+          </article>
+        </div>
+      </section>
+
+      {/* Quote Lines */}
+      <section className="mx-auto max-w-4xl px-4 py-6 text-center sm:px-6">
+        <p className="text-2xl font-semibold italic text-emerald-700 sm:text-3xl">
+          "When food is shared, hope is multiplied."
+        </p>
+        <p className="mt-3 text-xl italic text-slate-600 sm:text-2xl">
+          "Saving food today creates smiles tomorrow."
+        </p>
+      </section>
+
+      {/* Call To Action */}
+      <section className="mx-auto mb-20 max-w-6xl px-4 py-10 sm:px-6">
+        <div className="rounded-3xl bg-[linear-gradient(135deg,#065f46_0%,#16a34a_100%)] p-8 text-center shadow-[0_18px_44px_rgba(5,150,105,0.28)]">
+          <h2 className="text-3xl font-extrabold text-white sm:text-5xl">
+            Be The Reason Someone Eats Today
+          </h2>
+          <p className="mx-auto mt-4 max-w-3xl text-lg text-emerald-50 sm:text-xl">
+            Join Feeding Futures and help us transform food waste into hope.
+            Together we can make sure no meal goes to waste and no person sleeps hungry.
+          </p>
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <NavLink
+              to="/foodDonationForm"
+              className="rounded-full bg-white px-6 py-3 font-bold text-emerald-700 transition hover:scale-[0.98]"
+            >
+              Donate Food
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className="rounded-full border border-white px-6 py-3 font-bold text-white transition hover:bg-white/10"
+            >
+              Join As Volunteer
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className="rounded-full border border-white px-6 py-3 font-bold text-white transition hover:bg-white/10"
+            >
+              Partner With Us
+            </NavLink>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
