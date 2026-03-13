@@ -155,7 +155,7 @@ function Contact() {
           <p className="text-[1.7rem] font-bold tracking-[0.06em] text-green-800 sm:text-[2.15rem]">
             Support <span className="text-slate-950">&</span> Connection
           </p>
-          <div className="mx-auto mt-4 h-0.5 w-full max-w-[18rem] rounded-full bg-green-500/50 sm:max-w-[22rem]" />
+          <div className="mx-auto mt-1 mb-3 h-0.5 w-full max-w-[18rem] rounded-full bg-green-700/50 sm:max-w-[22rem]" />
         </div>
       </div>
 

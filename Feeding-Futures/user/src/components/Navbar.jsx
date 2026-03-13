@@ -60,7 +60,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed top-0 z-50 flex h-18 w-full items-center gap-4 bg-gradient-to-b from-white to-green-100 px-4 shadow-sm sm:px-6 md:px-12 lg:px-24">
+      <header className="fixed top-0 z-50 flex h-18 w-full items-center gap-4 bg-gradient-to-b from-white/80 to-green-100/80 px-3 shadow-sm backdrop-blur-md border border-white/40 sm:px-5 md:pl-6 md:pr-14 lg:pl-8 lg:pr-24">
         <NavLink
           to="/"
           end
