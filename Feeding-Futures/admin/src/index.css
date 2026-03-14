@@ -97,6 +97,12 @@ body {
   transform: translateY(-1px);
 }
 
+/* Hide browser-provided password reveal icons so only the custom eye button shows */
+.admin-password-input::-ms-reveal,
+.admin-password-input::-ms-clear {
+  display: none;
+}
+
 .admin-glow {
   animation: adminSoftPulse 3.8s ease-in-out infinite;
 }

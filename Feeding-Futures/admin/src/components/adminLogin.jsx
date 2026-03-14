@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./AppContext.jsx";
-import { FaGithub, FaInstagram, FaEnvelope } from "react-icons/fa";
+import { FaGithub, FaInstagram, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const inputClassName =
   "admin-interactive w-full rounded-2xl border border-emerald-200/24 bg-white/14 px-4 py-3.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_22px_rgba(0,0,0,0.10)] outline-none transition placeholder:text-emerald-50/50 focus:border-emerald-200/45 focus:ring-4 focus:ring-emerald-200/10";
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { setIsLoggedIn } = useContext(AppContext);
@@ -59,8 +60,8 @@ const AdminLogin = () => {
   return (
     <div className="admin-page flex min-h-screen flex-col bg-[linear-gradient(180deg,#eef6f2_0%,#e7f0ec_100%)] text-slate-100">
 <header className="border-b border-cyan-300/15 bg-[linear-gradient(120deg,#122041_0%,#1a2f57_58%,#1f3d6e_100%)] shadow-[0_10px_20px_rgba(6,23,46,0.24)]">
-  <div className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-3 sm:px-5 md:px-6 lg:px-6">
-    <h1 className="text-[1.2rem] font-extrabold leading-none text-slate-100 sm:text-[1.35rem] md:text-[1.5rem] lg:text-[1.6rem] lg:-ml-2">
+  <div className="flex h-18 w-full items-center justify-between px-4 sm:px-6 md:px-10 lg:px-14">
+          <h1 className="ml-1 text-[1.2rem] font-extrabold leading-none text-slate-100 sm:text-[1.35rem] md:ml-0 md:text-[1.5rem] lg:text-[1.6rem]">
       Feeding <span className="text-emerald-400">Futures</span>{" "}
       <span className="text-slate-300">- Admin</span>
     </h1>
@@ -110,15 +111,25 @@ const AdminLogin = () => {
                 <label className="mb-1.5 block text-sm font-semibold tracking-[0.03em] text-emerald-50/90">
                   Password
                 </label>
-                <input
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  required
-                  className={inputClassName}
-                />
+                <div className="relative">
+                  <input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    required
+                    className={`${inputClassName} admin-password-input pr-12`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-emerald-50/85 transition hover:text-white"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <FaEyeSlash className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
+                  </button>
+                </div>
               </div>
 
               {error && (
@@ -154,20 +165,20 @@ const AdminLogin = () => {
         </div>
       </main>
 
-      <footer className="border-t border-cyan-300/20 bg-[linear-gradient(120deg,#08152c_0%,#0a1f3d_55%,#0b2749_100%)] px-4 py-4 text-sm text-cyan-50 md:px-10">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
-          <h2 className="text-2xl font-semibold text-slate-100">
+      <footer className="border-t border-cyan-300/20 bg-[linear-gradient(120deg,#08152c_0%,#0a1f3d_55%,#0b2749_100%)] px-4 py-4 text-sm text-cyan-50 md:px-10 lg:px-14">
+        <div className="grid w-full grid-cols-1 items-center gap-4 text-center md:grid-cols-[auto_1fr_auto] md:text-left">
+          <h2 className="justify-self-center text-[1.65rem] font-semibold text-slate-100 md:justify-self-start md:text-[1.75rem]">
             Feeding <span className="text-emerald-400">Futures</span>
           </h2>
 
-          <div className="text-center text-sm text-cyan-100/80">
-            <p>&copy; {new Date().getFullYear()} Feeding Futures Admin. All Rights Reserved.</p>
+          <div className="text-center text-sm text-gray-400 md:justify-self-center">
+            <p >&copy; {new Date().getFullYear()} Feeding Futures Admin. All Rights Reserved.</p>
             <p className="mt-1 italic text-cyan-100/90">
-              Track the food, plan the share — creating smiles everywhere ❤️
+              Track the food, plan the share - creating smiles everywhere{"\u2764\uFE0F"}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4 md:justify-self-end">
             <a
               href="https://www.instagram.com/namanmahajan_17/"
               target="_blank"
@@ -201,3 +212,4 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+
