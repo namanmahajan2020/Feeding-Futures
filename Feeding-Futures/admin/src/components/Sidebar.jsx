@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from "react-router-dom";
 import { Home, BarChart, Users, MessageSquare, Briefcase, Menu, Sun, Moon, LogOut } from 'lucide-react';
 import { AppContext } from './AppContext';
@@ -6,6 +6,7 @@ import { AppContext } from './AppContext';
 const Sidebar = () => {
   const location = useLocation();
   const sidebarRef = useRef(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode, setIsLoggedIn } = useContext(AppContext);
 
   const handleLogout = () => {
@@ -52,7 +53,14 @@ const Sidebar = () => {
     if (isMobile) {
       setIsSidebarOpen(false);
     }
+    setShowLogoutConfirm(false);
   }, [location.pathname, isMobile, setIsSidebarOpen]);
+
+  useEffect(() => {
+    if (!showLogoutConfirm) return undefined;
+    const timer = window.setTimeout(() => setShowLogoutConfirm(false), 5000);
+    return () => window.clearTimeout(timer);
+  }, [showLogoutConfirm]);
 
   return (
     <nav ref={sidebarRef} className={`fixed top-0 left-0 border-r h-full ${isSidebarOpen ? 'w-56 md:w-64' : 'w-16 md:w-20'} 
@@ -114,28 +122,62 @@ const Sidebar = () => {
     </span>
   </div>
 
-  <button
-    onClick={handleLogout}
-    className={`admin-interactive flex items-center p-3 rounded-xl w-full
-      ${isDarkMode ? 'hover:bg-red-700' : 'hover:bg-red-600 hover:text-white'}
-      ${isSidebarOpen ? 'justify-start' : ''}`}
-  >
-    <div style={{ minWidth: '32px', display: 'flex', justifyContent: 'center' }}>
-      <LogOut className="w-8 h-6 mr-2 text-red-400" />
-    </div>
-    <span
-      className="ml-2 text-base font-medium"
-      style={{
-        opacity: isSidebarOpen ? 1 : 0,
-        width: isSidebarOpen ? 'auto' : 0,
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        transition: 'opacity 0.3s ease, width 0.3s ease',
-      }}
+  <div className="relative">
+    <button
+      onClick={() => setShowLogoutConfirm(true)}
+      className={`admin-interactive flex items-center p-3 rounded-xl w-full
+        ${isDarkMode ? 'hover:bg-red-700' : 'hover:bg-red-600 hover:text-white'}
+        ${isSidebarOpen ? 'justify-start' : ''}`}
     >
-      Logout
-    </span>
-  </button>
+      <div style={{ minWidth: '32px', display: 'flex', justifyContent: 'center' }}>
+        <LogOut className="w-8 h-6 mr-2 text-red-400" />
+      </div>
+      <span
+        className="ml-2 text-base font-medium"
+        style={{
+          opacity: isSidebarOpen ? 1 : 0,
+          width: isSidebarOpen ? 'auto' : 0,
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          transition: 'opacity 0.3s ease, width 0.3s ease',
+        }}
+      >
+        Logout
+      </span>
+    </button>
+
+    {showLogoutConfirm && (
+      <div
+        className={`absolute z-40 w-[12.5rem] rounded-2xl border border-white/60 bg-white/30 p-3 shadow-[0_18px_42px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:w-[13.5rem] md:w-[14.5rem] ${
+          isSidebarOpen ? "bottom-full left-2 mb-2" : "left-full bottom-0 ml-3"
+        }`}
+      >
+        <p className={`text-center text-[0.98rem] font-semibold ${isDarkMode ? "text-gray-200" : "text-rose-600"}`}>
+          Confirm logout
+        </p>
+        <div className="mt-3 flex justify-center gap-3">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-rose-500 md:px-3 md:py-1.5"
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowLogoutConfirm(false)}
+            className={`rounded-lg px-3.5 py-2 text-sm font-semibold transition md:px-3 md:py-1.5 ${
+              isDarkMode
+                ? "bg-slate-700 text-slate-100 hover:bg-slate-600"
+                : "bg-slate-200/90 text-slate-700 hover:bg-slate-300"
+            }`}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
 </div>
 
     </nav>
