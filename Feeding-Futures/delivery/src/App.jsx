@@ -65,14 +65,7 @@ function App() {
               }
             />
 
-            <Route
-              path="/contact"
-              element={
-                <ProtectedRoute isAllowed={isLoggedIn}>
-                  <Contact />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/contact" element={<Contact />} />
 
             <Route
               path="/signup"

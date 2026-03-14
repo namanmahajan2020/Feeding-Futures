@@ -11,12 +11,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const impactStats = [
-  { value: "50,000+", label: "Meals delivered to communities" },
-  { value: "100+", label: "NGO and volunteer partnerships" },
-  { value: "500+", label: "Food providers contributing surplus" },
-];
-
 const trustPoints = [
   {
     icon: Clock3,
@@ -108,19 +102,6 @@ const About = () => {
               </button>
             </div>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {impactStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-3xl border border-white/80 bg-white/70 p-5 shadow-md backdrop-blur"
-                >
-                  <p className="text-3xl font-black text-indigo-700">
-                    {stat.value}
-                  </p>
-                  <p className="mt-2 text-sm text-slate-600">{stat.label}</p>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="relative">
@@ -177,15 +158,15 @@ const About = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-14 md:px-10">
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="max-w-2xl">
             <p className="text-sm font-bold uppercase tracking-[0.3em] text-emerald-700">
               How it works
             </p>
             <h2 className="mt-4 text-3xl font-black text-slate-900 sm:text-4xl">
               A smoother path from surplus food to safe delivery.
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600">
+            <p className="mt-5 text-base leading-8 text-slate-600">
               The delivery page should feel purposeful from the first second.
               This home page now introduces the mission clearly while staying
               connected to the order workflow your delivery partners already use.

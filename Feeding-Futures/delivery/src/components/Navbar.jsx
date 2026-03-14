@@ -46,6 +46,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
 
   const loggedOutNavItems = [
     { name: "About Us", path: "/about", icon: Info },
+    { name: "Contact", path: "/contact", icon: Mail },
     // "Join Us" will be handled separately as a button
   ];
 
@@ -70,6 +71,15 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
     navigate("/signup");
   };
 
+  const goToAdminUserLogin = () => {
+    const apiStart = import.meta.env.VITE_API_START;
+    if (apiStart.startsWith("http")) {
+      window.location.href = apiStart;
+    } else {
+      navigate(apiStart);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b-1 border-white bg-transparent shadow-lg backdrop-blur-2xl overflow-x-clip">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -85,7 +95,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6 w-full justify-center">
             {/* Centered Navigation Items */}
-            {isLoggedIn && activeNavItems.map((item) => (
+            {activeNavItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => navigate(item.path)}
@@ -112,14 +122,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
               {/* On signup page, show “Login as Admin/User” button */}
               {(!isLoggedIn || isSignupPage) && (
                 <button
-                  onClick={() => {
-                    const apiStart = import.meta.env.VITE_API_START;
-                    if (apiStart.startsWith("http")) {
-                      window.location.href = apiStart;
-                    } else {
-                      navigate(apiStart);
-                    }
-                  }}
+                  onClick={goToAdminUserLogin}
                   className="ml-3 bg-gradient-to-tl from-sky-500 via-indigo-500 to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-blue-600 transition"
                 >
                   <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />
@@ -156,8 +159,13 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute w-full bg-white shadow-xl border-t border-gray-100">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden absolute w-full bg-white/95 shadow-xl border-t border-gray-100 backdrop-blur">
+          <div className="px-3 pt-3 pb-4 space-y-2">
+            {isLoggedIn && (
+              <div className="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700">
+                Hello, {userName || "User"}
+              </div>
+            )}
             {activeNavItems.map((item) => (
               <button
                 key={item.name}
@@ -185,20 +193,15 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
               </button>
             )}
 
-            {!isLoggedIn && isSignupPage && (
+            {!isLoggedIn && (
               <button
                 onClick={() => {
-                  const apiStart = import.meta.env.VITE_API_START;
-                  if (apiStart.startsWith("http")) {
-                    window.location.href = apiStart;
-                  } else {
-                    navigate(apiStart);
-                  }
+                  goToAdminUserLogin();
                   setIsMenuOpen(false);
                 }}
-                className="w-full py-2 px-3 mt-2 bg-blue-500 text-white font-base rounded-md shadow hover:bg-blue-600 transition flex justify-center items-center"
+                className="w-full py-2 px-3 mt-2 bg-gradient-to-tl from-sky-500 via-indigo-500 to-blue-700 text-white font-semibold rounded-md shadow transition flex justify-center items-center hover:opacity-95"
               >
-                <LogIn className="w-4 h-4 mr-2" /> Login as Admin/User
+                <LogIn className="w-4 h-4 mr-2 text-red-300" /> Login as Admin/User
               </button>
             )}
 
