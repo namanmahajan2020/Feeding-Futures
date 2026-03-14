@@ -7,12 +7,14 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const sidebarRef = useRef(null);
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
+  const { isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode, setIsLoggedIn } = useContext(AppContext);
 
-  const { isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode } = useContext(AppContext);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/login", { replace: true });
+  };
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   const navItems = [

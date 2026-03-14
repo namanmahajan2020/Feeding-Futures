@@ -16,11 +16,12 @@ const AdminLogin = () => {
   const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const role = localStorage.getItem("role");
+    const isLoggedIn =
+      localStorage.getItem("isLoggedIn") || sessionStorage.getItem("isLoggedIn");
+    const role = localStorage.getItem("role") || sessionStorage.getItem("role");
 
     if (isLoggedIn === "true" && role === "admin") {
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
   }, [navigate]);
 
@@ -35,8 +36,10 @@ const AdminLogin = () => {
       if (formData.email === adminEmail && formData.password === adminPassword) {
         localStorage.setItem("role", "admin");
         localStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("role", "admin");
+        sessionStorage.setItem("isLoggedIn", "true");
         setIsLoggedIn(true);
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       } else {
         setError("Invalid email or password.");
       }

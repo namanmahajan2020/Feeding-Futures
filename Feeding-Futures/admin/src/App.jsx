@@ -19,7 +19,8 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 // ✅ Protected Route Wrapper
 function ProtectedRoute({ children }) {
   const { isLoggedIn } = useContext(AppContext);
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
+  const role = localStorage.getItem("role") || sessionStorage.getItem("role");
+  return isLoggedIn && role === "admin" ? children : <Navigate to="/login" replace />;
 }
 
 
@@ -80,8 +81,10 @@ export default function App() {
 
   // Login State
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    // Optional: persist login state in localStorage
-    return localStorage.getItem("isLoggedIn") === "true";
+    return (
+      localStorage.getItem("isLoggedIn") === "true" ||
+      sessionStorage.getItem("isLoggedIn") === "true"
+    );
   });
 
   // Apply theme to body
@@ -90,9 +93,10 @@ export default function App() {
     localStorage.setItem("mode", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
-  // Save login state in localStorage (optional)
+  // Keep auth flag in both storages for route-guard consistency.
   useEffect(() => {
     localStorage.setItem("isLoggedIn", isLoggedIn);
+    sessionStorage.setItem("isLoggedIn", isLoggedIn);
   }, [isLoggedIn]);
 
   // Context provider value
