@@ -83,7 +83,7 @@ const About = () => {
           Nourishing Communities, One Meal at a Time
         </h1>
 
-        <div className="mx-auto max-w-6xl space-y-6 text-left text-base leading-7 text-gray-700 sm:space-y-8 md:text-justify md:text-lg md:leading-relaxed">
+        <div className="mx-auto max-w-6xl space-y-6 text-justify text-base leading-7 text-gray-700 sm:space-y-8 md:text-lg md:leading-relaxed">
           <p>
             Every meal counts when millions go hungry. We connect surplus food
             to those in need, transforming waste into hope and health.

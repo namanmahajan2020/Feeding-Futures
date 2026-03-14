@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   FaEnvelope,
+  FaChevronDown,
   FaInstagram,
   FaMapMarkerAlt,
   FaPhoneAlt,
@@ -84,7 +85,7 @@ const accordionData = [
 ];
 
 function Contact() {
-  const [activeAccordions, setActiveAccordions] = useState([]);
+  const [activeAccordion, setActiveAccordion] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -102,9 +103,7 @@ function Contact() {
   };
 
   const toggleAccordion = (index) => {
-    setActiveAccordions((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
+    setActiveAccordion((prev) => (prev === index ? null : index));
   };
 
   const handleSubmit = async (e) => {
@@ -304,17 +303,25 @@ function Contact() {
             Help & FAQs?
           </p>
           {accordionData.map(({ question, answer }, index) => {
-            const isActive = activeAccordions.includes(index);
+            const isActive = activeAccordion === index;
             return (
               <div key={index} className="mb-4 rounded">
                 <button
-                  className={`w-full text-left text-base font-semibold text-white transition-transform duration-300 focus:outline-none sm:text-lg ${
+                  className={`flex w-full items-center justify-between text-left text-base font-semibold text-white transition-transform duration-300 focus:outline-none sm:text-lg ${
                     isActive ? "rounded-t" : "rounded"
                   } bg-gradient-to-b from-green-400 to-green-700 px-4 py-3 hover:scale-[1.01]`}
                   onClick={() => toggleAccordion(index)}
                   aria-expanded={isActive}
                 >
-                  {question}
+                  <span>{question}</span>
+                  <span
+                    className={`ml-4 inline-flex items-center justify-center text-green-100 transition-transform duration-300 ${
+                      isActive ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <FaChevronDown className="text-base sm:text-lg" />
+                  </span>
                 </button>
                 {isActive && (
                   <div className="mt-1 mb-8 border-t border-green-600 bg-gradient-to-b from-white to-green-100 p-4 sm:mb-12">
