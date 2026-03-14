@@ -109,7 +109,7 @@ const About = () => {
           </p>
 
           <p>
-            Our mission goes beyond feeding the hungry; it is about building a
+            Our mission goes beyond feeding the hungry, it is about building a
             sustainable community that values every meal, protects our planet,
             and creates lasting impact. By turning food waste into nourishment,
             we are shaping a healthier, more equitable future for all.
