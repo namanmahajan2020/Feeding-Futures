@@ -63,35 +63,40 @@ const Profile = () => {
               Your Profile
             </h2>
 
-            {!showLogoutConfirm ? (
-              <button
-                onClick={() => setShowLogoutConfirm(true)}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 font-bold text-white transition hover:scale-[1.01] hover:bg-red-500 sm:w-auto"
-              >
-                <LogOut className="h-5 w-5" />
-                Logout
-              </button>
-            ) : (
-              <div className="w-full rounded-xl border border-rose-200 bg-rose-50 p-3 sm:w-auto">
-                <p className="text-xs font-semibold text-rose-700">Confirm logout, {name || "User"}?</p>
-                <div className="mt-2 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-rose-500"
-                  >
-                    Yes
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowLogoutConfirm(false)}
-                    className="rounded-lg bg-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-300"
-                  >
-                    No
-                  </button>
+            <div className="relative w-full sm:w-auto">
+              {!showLogoutConfirm && (
+                <button
+                  onClick={() => setShowLogoutConfirm(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 font-bold text-white transition hover:scale-[1.01] hover:bg-red-500 sm:w-auto"
+                >
+                  <LogOut className="h-5 w-5" />
+                  Logout
+                </button>
+              )}
+              {showLogoutConfirm && (
+                <div className="absolute right-0 top-0 z-20 w-full rounded-2xl border border-white/60 bg-white/35 p-4 shadow-[0_18px_42px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:w-[18rem] md:w-[20rem] md:p-5">
+                  <p className="text-sm font-semibold text-rose-700 md:text-base">
+                    Confirm logout, {name || "User"}?
+                  </p>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-rose-500 md:text-sm"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowLogoutConfirm(false)}
+                      className="rounded-lg bg-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-300 md:text-sm"
+                    >
+                      No
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           <div className="mt-6 grid gap-3 text-gray-700 sm:grid-cols-1 sm:gap-2">
