@@ -6,6 +6,7 @@ import { LogOut } from "lucide-react";
 const Profile = () => {
   const navigate = useNavigate();
   const [donations, setDonations] = useState([]);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const name = localStorage.getItem("name");
   const email = localStorage.getItem("email");
@@ -38,6 +39,16 @@ const Profile = () => {
     navigate("/start");
   };
 
+  useEffect(() => {
+    if (!showLogoutConfirm) return undefined;
+
+    const timer = window.setTimeout(() => {
+      setShowLogoutConfirm(false);
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [showLogoutConfirm]);
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-green-50 to-white">
       <div className="flex flex-grow items-start justify-center px-4 pb-10 pt-24 sm:px-6 md:pt-28">
@@ -52,13 +63,35 @@ const Profile = () => {
               Your Profile
             </h2>
 
-            <button
-              onClick={handleLogout}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 font-bold text-white transition hover:scale-[1.01] hover:bg-red-500 sm:w-auto"
-            >
-              <LogOut className="h-5 w-5" />
-              Logout
-            </button>
+            {!showLogoutConfirm ? (
+              <button
+                onClick={() => setShowLogoutConfirm(true)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 font-bold text-white transition hover:scale-[1.01] hover:bg-red-500 sm:w-auto"
+              >
+                <LogOut className="h-5 w-5" />
+                Logout
+              </button>
+            ) : (
+              <div className="w-full rounded-xl border border-rose-200 bg-rose-50 p-3 sm:w-auto">
+                <p className="text-xs font-semibold text-rose-700">Confirm logout, {name || "User"}?</p>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-rose-500"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowLogoutConfirm(false)}
+                    className="rounded-lg bg-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-300"
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-6 grid gap-3 text-gray-700 sm:grid-cols-1 sm:gap-2">
