@@ -74,22 +74,22 @@ const Profile = () => {
                 </button>
               )}
               {showLogoutConfirm && (
-                <div className="absolute right-0 top-0 z-20 w-full rounded-2xl border border-white/60 bg-white/35 p-4 shadow-[0_18px_42px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:w-[18rem] md:w-[20rem] md:p-5">
+                <div className="absolute right-0 top-0 z-20 w-[13rem] rounded-2xl border border-white/60 bg-white/35 p-3 shadow-[0_18px_42px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:w-[14rem] md:w-[15rem] md:p-4">
                   <p className="text-sm font-semibold text-rose-700 md:text-base">
-                    Confirm logout, {name || "User"}?
+                    Confirm logout
                   </p>
                   <div className="mt-3 flex gap-2">
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-rose-500 md:text-sm"
+                      className="rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-rose-500 md:px-3 md:py-1.5 md:text-sm"
                     >
                       Yes
                     </button>
                     <button
                       type="button"
                       onClick={() => setShowLogoutConfirm(false)}
-                      className="rounded-lg bg-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-300 md:text-sm"
+                      className="rounded-lg bg-slate-200/90 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-300 md:px-3 md:py-1.5 md:text-sm"
                     >
                       No
                     </button>
