@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Home, BarChart, Users, MessageSquare, Briefcase, Menu, Sun, Moon, LogOut } from 'lucide-react';
 import { AppContext } from './AppContext';
 
 const Sidebar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const sidebarRef = useRef(null);
   const { isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode, setIsLoggedIn } = useContext(AppContext);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/login", { replace: true });
+    localStorage.removeItem("role");
+    localStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("isLoggedIn");
+    window.location.href = "https://feeding-futures-user.vercel.app/start";
   };
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
