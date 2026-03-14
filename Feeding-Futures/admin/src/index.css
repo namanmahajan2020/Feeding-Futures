@@ -22,6 +22,12 @@ body {
   font-family: 'Poppins', sans-serif; /* Ensure Poppins font is applied globally */
   font-size: 1rem; /* Consistent font size */
   line-height: 1.5; /* Ensure consistent line height */
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+body.admin-logout-fade {
+  opacity: 0;
 }
 
 /* fallback scrollbar for browsers without custom component */

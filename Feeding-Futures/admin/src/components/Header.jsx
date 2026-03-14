@@ -14,7 +14,10 @@ const Header = () => {
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
-    window.location.href = "https://feeding-futures-user.vercel.app/start";
+    document.body.classList.add("admin-logout-fade");
+    window.setTimeout(() => {
+      window.location.href = "https://feeding-futures-user.vercel.app/start";
+    }, 220);
   };
 
   useEffect(() => {
