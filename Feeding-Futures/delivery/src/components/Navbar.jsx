@@ -51,16 +51,20 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   ];
 
   const activeNavItems = isLoggedIn ? loggedInNavItems : loggedOutNavItems;
+  const isActivePath = (path) =>
+    path === "/about"
+      ? location.pathname === "/" || location.pathname === "/about"
+      : location.pathname === path;
 
   const getLinkClass = (path) =>
     `px-3 py-2 rounded-md text-sm transition-colors flex items-center 
-     ${location.pathname === path
+     ${isActivePath(path)
       ? "text-emerald-600 font-bold"
       : "hover:bg-emerald-50 text-gray-600 font-medium hover:text-emerald-700"}`;
 
   const getMobileLinkClass = (path) =>
     `block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors flex items-center 
-     ${location.pathname === path
+     ${isActivePath(path)
       ? "bg-emerald-100 text-emerald-700 font-bold"
       : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-700"}`;
 

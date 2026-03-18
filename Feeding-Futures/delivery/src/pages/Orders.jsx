@@ -178,17 +178,16 @@ useEffect(() => {
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
       {/* Inline info message */}
       {infoMessage && (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-  bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 text-sm font-medium text-center transition-opacity duration-300 opacity-100">
+        <div className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-indigo-600 px-6 py-3 text-center text-sm font-medium text-white opacity-100 shadow-lg transition-opacity duration-300">
           {infoMessage}
         </div>
 
       )}
 
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="mx-auto max-w-6xl p-4 sm:p-6">
         {/* Title */}
         <div className="flex flex-col text-center justify-center">
-          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-transparent drop-shadow-sm">
+          <h2 className="bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-3xl font-extrabold text-transparent drop-shadow-sm sm:text-4xl">
             Orders
           </h2>
           <div className="mt-3 flex justify-center">
@@ -197,9 +196,9 @@ useEffect(() => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-6 max-w-2/3">
+        <div className="mb-6 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
           {/* Location Toggle */}
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-sm font-medium text-gray-700">Show:</span>
             <div
               onClick={() =>
@@ -225,8 +224,8 @@ useEffect(() => {
           </div>
 
           {/* Status Filter */}
-          <div className="flex justify-center w-full sm:w-auto mr-5">
-            <div className="flex space-x-2">
+          <div className="w-full overflow-x-auto pb-1 sm:w-auto">
+            <div className="flex min-w-max gap-2">
               {["All", "Pending", "Processing"].map((status) => (
                 <button
                   key={status}
@@ -255,7 +254,7 @@ useEffect(() => {
               >
                 <div className="flex flex-col md:flex-row">
                   {/* Left Section - Order Details */}
-                  <div className="flex-1 p-6">
+                  <div className="flex-1 p-4 sm:p-6">
                     <div className="flex items-center mb-4">
                       <span className="text-sky-500 font-semibold text-lg mr-3">
                         #{index + 1}
@@ -296,8 +295,8 @@ useEffect(() => {
                       </div>
                     </div>
 
-                    <div className="mt-6 flex flex-row text-lg items-center">
-                      <span className="text-sm mr-2 mt-1.5 font-semibold text-gray-700 mb-2 block">
+                    <div className="mt-6 flex flex-wrap items-center gap-2 text-lg">
+                      <span className="mb-1 block text-sm font-semibold text-gray-700 sm:mb-0">
                         Current Status :
                       </span>
                       <span
@@ -314,9 +313,9 @@ useEffect(() => {
                   </div>
 
                   {/* Right Section */}
-                  <div className="min-w-1/3 p-6">
-                    <div className="flex flex-col gap-5 h-full justify-between items-end">
-                      <div className="mb-6 flex flex-col items-end justify-center">
+                  <div className="w-full border-t border-white/70 p-4 sm:p-6 md:w-[38%] md:border-l md:border-t-0 lg:w-[34%]">
+                    <div className="flex h-full flex-col justify-between gap-5 items-start md:items-end">
+                      <div className="mb-6 flex flex-col justify-center items-start md:items-end">
                         <h4 className="text-lg font-bold text-indigo-700">
                           {order.name}
                         </h4>
@@ -325,8 +324,8 @@ useEffect(() => {
                         </p>
                       </div>
 
-                      <div className="flex flex-col justify-center items-center">
-                        <div className="mb-2 font-semibold flex items-center space-x-2">
+                      <div className="flex w-full flex-col items-center justify-center">
+                        <div className="mb-2 flex items-center space-x-2 text-center font-semibold">
                           <span
                             className={`text-sm ${order.status === "Pending"
                               ? "text-blue-600"
@@ -354,7 +353,7 @@ useEffect(() => {
                             )}
                         </div>
 
-                        <div className="mb-4 min-w-50">
+                        <div className="mb-4 w-full max-w-sm">
                           <div className="relative w-full">
                             <input
                               type="range"
@@ -404,7 +403,7 @@ useEffect(() => {
                         {/* Auto-close confirmation */}
                         {order.showConfirm && (
                           <div className="fixed inset-0 flex items-center justify-center z-50">
-                            <div className="bg-indigo-50 border border-indigo-200 rounded-md shadow-lg p-6 w-72 text-center">
+                              <div className="w-[90%] max-w-sm rounded-md border border-indigo-200 bg-indigo-50 p-6 text-center shadow-lg">
                               <p className="text-sm text-indigo-700 font-medium mb-4">
                                 {order.status === "Pending"
                                   ? "Do you want to accept this order?"

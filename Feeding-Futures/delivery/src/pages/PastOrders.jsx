@@ -128,13 +128,13 @@ const PastOrder = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
-      <div className="max-w-5xl mx-auto p-6">
+      <div className="mx-auto max-w-5xl p-4 sm:p-6">
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-transparent drop-shadow-sm">
+          <h2 className="bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-3xl font-extrabold text-transparent drop-shadow-sm sm:text-4xl">
             Your Past Collected Orders
           </h2>
           <div className="mt-3 flex justify-center">
-            <span className="w-98 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 rounded-full shadow-md"></span>
+            <span className="h-1 w-full max-w-md rounded-full bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 shadow-md"></span>
           </div>
           {orders.length > 0 && (
             <p className="mt-3 text-sm text-gray-600 font-medium">
@@ -159,7 +159,7 @@ const PastOrder = () => {
               >
                 <div className="flex flex-col md:flex-row">
                   {/* Left Section */}
-                  <div className="flex-1 p-6">
+                  <div className="flex-1 p-4 sm:p-6">
                     <div className="flex items-center mb-4">
                       <span className="text-sky-500 font-semibold text-lg mr-3">
                         #{index + 1}
@@ -179,8 +179,8 @@ const PastOrder = () => {
                       <div><span className="font-semibold text-gray-700">Email :</span> <span className="text-green-600 font-medium">{order.email}</span></div>
                     </div>
 
-                    <div className="mt-6 flex flex-row text-lg items-center">
-                      <span className="text-sm mr-2 mt-1.5 font-semibold text-gray-700">
+                    <div className="mt-6 flex flex-wrap items-center gap-2 text-lg">
+                      <span className="text-sm font-semibold text-gray-700">
                         Current Status :
                       </span>
                       <span
@@ -197,9 +197,9 @@ const PastOrder = () => {
                   </div>
 
                   {/* Right Section */}
-                  <div className="min-w-1/3 p-6">
-                    <div className="flex flex-col gap-5 h-full justify-between items-end">
-                      <div className="mb-6 flex flex-col items-end">
+                  <div className="w-full border-t border-white/70 p-4 sm:p-6 md:w-[38%] md:border-l md:border-t-0 lg:w-[34%]">
+                    <div className="flex h-full flex-col justify-between gap-5 items-start md:items-end">
+                      <div className="mb-6 flex flex-col items-start md:items-end">
                         <h4 className="text-lg font-bold text-indigo-700 ">
                           {order.name}
                         </h4>
@@ -209,7 +209,7 @@ const PastOrder = () => {
                       </div>
 
                       {/* ⭐ Rating Section */}
-                      <div className="text-yellow-500 font-semibold flex flex-col items-end space-y-2">
+                      <div className="flex flex-col items-start space-y-2 font-semibold text-yellow-500 md:items-end">
                         {submittedRatings[order._id] ? (
                           // ⭐ Show saved rating
                           <div className="flex space-x-1">
