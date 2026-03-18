@@ -21,19 +21,24 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const name = localStorage.getItem("name");
-      setUserName(name);
-    };
+  const syncUserName = () => {
+    const nameFromStorage =
+      localStorage.getItem("name") || sessionStorage.getItem("name") || "";
+    setUserName(nameFromStorage.trim());
+  };
 
-    window.addEventListener("storage", checkLoginStatus);
-    checkLoginStatus();
+  useEffect(() => {
+    window.addEventListener("storage", syncUserName);
+    syncUserName();
 
     return () => {
-      window.removeEventListener("storage", checkLoginStatus);
+      window.removeEventListener("storage", syncUserName);
     };
   }, []);
+
+  useEffect(() => {
+    syncUserName();
+  }, [isLoggedIn, location.pathname, isMenuOpen]);
 
   useEffect(() => {
     if (!showLogoutConfirm) return undefined;
