@@ -431,8 +431,20 @@ useEffect(() => {
 
                         {/* Auto-close confirmation */}
                         {order.showConfirm && (
-                          <div className="fixed inset-0 flex items-center justify-center z-50">
-                              <div className="w-[90%] max-w-sm rounded-md border border-indigo-200 bg-indigo-50 p-6 text-center shadow-lg">
+                          <div
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-white/12 backdrop-blur-[2px]"
+                            onClick={() =>
+                              setOrders((prev) =>
+                                prev.map((o) =>
+                                  o._id === order._id ? { ...o, showConfirm: false } : o
+                                )
+                              )
+                            }
+                          >
+                              <div
+                                className="w-[90%] max-w-sm rounded-md border border-indigo-200 bg-indigo-50/95 p-6 text-center shadow-lg"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                               <p className="text-sm text-indigo-700 font-medium mb-4">
                                 {order.status === "Pending"
                                   ? "Do you want to accept this order?"

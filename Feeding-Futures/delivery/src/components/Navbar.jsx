@@ -86,7 +86,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b-1 border-white bg-transparent shadow-lg backdrop-blur-2xl overflow-x-clip">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b-1 border-white bg-transparent shadow-lg backdrop-blur-2xl overflow-x-clip">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
