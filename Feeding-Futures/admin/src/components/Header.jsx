@@ -16,7 +16,7 @@ const Header = () => {
     setIsLoggedIn(false);
     document.body.classList.add("admin-logout-fade");
     window.setTimeout(() => {
-      window.location.href = "https://feeding-futures-user.vercel.app/start";
+      window.location.href = "https://feedingfutures.vercel.app/start";
     }, 220);
   };
 

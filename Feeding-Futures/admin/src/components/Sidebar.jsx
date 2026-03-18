@@ -17,7 +17,7 @@ const Sidebar = () => {
     sessionStorage.removeItem("isLoggedIn");
     document.body.classList.add("admin-logout-fade");
     window.setTimeout(() => {
-      window.location.href = "https://feeding-futures-user.vercel.app/start";
+      window.location.href = "https://feedingfutures.vercel.app/start";
     }, 220);
   };
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
