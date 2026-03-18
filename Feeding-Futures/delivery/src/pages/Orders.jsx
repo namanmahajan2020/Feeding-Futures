@@ -137,13 +137,17 @@ useEffect(() => {
 
     if (didReachEnd) {
       setOrderDragPercent(session.orderId, session.targetPercent);
-      window.setTimeout(() => {
-        setOrders((prev) =>
-          prev.map((o) =>
-            o._id === session.orderId ? { ...o, showConfirm: true } : o
-          )
-        );
-      }, 120);
+      if (!deliveryPartner) {
+        openSignInPrompt();
+      } else {
+        window.setTimeout(() => {
+          setOrders((prev) =>
+            prev.map((o) =>
+              o._id === session.orderId ? { ...o, showConfirm: true } : o
+            )
+          );
+        }, 120);
+      }
     } else {
       setOrderDragPercent(session.orderId, session.basePercent);
     }
@@ -154,10 +158,6 @@ useEffect(() => {
   };
 
   const startOrderDrag = (order, event) => {
-    if (!deliveryPartner) {
-      openSignInPrompt();
-      return;
-    }
     if (!canDragStatus(order.status)) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
@@ -196,6 +196,7 @@ useEffect(() => {
     if (currentStatus === "Pending" && hasProcessing) {
       setSelectedStatus("Processing");
       setLocationFilter("All");
+      resetOrderDrag(id, currentStatus);
       showTemporaryMessage("You already have one processing order.");
       return;
     }
@@ -306,6 +307,18 @@ useEffect(() => {
       document.body.style.overflow = previousOverflow;
     };
   }, [orders, showSignInPrompt]);
+
+  useEffect(() => {
+    if (!showSignInPrompt) return;
+
+    setDragPercentByOrder((prev) => {
+      const next = { ...prev };
+      orders.forEach((order) => {
+        next[order._id] = getBasePercent(order.status);
+      });
+      return next;
+    });
+  }, [showSignInPrompt, orders]);
 
   useEffect(() => {
     return () => {
