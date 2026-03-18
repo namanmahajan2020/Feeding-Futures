@@ -15,8 +15,9 @@ const Orders = () => {
   const [infoMessage, setInfoMessage] = useState(null);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
   const [signInCountdown, setSignInCountdown] = useState(5);
-  const dragStartXRef = useRef({});
-  const hasDraggedRef = useRef({});
+  const [dragPercentByOrder, setDragPercentByOrder] = useState({});
+  const [activeDragOrderId, setActiveDragOrderId] = useState(null);
+  const dragSessionRef = useRef(null);
 
   // Fetch delivery partner email and location from localStorage
   useEffect(() => {
@@ -78,6 +79,105 @@ useEffect(() => {
     setShowSignInPrompt(true);
   };
 
+  const getBasePercent = (status) => {
+    if (status === "Pending") return 0;
+    if (status === "Processing") return 50;
+    return 100;
+  };
+
+  const getTargetPercent = (status) => {
+    if (status === "Pending") return 50;
+    if (status === "Processing") return 100;
+    return 100;
+  };
+
+  const canDragStatus = (status) =>
+    status === "Pending" || status === "Processing";
+
+  const setOrderDragPercent = (orderId, percent) => {
+    setDragPercentByOrder((prev) => ({ ...prev, [orderId]: percent }));
+  };
+
+  const resetOrderDrag = (orderId, status) => {
+    setOrderDragPercent(orderId, getBasePercent(status));
+  };
+
+  const cleanupPointerListeners = () => {
+    window.removeEventListener("pointermove", handleGlobalPointerMove);
+    window.removeEventListener("pointerup", handleGlobalPointerUp);
+    window.removeEventListener("pointercancel", handleGlobalPointerUp);
+  };
+
+  const handleGlobalPointerMove = (event) => {
+    const session = dragSessionRef.current;
+    if (!session) return;
+
+    const deltaX = event.clientX - session.startX;
+    const rightDragOnly = Math.max(deltaX, 0);
+    const deltaPercent = (rightDragOnly / session.trackWidth) * 100;
+    const nextPercent = Math.min(
+      session.targetPercent,
+      Math.max(session.basePercent, session.basePercent + deltaPercent)
+    );
+
+    session.currentPercent = nextPercent;
+    setOrderDragPercent(session.orderId, nextPercent);
+  };
+
+  const handleGlobalPointerUp = () => {
+    const session = dragSessionRef.current;
+    if (!session) return;
+
+    const triggerPercent =
+      session.basePercent + (session.targetPercent - session.basePercent) * 0.82;
+    const didReachEnd = session.currentPercent >= triggerPercent;
+
+    if (didReachEnd) {
+      setOrderDragPercent(session.orderId, session.targetPercent);
+      window.setTimeout(() => {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o._id === session.orderId ? { ...o, showConfirm: true } : o
+          )
+        );
+      }, 120);
+    } else {
+      setOrderDragPercent(session.orderId, session.basePercent);
+    }
+
+    setActiveDragOrderId(null);
+    dragSessionRef.current = null;
+    cleanupPointerListeners();
+  };
+
+  const startOrderDrag = (order, event) => {
+    if (!deliveryPartner) {
+      openSignInPrompt();
+      return;
+    }
+    if (!canDragStatus(order.status)) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const basePercent = getBasePercent(order.status);
+    const targetPercent = getTargetPercent(order.status);
+
+    dragSessionRef.current = {
+      orderId: order._id,
+      startX: event.clientX,
+      trackWidth: Math.max(rect.width, 1),
+      basePercent,
+      targetPercent,
+      currentPercent: basePercent,
+    };
+
+    setActiveDragOrderId(order._id);
+    setOrderDragPercent(order._id, basePercent);
+
+    window.addEventListener("pointermove", handleGlobalPointerMove);
+    window.addEventListener("pointerup", handleGlobalPointerUp);
+    window.addEventListener("pointercancel", handleGlobalPointerUp);
+  };
+
   const handleStatusChange = async (id, currentStatus) => {
     if (!deliveryPartner) {
       openSignInPrompt();
@@ -121,6 +221,7 @@ useEffect(() => {
       setOrders((prev) =>
         prev.map((order) => (order._id === id ? updated : order))
       );
+      setOrderDragPercent(id, getBasePercent(updated.status));
 
       showTemporaryMessage(
         nextStatus === "Processing"
@@ -136,6 +237,7 @@ useEffect(() => {
       }
     } catch (error) {
       console.error("❌ Error updating status:", error);
+      setOrderDragPercent(id, getBasePercent(currentStatus));
       showTemporaryMessage("Failed to update status. Try again.");
     }
   };
@@ -202,6 +304,12 @@ useEffect(() => {
     };
   }, [orders, showSignInPrompt]);
 
+  useEffect(() => {
+    return () => {
+      cleanupPointerListeners();
+    };
+  }, []);
+
   if (loading)
     return <OrdersSkeleton />;
 
@@ -225,28 +333,6 @@ useEffect(() => {
 
   const pageTitle =
     selectedStatus === "All" ? "Orders" : selectedStatus;
-  const isCoarsePointer =
-    typeof window !== "undefined" &&
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(pointer: coarse)").matches;
-
-  const handleTouchStartOnSlider = (orderId, event) => {
-    if (!deliveryPartner) {
-      openSignInPrompt();
-      return;
-    }
-    dragStartXRef.current[orderId] = event.touches?.[0]?.clientX ?? 0;
-    hasDraggedRef.current[orderId] = false;
-  };
-
-  const handleTouchMoveOnSlider = (orderId, event) => {
-    const startX = dragStartXRef.current[orderId];
-    if (typeof startX !== "number") return;
-    const currentX = event.touches?.[0]?.clientX ?? startX;
-    if (Math.abs(currentX - startX) > 22) {
-      hasDraggedRef.current[orderId] = true;
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
@@ -467,54 +553,55 @@ useEffect(() => {
 
                         <div className="mb-4 w-full max-w-sm">
                           <div className="relative w-full">
-                            <input
-                              type="range"
-                              min="0"
-                              max="2"
-                              step="1"
-                              value={
-                                order.status === "Pending"
-                                  ? 0
-                                  : order.status === "Processing"
-                                    ? 1
-                                    : 2
+                            <div
+                              role="slider"
+                              aria-valuemin={0}
+                              aria-valuemax={100}
+                              aria-valuenow={
+                                dragPercentByOrder[order._id] ??
+                                getBasePercent(order.status)
                               }
-                              onChange={() =>
-                                (() => {
-                                  if (isCoarsePointer && !hasDraggedRef.current[order._id]) {
-                                    return;
-                                  }
-                                  setOrders((prev) =>
-                                    prev.map((o) =>
-                                      o._id === order._id
-                                        ? { ...o, showConfirm: true }
-                                        : o
-                                    )
-                                  );
-                                  hasDraggedRef.current[order._id] = false;
-                                })()
-                              }
-                              onMouseDown={() => {
-                                if (!deliveryPartner) {
-                                  openSignInPrompt();
-                                }
-                              }}
-                              onTouchStart={() => {
-                                if (!deliveryPartner) {
-                                  openSignInPrompt();
-                                }
-                              }}
-                              onTouchStartCapture={(event) =>
-                                handleTouchStartOnSlider(order._id, event)
-                              }
-                              onTouchMoveCapture={(event) =>
-                                handleTouchMoveOnSlider(order._id, event)
-                              }
-                              className={`w-full h-8 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 accent-white ${deliveryPartner
-                                ? "ring-2 ring-indigo-300"
-                                : "opacity-60 cursor-not-allowed"
+                              className={`relative h-10 w-full touch-none select-none rounded-full border border-white/70 bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 ${
+                                deliveryPartner && canDragStatus(order.status)
+                                  ? "cursor-grab ring-2 ring-indigo-300 active:cursor-grabbing"
+                                  : "cursor-not-allowed opacity-60"
+                              }`}
+                              onPointerDown={(event) => startOrderDrag(order, event)}
+                            >
+                              <div
+                                className={`absolute left-0 top-0 h-full rounded-full bg-white/28 ${
+                                  activeDragOrderId === order._id
+                                    ? ""
+                                    : "transition-[width] duration-200"
                                 }`}
-                            />
+                                style={{
+                                  width: `${
+                                    dragPercentByOrder[order._id] ??
+                                    getBasePercent(order.status)
+                                  }%`,
+                                }}
+                              />
+                              <div
+                                className={`absolute top-1/2 h-7 w-7 rounded-full border-2 border-white bg-white shadow-[0_6px_14px_rgba(15,23,42,0.28)] ${
+                                  activeDragOrderId === order._id
+                                    ? ""
+                                    : "transition-all duration-200"
+                                }`}
+                                style={{
+                                  left: `${
+                                    Math.min(
+                                      98,
+                                      Math.max(
+                                        2,
+                                        dragPercentByOrder[order._id] ??
+                                          getBasePercent(order.status)
+                                      )
+                                    )
+                                  }%`,
+                                  transform: "translate(-50%, -50%)",
+                                }}
+                              />
+                            </div>
 
                             {/* Labels */}
                             <div className="flex justify-between text-xs mt-2">
@@ -538,13 +625,14 @@ useEffect(() => {
                         {order.showConfirm && (
                           <div
                             className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
-                            onClick={() =>
+                            onClick={() => {
                               setOrders((prev) =>
                                 prev.map((o) =>
                                   o._id === order._id ? { ...o, showConfirm: false } : o
                                 )
-                              )
-                            }
+                              );
+                              resetOrderDrag(order._id, order.status);
+                            }}
                           >
                               <div
                                 className="w-[90%] max-w-sm rounded-md border border-indigo-200 bg-indigo-50/95 p-6 text-center shadow-lg"
@@ -559,13 +647,14 @@ useEffect(() => {
                               </p>
                               <div className="flex justify-center space-x-4">
                                 <button
-                                  onClick={() =>
+                                  onClick={() => {
                                     setOrders((prev) =>
                                       prev.map((o) =>
                                         o._id === order._id ? { ...o, showConfirm: false } : o
                                       )
-                                    )
-                                  }
+                                    );
+                                    resetOrderDrag(order._id, order.status);
+                                  }}
                                   className="px-4 py-2 text-sm rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 transition"
                                 >
                                   No
