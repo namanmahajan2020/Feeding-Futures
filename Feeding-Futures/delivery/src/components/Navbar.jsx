@@ -15,6 +15,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = ({ isLoggedIn = false, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [userName, setUserName] = useState(""); // Track user name
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,6 +36,16 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
       window.removeEventListener("storage", checkLoginStatus);
     };
   }, [userName, navigate]);
+
+  useEffect(() => {
+    if (!showLogoutConfirm) return undefined;
+
+    const timer = window.setTimeout(() => {
+      setShowLogoutConfirm(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, [showLogoutConfirm]);
 
   const isSignupPage = location.pathname === "/signup";
 
@@ -73,16 +84,16 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
     localStorage.removeItem("email");
     localStorage.removeItem("name"); // Remove name from localStorage as well
     if (onLogout) onLogout(); // update parent immediately
-    navigate("/signup");
+    window.location.href = "https://feedingfuturesuser.vercel.app/start";
+  };
+
+  const requestLogout = () => {
+    setIsMenuOpen(false);
+    setShowLogoutConfirm(true);
   };
 
   const goToAdminUserLogin = () => {
-    const apiStart = import.meta.env.VITE_API_START;
-    if (apiStart.startsWith("http")) {
-      window.location.href = apiStart;
-    } else {
-      navigate(apiStart);
-    }
+    window.location.href = "https://feedingfuturesuser.vercel.app/start";
   };
 
   return (
@@ -142,7 +153,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
                     👋 {userName || "User"} {/* Show the user's name */}
                   </span>
                   <button
-                    onClick={logout}
+                    onClick={requestLogout}
                     className="!w-auto !py-1 !px-3 !text-sm flex items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
                   >
                     <LogOut className="w-4 h-4 mr-1" /> Logout
@@ -212,12 +223,42 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
 
             {isLoggedIn && (
               <button
-                onClick={logout}
+                onClick={requestLogout}
                 className="!w-full !py-2 !px-3 !text-base mt-2 flex justify-center items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
               >
                 <LogOut className="w-5 h-5 mr-2" /> Logout
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {showLogoutConfirm && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-white/12 backdrop-blur-[2px]"
+          onClick={() => setShowLogoutConfirm(false)}
+        >
+          <div
+            className="w-[90%] max-w-md rounded-3xl border border-rose-100 bg-[#eef5f3]/95 px-6 py-8 text-center shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="mb-6 text-4xl font-bold text-rose-700 max-sm:text-3xl">
+              Confirm logout
+            </p>
+            <div className="flex items-center justify-center gap-4">
+              <button
+                onClick={logout}
+                className="min-w-28 rounded-2xl bg-rose-600 px-7 py-3 text-4xl font-bold text-white transition hover:bg-rose-700 max-sm:text-3xl"
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="min-w-28 rounded-2xl bg-slate-200 px-7 py-3 text-4xl font-bold text-slate-600 transition hover:bg-slate-300 max-sm:text-3xl"
+              >
+                No
+              </button>
+            </div>
           </div>
         </div>
       )}
