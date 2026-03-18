@@ -235,7 +235,7 @@ useEffect(() => {
       )}
 
       {showSignInPrompt && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/20 px-4">
+        <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/20 px-4">
           <div className="w-full max-w-md rounded-2xl border border-indigo-200 bg-white p-5 text-center shadow-xl sm:p-6">
             <p className="text-base font-semibold text-indigo-700 sm:text-lg">
               You are not signed in. Sign in to accept orders.
@@ -501,7 +501,7 @@ useEffect(() => {
                         {/* Auto-close confirmation */}
                         {order.showConfirm && (
                           <div
-                            className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
+                            className="absolute inset-0 z-50 flex items-center justify-center bg-black/20 px-4"
                             onClick={() =>
                               setOrders((prev) =>
                                 prev.map((o) =>
