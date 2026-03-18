@@ -115,6 +115,13 @@ useEffect(() => {
           ? "Order accepted!"
           : "Order marked as collected!"
       );
+
+      if (nextStatus === "Processing") {
+        setSelectedStatus("Processing");
+        navigate("/orders");
+      } else if (nextStatus === "Collected") {
+        navigate("/past-orders");
+      }
     } catch (error) {
       console.error("❌ Error updating status:", error);
       showTemporaryMessage("Failed to update status. Try again.");
