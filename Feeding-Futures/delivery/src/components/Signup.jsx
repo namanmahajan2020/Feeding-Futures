@@ -9,7 +9,7 @@ const fieldLabelClassName =
   "mb-1.5 block text-sm font-semibold tracking-wide text-slate-700";
 
 // ==================== Gender Select ====================
-const GenderSelect = ({ value, onChange }) => {
+const GenderSelect = ({ value, onChange, disabled = false }) => {
   const [open, setOpen] = useState(false);
   const options = ["Male", "Female", "Other", "Prefer not to say"];
   const ref = useRef();
@@ -28,8 +28,9 @@ const GenderSelect = ({ value, onChange }) => {
         type="button"
         className={`${inputClassName} flex items-center justify-between text-left ${
           value ? "text-slate-800" : "text-slate-400"
-        }`}
-        onClick={() => setOpen((prev) => !prev)}
+        } ${disabled ? "cursor-not-allowed opacity-70" : ""}`}
+        onClick={() => !disabled && setOpen((prev) => !prev)}
+        disabled={disabled}
       >
         <span>{value || "Select gender"}</span>
         <svg
@@ -71,7 +72,7 @@ const GenderSelect = ({ value, onChange }) => {
 };
 
 // ==================== Location Select ====================
-const LocationSelect = ({ value, onChange }) => {
+const LocationSelect = ({ value, onChange, disabled = false }) => {
   const [open, setOpen] = useState(false);
   const options = ["Chennai", "Coimbatore", "Madurai"];
   const ref = useRef();
@@ -90,8 +91,9 @@ const LocationSelect = ({ value, onChange }) => {
         type="button"
         className={`${inputClassName} flex items-center justify-between text-left ${
           value ? "text-slate-800" : "text-slate-400"
-        }`}
-        onClick={() => setOpen((prev) => !prev)}
+        } ${disabled ? "cursor-not-allowed opacity-70" : ""}`}
+        onClick={() => !disabled && setOpen((prev) => !prev)}
+        disabled={disabled}
       >
         <span>{value || "Select location"}</span>
         <svg
@@ -135,6 +137,7 @@ const LocationSelect = ({ value, onChange }) => {
 // ==================== Auth Form (Signup / Login) ====================
 const AuthForm = ({ onLogin }) => {
   const [isSignup, setIsSignup] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -151,8 +154,10 @@ const AuthForm = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setError("");
     setSuccess("");
+    setIsSubmitting(true);
 
     try {
       const url = isSignup
@@ -191,6 +196,8 @@ const AuthForm = ({ onLogin }) => {
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -225,11 +232,12 @@ const AuthForm = ({ onLogin }) => {
                       setError("");
                       setSuccess("");
                     }}
+                    disabled={isSubmitting}
                     className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                       isSignup
                         ? "bg-cyan-600 text-white shadow-md"
                         : "text-cyan-700"
-                    }`}
+                    } ${isSubmitting ? "cursor-not-allowed opacity-60" : ""}`}
                   >
                     Sign Up
                   </button>
@@ -240,16 +248,24 @@ const AuthForm = ({ onLogin }) => {
                       setError("");
                       setSuccess("");
                     }}
+                    disabled={isSubmitting}
                     className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                       !isSignup
                         ? "bg-slate-900 text-white shadow-md"
                         : "text-slate-600"
-                    }`}
+                    } ${isSubmitting ? "cursor-not-allowed opacity-60" : ""}`}
                   >
                     Login
                   </button>
                 </div>
               </div>
+
+              {isSubmitting && (
+                <div className="mt-4 flex items-center gap-2 rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-medium text-cyan-700">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-600 border-t-transparent" />
+                  {isSignup ? "Creating your account..." : "Logging you in..."}
+                </div>
+              )}
 
               <div className="mt-5 space-y-3.5">
                 {isSignup && (
@@ -262,6 +278,7 @@ const AuthForm = ({ onLogin }) => {
                         onChange={handleChange}
                         placeholder="Enter your name"
                         required
+                        disabled={isSubmitting}
                         className={inputClassName}
                       />
                     </div>
@@ -270,7 +287,10 @@ const AuthForm = ({ onLogin }) => {
                       <label className={fieldLabelClassName}>Gender</label>
                       <GenderSelect
                         value={formData.gender}
-                        onChange={(val) => setFormData({ ...formData, gender: val })}
+                        disabled={isSubmitting}
+                        onChange={(val) =>
+                          !isSubmitting && setFormData({ ...formData, gender: val })
+                        }
                       />
                     </div>
 
@@ -278,7 +298,10 @@ const AuthForm = ({ onLogin }) => {
                       <label className={fieldLabelClassName}>Location</label>
                       <LocationSelect
                         value={formData.location}
-                        onChange={(val) => setFormData({ ...formData, location: val })}
+                        disabled={isSubmitting}
+                        onChange={(val) =>
+                          !isSubmitting && setFormData({ ...formData, location: val })
+                        }
                       />
                     </div>
                   </div>
@@ -293,6 +316,7 @@ const AuthForm = ({ onLogin }) => {
                     onChange={handleChange}
                     placeholder="Enter your email"
                     required
+                    disabled={isSubmitting}
                     className={inputClassName}
                   />
                 </div>
@@ -306,6 +330,7 @@ const AuthForm = ({ onLogin }) => {
                     onChange={handleChange}
                     placeholder="Enter your password"
                     required
+                    disabled={isSubmitting}
                     className={inputClassName}
                   />
                 </div>
@@ -323,9 +348,25 @@ const AuthForm = ({ onLogin }) => {
 
                 <button
                   type="submit"
-                  className="w-full rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(2,18,38,0.18)] transition hover:-translate-y-0.5 hover:bg-cyan-500"
+                  disabled={isSubmitting}
+                  className={`w-full rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(2,18,38,0.18)] transition ${
+                    isSubmitting
+                      ? "cursor-not-allowed opacity-70"
+                      : "hover:-translate-y-0.5 hover:bg-cyan-500"
+                  }`}
                 >
-                  {isSignup ? "Create delivery account" : "Login to dashboard"}
+                  <span className="inline-flex items-center justify-center gap-2">
+                    {isSubmitting && (
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    )}
+                    {isSubmitting
+                      ? isSignup
+                        ? "Processing..."
+                        : "Processing..."
+                      : isSignup
+                        ? "Create delivery account"
+                        : "Login to dashboard"}
+                  </span>
                 </button>
 
                 <p className="text-center text-sm leading-6 text-slate-500">
@@ -337,7 +378,12 @@ const AuthForm = ({ onLogin }) => {
                       setError("");
                       setSuccess("");
                     }}
-                    className="font-semibold text-cyan-700 underline-offset-4 transition hover:text-cyan-600 hover:underline"
+                    disabled={isSubmitting}
+                    className={`font-semibold text-cyan-700 underline-offset-4 transition ${
+                      isSubmitting
+                        ? "cursor-not-allowed opacity-60"
+                        : "hover:text-cyan-600 hover:underline"
+                    }`}
                   >
                     {isSignup ? "Login here" : "Sign up here"}
                   </button>

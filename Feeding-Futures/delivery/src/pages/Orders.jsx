@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaClock, FaSyncAlt, FaCheck } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [locationFilter, setLocationFilter] = useState("All");
@@ -68,7 +70,7 @@ useEffect(() => {
 
   const handleStatusChange = async (id, currentStatus) => {
     if (!deliveryPartner) {
-      showTemporaryMessage("Please log in first.");
+      navigate("/signup", { state: { from: { pathname: "/orders" } } });
       return;
     }
 
@@ -185,6 +187,12 @@ useEffect(() => {
       )}
 
       <div className="mx-auto max-w-6xl p-4 sm:p-6">
+        {!deliveryPartner && (
+          <div className="mb-4 rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-medium text-indigo-700">
+            You are viewing orders as a guest. Sign in to accept or update an order.
+          </div>
+        )}
+
         {/* Title */}
         <div className="flex flex-col text-center justify-center">
           <h2 className="bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-3xl font-extrabold text-transparent drop-shadow-sm sm:text-4xl">
@@ -376,6 +384,20 @@ useEffect(() => {
                                   )
                                 )
                               }
+                              onMouseDown={() => {
+                                if (!deliveryPartner) {
+                                  navigate("/signup", {
+                                    state: { from: { pathname: "/orders" } },
+                                  });
+                                }
+                              }}
+                              onTouchStart={() => {
+                                if (!deliveryPartner) {
+                                  navigate("/signup", {
+                                    state: { from: { pathname: "/orders" } },
+                                  });
+                                }
+                              }}
                               className={`w-full h-8 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 accent-white ${deliveryPartner
                                 ? "ring-2 ring-indigo-300"
                                 : "opacity-60 cursor-not-allowed"

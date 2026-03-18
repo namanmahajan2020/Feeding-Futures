@@ -49,11 +49,7 @@ function App() {
 
             <Route
               path="/orders"
-              element={
-                <ProtectedRoute isAllowed={isLoggedIn}>
-                  <Orders />
-                </ProtectedRoute>
-              }
+              element={<Orders />}
             />
 
             <Route

@@ -46,6 +46,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
 
   const loggedOutNavItems = [
     { name: "About Us", path: "/about", icon: Info },
+    { name: "Orders", path: "/orders", icon: Package },
     { name: "Contact", path: "/contact", icon: Mail },
     // "Join Us" will be handled separately as a button
   ];
