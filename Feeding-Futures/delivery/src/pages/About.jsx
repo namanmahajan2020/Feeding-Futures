@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowRight,
   Clock3,
@@ -62,6 +62,15 @@ const deliveryHighlights = [
 
 const About = () => {
   const navigate = useNavigate();
+  const [activeTrustPoint, setActiveTrustPoint] = useState(0);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveTrustPoint((prev) => (prev + 1) % trustPoints.length);
+    }, 3200);
+
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 text-slate-900">
@@ -104,7 +113,7 @@ const About = () => {
 
           </div>
 
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div className="absolute -left-6 top-8 h-24 w-24 rounded-full bg-sky-300/40 blur-2xl" />
             <div className="absolute -right-6 bottom-8 h-28 w-28 rounded-full bg-emerald-300/40 blur-2xl" />
 
@@ -139,7 +148,47 @@ const About = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-6 md:px-10">
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="block md:hidden">
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/80 bg-white/75 shadow-md backdrop-blur">
+            <div
+              className="flex transition-transform duration-700 ease-in-out"
+              style={{ transform: `translateX(-${activeTrustPoint * 100}%)` }}
+            >
+              {trustPoints.map((point) => (
+                <div key={point.title} className="w-full shrink-0 p-7">
+                  <div className="mb-5 inline-flex rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 p-3 text-white">
+                    <point.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900">{point.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    {point.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-center gap-3">
+            {trustPoints.map((point, index) => (
+              <button
+                key={point.title}
+                type="button"
+                onClick={() => setActiveTrustPoint(index)}
+                className={`h-3 rounded-full transition-all duration-500 ${
+                  index === activeTrustPoint
+                    ? "w-20 bg-emerald-500"
+                    : "w-14 bg-emerald-300/70"
+                }`}
+                aria-label={`Show ${point.title}`}
+                aria-pressed={index === activeTrustPoint}
+              />
+            ))}
+          </div>
+        </div>
+        
+        
+
+        <div className="hidden gap-6 md:grid lg:grid-cols-3">
           {trustPoints.map((point) => (
             <div
               key={point.title}
