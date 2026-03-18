@@ -143,7 +143,7 @@ function Contact() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white font-poppins">
       <div className="flex justify-center px-4">
-        <div className="pb-6 pt-32 text-center sm:pb-8">
+        <div className="pb-6 pt-6 text-center sm:pb-8 sm:pt-8">
           <p className="text-[1.7rem] font-bold tracking-[0.06em] text-sky-800 sm:text-[2.15rem]">
             Support <span className="text-slate-950">&</span> Connection
           </p>

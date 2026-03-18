@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { PastOrdersSkeleton } from "../components/Skeletons.jsx";
 
 const PastOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -113,11 +114,7 @@ const PastOrder = () => {
   };
 
   if (loading)
-    return (
-      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center h-64 text-lg font-medium">
-        Loading your collected orders...
-      </div>
-    );
+    return <PastOrdersSkeleton />;
 
   if (error)
     return (

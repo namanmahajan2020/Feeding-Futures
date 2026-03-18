@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Orders from "./pages/Orders.jsx";
-import Signup from "./components/Signup.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
-import About from "./pages/About.jsx";
 import Footer from "./components/Footer.jsx";
 import Navbar from "./components/Navbar.jsx";
-import Contact from "./pages/Contact.jsx";
-import PastOrders from "./pages/PastOrders.jsx";
+import { RouteSkeleton } from "./components/Skeletons.jsx";
+
+const About = lazy(() => import("./pages/About.jsx"));
+const Orders = lazy(() => import("./pages/Orders.jsx"));
+const Contact = lazy(() => import("./pages/Contact.jsx"));
+const PastOrders = lazy(() => import("./pages/PastOrders.jsx"));
+const Signup = lazy(() => import("./components/Signup.jsx"));
 
 function ProtectedRoute({ isAllowed, children }) {
   const location = useLocation();
@@ -43,31 +45,33 @@ function App() {
         <Navbar isLoggedIn={isLoggedIn} onLogout={() => setIsLoggedIn(false)} />
 
         <main className="flex flex-1 flex-col pt-16">
-          <Routes>
-            <Route path="/" element={<About />} />
-            <Route path="/about" element={<About />} />
+          <Suspense fallback={<RouteSkeleton />}>
+            <Routes>
+              <Route path="/" element={<About />} />
+              <Route path="/about" element={<About />} />
 
-            <Route
-              path="/orders"
-              element={<Orders />}
-            />
+              <Route
+                path="/orders"
+                element={<Orders />}
+              />
 
-            <Route
-              path="/past-orders"
-              element={
-                <ProtectedRoute isAllowed={isLoggedIn}>
-                  <PastOrders />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/past-orders"
+                element={
+                  <ProtectedRoute isAllowed={isLoggedIn}>
+                    <PastOrders />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route path="/contact" element={<Contact />} />
+              <Route path="/contact" element={<Contact />} />
 
-            <Route
-              path="/signup"
-              element={isLoggedIn ? <Navigate to="/orders" replace /> : <Signup onLogin={() => setIsLoggedIn(true)} />}
-            />
-          </Routes>
+              <Route
+                path="/signup"
+                element={isLoggedIn ? <Navigate to="/orders" replace /> : <Signup onLogin={() => setIsLoggedIn(true)} />}
+              />
+            </Routes>
+          </Suspense>
         </main>
 
         <Footer />

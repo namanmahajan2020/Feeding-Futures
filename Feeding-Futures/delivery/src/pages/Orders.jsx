@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaClock, FaSyncAlt, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { OrdersSkeleton } from "../components/Skeletons.jsx";
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -81,6 +82,8 @@ useEffect(() => {
     );
 
     if (currentStatus === "Pending" && hasProcessing) {
+      setSelectedStatus("Processing");
+      setLocationFilter("All");
       showTemporaryMessage("You already have one processing order.");
       return;
     }
@@ -159,11 +162,7 @@ useEffect(() => {
   });
 
   if (loading)
-    return (
-      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center text-lg font-medium">
-        Loading orders...
-      </div>
-    );
+    return <OrdersSkeleton />;
 
   if (error)
     return (
