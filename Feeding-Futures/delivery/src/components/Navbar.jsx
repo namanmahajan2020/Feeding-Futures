@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   UserPlus,
   Package,
@@ -16,35 +16,55 @@ import { useNavigate, useLocation } from "react-router-dom";
 const Header = ({ isLoggedIn = false, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [userName, setUserName] = useState(""); // Track user name
+  const [userName, setUserName] = useState("");
+  const logoutConfirmRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const checkLoginStatus = () => {
-      const name = localStorage.getItem("name"); // Get the name from localStorage
+      const name = localStorage.getItem("name");
       setUserName(name);
     };
 
-    // Listen to localStorage changes (cross-tab)
     window.addEventListener("storage", checkLoginStatus);
-
-    // Also check immediately on mount
     checkLoginStatus();
 
     return () => {
       window.removeEventListener("storage", checkLoginStatus);
     };
-  }, [userName, navigate]);
+  }, []);
 
   useEffect(() => {
     if (!showLogoutConfirm) return undefined;
 
     const timer = window.setTimeout(() => {
       setShowLogoutConfirm(false);
-    }, 3000);
+    }, 5000);
 
     return () => window.clearTimeout(timer);
+  }, [showLogoutConfirm]);
+
+  useEffect(() => {
+    if (!showLogoutConfirm) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (logoutConfirmRef.current && !logoutConfirmRef.current.contains(event.target)) {
+        setShowLogoutConfirm(false);
+      }
+    };
+
+    const handleScroll = () => {
+      setShowLogoutConfirm(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("scroll", handleScroll, true);
+    };
   }, [showLogoutConfirm]);
 
   const isSignupPage = location.pathname === "/signup";
@@ -59,7 +79,6 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
     { name: "About Us", path: "/about", icon: Info },
     { name: "Orders", path: "/orders", icon: Package },
     { name: "Contact", path: "/contact", icon: Mail },
-    // "Join Us" will be handled separately as a button
   ];
 
   const activeNavItems = isLoggedIn ? loggedInNavItems : loggedOutNavItems;
@@ -82,13 +101,12 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
 
   const logout = () => {
     localStorage.removeItem("email");
-    localStorage.removeItem("name"); // Remove name from localStorage as well
-    if (onLogout) onLogout(); // update parent immediately
+    localStorage.removeItem("name");
+    if (onLogout) onLogout();
     window.location.href = "https://feedingfuturesuser.vercel.app/start";
   };
 
   const requestLogout = () => {
-    setIsMenuOpen(false);
     setShowLogoutConfirm(true);
   };
 
@@ -97,10 +115,9 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b-1 border-white bg-transparent shadow-lg backdrop-blur-2xl overflow-x-clip">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b-1 border-white bg-transparent shadow-lg overflow-x-clip">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <div
             className="min-w-0 flex-shrink text-xl sm:text-2xl md:whitespace-nowrap lg:mr-64 font-extrabold text-gray-800 cursor-pointer"
             onClick={() => navigate(isLoggedIn ? "/orders" : "/")}
@@ -108,9 +125,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
             Feeding <b className="text-emerald-500">Futures</b>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6 w-full justify-center">
-            {/* Centered Navigation Items */}
             {activeNavItems.map((item) => (
               <button
                 key={item.name}
@@ -122,9 +137,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
               </button>
             ))}
 
-            {/* Rest of Navigation Items */}
             <div className="flex items-center space-x-4 ml-auto">
-              {/* Show “Join Us” button only if logged out and NOT on signup page */}
               {!isLoggedIn && !isSignupPage && (
                 <button
                   onClick={() => navigate("/signup")}
@@ -135,7 +148,6 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
                 </button>
               )}
 
-              {/* On signup page, show “Login as Admin/User” button */}
               {(!isLoggedIn || isSignupPage) && (
                 <button
                   onClick={goToAdminUserLogin}
@@ -144,28 +156,53 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
                   <LogIn className="w-5 h-5 text-red-400 inline-block mr-2" />
                   Login as Admin/User
                 </button>
-
               )}
 
               {isLoggedIn && (
                 <>
                   <span className="text-sm font-semibold text-gray-700 ml-4">
-                    👋 {userName || "User"} {/* Show the user's name */}
+                    Hi, {userName || "User"}
                   </span>
-                  <button
-                    onClick={requestLogout}
-                    className="!w-auto !py-1 !px-3 !text-sm flex items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
-                  >
-                    <LogOut className="w-4 h-4 mr-1" /> Logout
-                  </button>
+                  <div className="relative" ref={logoutConfirmRef}>
+                    <button
+                      onClick={requestLogout}
+                      className="!w-auto !py-1 !px-3 !text-sm flex items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
+                    >
+                      <LogOut className="w-4 h-4 mr-1" /> Logout
+                    </button>
+
+                    {showLogoutConfirm && (
+                      <div className="absolute right-0 top-full mt-2 z-[60] w-[12.5rem] rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-[0_18px_42px_rgba(15,23,42,0.22)] sm:w-[13.5rem] md:w-[14.5rem]">
+                        <p className="text-[0.98rem] font-semibold text-rose-700">Confirm logout</p>
+                        <div className="mt-3 flex justify-center gap-3">
+                          <button
+                            type="button"
+                            onClick={logout}
+                            className="rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-rose-500 md:px-3 md:py-1.5"
+                          >
+                            Yes
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setShowLogoutConfirm(false)}
+                            className="rounded-lg bg-slate-200/90 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-300 md:px-3 md:py-1.5"
+                          >
+                            No
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </>
               )}
             </div>
           </nav>
 
-          {/* Mobile Menu Toggle */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen);
+              if (isMenuOpen) setShowLogoutConfirm(false);
+            }}
             className="md:hidden p-2 rounded-md text-gray-500 hover:text-emerald-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -173,12 +210,11 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute w-full bg-white/95 shadow-xl border-t border-gray-100 backdrop-blur">
+        <div className="md:hidden absolute w-full bg-white/95 shadow-xl border-t border-gray-100">
           <div className="px-3 pt-3 pb-4 space-y-2">
             {isLoggedIn && (
-              <div className="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700">
+              <div className="px-1 py-1 text-sm font-semibold text-teal-700">
                 Hello, {userName || "User"}
               </div>
             )}
@@ -188,6 +224,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
                 onClick={() => {
                   navigate(item.path);
                   setIsMenuOpen(false);
+                  setShowLogoutConfirm(false);
                 }}
                 className={getMobileLinkClass(item.path)}
               >
@@ -222,43 +259,37 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
             )}
 
             {isLoggedIn && (
-              <button
-                onClick={requestLogout}
-                className="!w-full !py-2 !px-3 !text-base mt-2 flex justify-center items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
-              >
-                <LogOut className="w-5 h-5 mr-2" /> Logout
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+              <div className="relative" ref={logoutConfirmRef}>
+                <button
+                  onClick={requestLogout}
+                  className="!w-full !py-2 !px-3 !text-base mt-2 flex justify-center items-center bg-red-500 text-white font-semibold rounded-md transition duration-200 shadow-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-200"
+                >
+                  <LogOut className="w-5 h-5 mr-2" /> Logout
+                </button>
 
-      {showLogoutConfirm && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-white/12 backdrop-blur-[2px]"
-          onClick={() => setShowLogoutConfirm(false)}
-        >
-          <div
-            className="w-[13rem] rounded-2xl border border-white/60 bg-white/35 p-3 text-center shadow-[0_18px_42px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:w-[14rem] md:w-[15rem] md:p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="text-base font-semibold text-rose-700 md:text-base">
-              Confirm logout
-            </p>
-            <div className="mt-3 flex items-center justify-center gap-3">
-              <button
-                onClick={logout}
-                className="min-w-14 rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-rose-500 md:px-3 md:py-1.5 md:text-sm"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setShowLogoutConfirm(false)}
-                className="min-w-14 rounded-lg bg-slate-200/90 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-300 md:px-3 md:py-1.5 md:text-sm"
-              >
-                No
-              </button>
-            </div>
+                {showLogoutConfirm && (
+                  <div className="mx-auto mt-2 w-[12.5rem] rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-[0_18px_42px_rgba(15,23,42,0.22)] sm:w-[13.5rem]">
+                    <p className="text-sm font-semibold text-rose-700">Confirm logout</p>
+                    <div className="mt-3 flex justify-center gap-3">
+                      <button
+                        type="button"
+                        onClick={logout}
+                        className="rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-rose-500"
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowLogoutConfirm(false)}
+                        className="rounded-lg bg-slate-200/90 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-300"
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
