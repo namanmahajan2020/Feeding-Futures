@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaClock, FaSyncAlt, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { OrdersSkeleton } from "../components/Skeletons.jsx";
@@ -15,6 +15,8 @@ const Orders = () => {
   const [infoMessage, setInfoMessage] = useState(null);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
   const [signInCountdown, setSignInCountdown] = useState(5);
+  const dragStartXRef = useRef({});
+  const hasDraggedRef = useRef({});
 
   // Fetch delivery partner email and location from localStorage
   useEffect(() => {
@@ -223,6 +225,28 @@ useEffect(() => {
 
   const pageTitle =
     selectedStatus === "All" ? "Orders" : selectedStatus;
+  const isCoarsePointer =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(pointer: coarse)").matches;
+
+  const handleTouchStartOnSlider = (orderId, event) => {
+    if (!deliveryPartner) {
+      openSignInPrompt();
+      return;
+    }
+    dragStartXRef.current[orderId] = event.touches?.[0]?.clientX ?? 0;
+    hasDraggedRef.current[orderId] = false;
+  };
+
+  const handleTouchMoveOnSlider = (orderId, event) => {
+    const startX = dragStartXRef.current[orderId];
+    if (typeof startX !== "number") return;
+    const currentX = event.touches?.[0]?.clientX ?? startX;
+    if (Math.abs(currentX - startX) > 22) {
+      hasDraggedRef.current[orderId] = true;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
@@ -456,13 +480,19 @@ useEffect(() => {
                                     : 2
                               }
                               onChange={() =>
-                                setOrders((prev) =>
-                                  prev.map((o) =>
-                                    o._id === order._id
-                                      ? { ...o, showConfirm: true }
-                                      : o
-                                  )
-                                )
+                                (() => {
+                                  if (isCoarsePointer && !hasDraggedRef.current[order._id]) {
+                                    return;
+                                  }
+                                  setOrders((prev) =>
+                                    prev.map((o) =>
+                                      o._id === order._id
+                                        ? { ...o, showConfirm: true }
+                                        : o
+                                    )
+                                  );
+                                  hasDraggedRef.current[order._id] = false;
+                                })()
                               }
                               onMouseDown={() => {
                                 if (!deliveryPartner) {
@@ -474,6 +504,12 @@ useEffect(() => {
                                   openSignInPrompt();
                                 }
                               }}
+                              onTouchStartCapture={(event) =>
+                                handleTouchStartOnSlider(order._id, event)
+                              }
+                              onTouchMoveCapture={(event) =>
+                                handleTouchMoveOnSlider(order._id, event)
+                              }
                               className={`w-full h-8 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 accent-white ${deliveryPartner
                                 ? "ring-2 ring-indigo-300"
                                 : "opacity-60 cursor-not-allowed"
