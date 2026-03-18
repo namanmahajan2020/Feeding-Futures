@@ -182,6 +182,8 @@ useEffect(() => {
     return new Date(dateString).toLocaleString(undefined, options);
   };
 
+  const pageTitle = selectedStatus === "Processing" ? "Processing" : "Orders";
+
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
       {/* Inline info message */}
@@ -200,12 +202,12 @@ useEffect(() => {
         )}
 
         {/* Title */}
-        <div className="flex flex-col text-center justify-center">
-          <h2 className="bg-gradient-to-r from-indigo-600 via-sky-500 to-green-500 bg-clip-text text-3xl font-extrabold text-transparent drop-shadow-sm sm:text-4xl">
-            Orders
-          </h2>
-          <div className="mt-3 flex justify-center">
-            <span className="w-32 mb-7 h-1 bg-gradient-to-r from-indigo-500 via-sky-400 to-green-400 rounded-full shadow-md"></span>
+        <div className="flex justify-center px-4">
+          <div className="pb-6 pt-2 text-center sm:pb-8 sm:pt-3">
+            <p className="text-[1.7rem] font-bold tracking-[0.06em] text-sky-800 sm:text-[2.15rem]">
+              {pageTitle}
+            </p>
+            <div className="mx-auto mt-1 mb-3 h-0.5 w-full max-w-[18rem] rounded-full bg-sky-700/50 sm:max-w-[22rem]" />
           </div>
         </div>
 

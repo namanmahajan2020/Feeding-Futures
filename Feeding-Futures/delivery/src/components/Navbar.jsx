@@ -115,7 +115,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b-1 border-white bg-transparent shadow-lg overflow-x-clip">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b-1 border-white bg-transparent shadow-lg backdrop-blur-2xl overflow-x-clip">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div
@@ -211,7 +211,7 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden absolute w-full bg-white/95 shadow-xl border-t border-gray-100">
+        <div className="md:hidden absolute w-full bg-white/95 shadow-xl border-t border-gray-100 backdrop-blur">
           <div className="px-3 pt-3 pb-4 space-y-2">
             {isLoggedIn && (
               <div className="px-1 py-1 text-sm font-semibold text-teal-700">
