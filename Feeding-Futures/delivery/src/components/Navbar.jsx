@@ -48,6 +48,17 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
   useEffect(() => {
     if (!showLogoutConfirm) return undefined;
 
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [showLogoutConfirm]);
+
+  useEffect(() => {
+    if (!showLogoutConfirm) return undefined;
+
     const handlePointerDown = (event) => {
       if (logoutConfirmRef.current && !logoutConfirmRef.current.contains(event.target)) {
         setShowLogoutConfirm(false);

@@ -13,6 +13,8 @@ const Orders = () => {
   const [deliveryPartner, setDeliveryPartner] = useState("");
   const [userLocation, setUserLocation] = useState("");
   const [infoMessage, setInfoMessage] = useState(null);
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
+  const [signInCountdown, setSignInCountdown] = useState(5);
 
   // Fetch delivery partner email and location from localStorage
   useEffect(() => {
@@ -69,9 +71,14 @@ useEffect(() => {
     setTimeout(() => setInfoMessage(null), 3000);
   };
 
+  const openSignInPrompt = () => {
+    setSignInCountdown(5);
+    setShowSignInPrompt(true);
+  };
+
   const handleStatusChange = async (id, currentStatus) => {
     if (!deliveryPartner) {
-      navigate("/signup", { state: { from: { pathname: "/orders" } } });
+      openSignInPrompt();
       return;
     }
 
@@ -182,7 +189,40 @@ useEffect(() => {
     return new Date(dateString).toLocaleString(undefined, options);
   };
 
-  const pageTitle = selectedStatus === "Processing" ? "Processing" : "Orders";
+  const pageTitle =
+    selectedStatus === "All" ? "Orders" : selectedStatus;
+
+  useEffect(() => {
+    if (!showSignInPrompt) return undefined;
+
+    const interval = window.setInterval(() => {
+      setSignInCountdown((prev) => {
+        if (prev <= 1) {
+          window.clearInterval(interval);
+          setShowSignInPrompt(false);
+          navigate("/signup", { state: { from: { pathname: "/orders" } } });
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(interval);
+  }, [showSignInPrompt, navigate]);
+
+  useEffect(() => {
+    const hasOrderConfirmPopup = orders.some((order) => order.showConfirm);
+    const isAnyPopupOpen = hasOrderConfirmPopup || showSignInPrompt;
+
+    if (!isAnyPopupOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [orders, showSignInPrompt]);
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
@@ -192,6 +232,38 @@ useEffect(() => {
           {infoMessage}
         </div>
 
+      )}
+
+      {showSignInPrompt && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/20 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-indigo-200 bg-white p-5 text-center shadow-xl sm:p-6">
+            <p className="text-base font-semibold text-indigo-700 sm:text-lg">
+              You are not signed in. Sign in to accept orders.
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              Redirecting to sign in in {signInCountdown}...
+            </p>
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSignInPrompt(false);
+                  navigate("/signup", { state: { from: { pathname: "/orders" } } });
+                }}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowSignInPrompt(false)}
+                className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-300"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <div className="mx-auto max-w-6xl p-4 sm:p-6">
@@ -394,16 +466,12 @@ useEffect(() => {
                               }
                               onMouseDown={() => {
                                 if (!deliveryPartner) {
-                                  navigate("/signup", {
-                                    state: { from: { pathname: "/orders" } },
-                                  });
+                                  openSignInPrompt();
                                 }
                               }}
                               onTouchStart={() => {
                                 if (!deliveryPartner) {
-                                  navigate("/signup", {
-                                    state: { from: { pathname: "/orders" } },
-                                  });
+                                  openSignInPrompt();
                                 }
                               }}
                               className={`w-full h-8 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 accent-white ${deliveryPartner
@@ -433,7 +501,7 @@ useEffect(() => {
                         {/* Auto-close confirmation */}
                         {order.showConfirm && (
                           <div
-                            className="fixed inset-0 z-50 flex items-center justify-center bg-white/12 backdrop-blur-[2px]"
+                            className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
                             onClick={() =>
                               setOrders((prev) =>
                                 prev.map((o) =>

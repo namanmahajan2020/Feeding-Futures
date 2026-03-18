@@ -126,7 +126,7 @@ const PastOrder = () => {
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100">
       <div className="mx-auto max-w-5xl p-4 sm:p-6">
-        <div className="mb-10 flex justify-center px-4">
+        <div className="mb-10 px-4">
           <div className="text-center">
             <p className="text-[1.7rem] font-bold tracking-[0.06em] text-sky-800 sm:text-[2.15rem]">
               History
@@ -134,7 +134,7 @@ const PastOrder = () => {
             <div className="mx-auto mt-1 mb-3 h-0.5 w-full max-w-[18rem] rounded-full bg-sky-700/50 sm:max-w-[22rem]" />
           </div>
           {orders.length > 0 && (
-            <p className="mt-3 text-sm text-gray-600 font-medium">
+            <p className="mt-4 pl-3 text-left text-sm font-medium text-gray-600 sm:pl-6">
               Total Collected Orders:{" "}
               <span className="text-indigo-600 font-semibold">
                 {orders.length}
