@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const HOME_PRELOADER_SEEN_KEY = "ff_user_home_preloader_seen";
+
 const Home = () => {
   const quotes = [
     "A shared meal can carry more hope than words.",
@@ -9,6 +11,7 @@ const Home = () => {
     "Turning surplus food into shared smiles.",
     "Sharing food is one of the simplest ways to spread kindness.",
   ];
+
   const works = [
     {
       img: "img/p1.jpeg",
@@ -29,14 +32,24 @@ const Home = () => {
       text: "Every surplus meal becomes support for someone who needs it.",
     },
   ];
+
   const [activeQuote, setActiveQuote] = useState(0);
+  const [showPreloader, setShowPreloader] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem(HOME_PRELOADER_SEEN_KEY) !== "1";
+  });
   const swipeStartX = useRef(null);
+  const loadingChars = "LOADING".split("");
+  const loaderFrames = [
+    "/img/loading1.png",
+    "/img/loading2.png",
+    "/img/loading3.png",
+    "/img/loading4.png",
+    "/img/loading5.png",
+  ];
 
-  const nextQuote = () =>
-    setActiveQuote((prev) => (prev + 1) % quotes.length);
-
-  const prevQuote = () =>
-    setActiveQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
+  const nextQuote = () => setActiveQuote((prev) => (prev + 1) % quotes.length);
+  const prevQuote = () => setActiveQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
 
   const handlePointerDown = (event) => {
     swipeStartX.current = event.clientX;
@@ -60,8 +73,144 @@ const Home = () => {
     return () => window.clearInterval(timer);
   }, [quotes.length]);
 
+  useEffect(() => {
+    if (!showPreloader) return undefined;
+
+    window.localStorage.setItem(HOME_PRELOADER_SEEN_KEY, "1");
+
+    const timer = window.setTimeout(() => {
+      setShowPreloader(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, [showPreloader]);
+
+  useEffect(() => {
+    if (!showPreloader) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [showPreloader]);
+
   return (
     <div className="bg-gradient-to-b from-green-50 to-white min-h-screen font-poppins">
+      {showPreloader && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center overflow-hidden bg-white px-4">
+          <style>
+            {`
+              @keyframes ff-fill {
+                0% { width: 0%; }
+                70% { width: 65%; }
+                100% { width: 100%; }
+              }
+              @keyframes ff-wave-fade {
+                0%, 100% { opacity: 0.95; transform: translateY(0px) scale(1); }
+                50% { opacity: 0.18; transform: translateY(7px) scale(0.985); }
+              }
+              @keyframes ff-twinkle {
+                0%, 100% { opacity: 0.25; transform: scale(0.85); }
+                50% { opacity: 1; transform: scale(1.12); }
+              }
+              @keyframes ff-drift {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-6px); }
+              }
+              @keyframes ff-soft-spin {
+                0%, 100% { transform: rotate(0deg) scale(0.9); opacity: 0.35; }
+                50% { transform: rotate(18deg) scale(1.1); opacity: 1; }
+              }
+              @keyframes ff-letter-wave {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-7px); }
+              }
+              @keyframes ff-dot-blink {
+                0%, 100% { opacity: 0.2; transform: scale(0.85); }
+                50% { opacity: 1; transform: scale(1.1); }
+              }
+            `}
+          </style>
+
+          <div className="relative w-full max-w-[760px] px-2 py-2 text-center">
+            <div className="pointer-events-none absolute inset-0">
+              <span className="absolute left-[37%] top-[62%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.1s ease-in-out infinite 0.2s" }} />
+              <span className="absolute left-[42%] top-[64%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.2s ease-in-out infinite 0.35s" }} />
+              <span className="absolute right-[37%] top-[62%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.05s ease-in-out infinite 0.25s" }} />
+              <span className="absolute right-[42%] top-[64%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.25s ease-in-out infinite 0.4s" }} />
+            </div>
+
+            <div className="pointer-events-none absolute inset-0">
+              <span className="absolute left-[4%] top-[40%] text-sm text-[#d7b450]" style={{ animation: "ff-soft-spin 2s ease-in-out infinite" }}>&#10022;</span>
+              <span className="absolute right-[5%] top-[42%] text-sm text-[#d7b450]" style={{ animation: "ff-twinkle 1.4s ease-in-out infinite 0.6s" }}>&#10023;</span>
+              <span className="absolute left-[16%] top-[24%] text-base text-[#d7b450]" style={{ animation: "ff-twinkle 1.8s ease-in-out infinite 0.2s" }}>&#10027;</span>
+              <span className="absolute right-[17%] top-[25%] text-base text-[#d7b450]" style={{ animation: "ff-soft-spin 2.4s ease-in-out infinite 0.35s" }}>&#10038;</span>
+              <span className="absolute left-[24%] top-[44%] text-xs text-[#d7b450]" style={{ animation: "ff-twinkle 1.5s ease-in-out infinite 0.45s" }}>&#9733;</span>
+              <span className="absolute right-[26%] top-[46%] text-xs text-[#d7b450]" style={{ animation: "ff-twinkle 1.65s ease-in-out infinite 0.25s" }}>&#10040;</span>
+              <span className="absolute left-[44%] top-[20%] text-sm text-[#d7b450]" style={{ animation: "ff-soft-spin 2.1s ease-in-out infinite 0.55s" }}>&#10023;</span>
+              <span className="absolute right-[44%] top-[21%] text-sm text-[#d7b450]" style={{ animation: "ff-twinkle 1.7s ease-in-out infinite 0.5s" }}>&#10022;</span>
+              <span className="absolute left-[9%] top-[67%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.15s ease-in-out infinite 0.25s" }} />
+              <span className="absolute left-[30%] top-[68%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.25s ease-in-out infinite 0.45s" }} />
+              <span className="absolute right-[30%] top-[68%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.1s ease-in-out infinite 0.3s" }} />
+              <span className="absolute right-[9%] top-[67%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.2s ease-in-out infinite 0.5s" }} />
+            </div>
+
+            <div className="relative mx-auto flex w-full max-w-[380px] items-end justify-center">
+              {loaderFrames.map((frame, index) => (
+                <img
+                  key={frame}
+                  src={frame}
+                  alt={`Loading frame ${index + 1}`}
+                  className="block h-auto w-[20%] shrink-0"
+                  style={{
+                    animation: "ff-wave-fade 2s cubic-bezier(0.35, 0.05, 0.22, 1) infinite alternate",
+                    animationDelay: `${index * 0.18}s`,
+                  }}
+                />
+              ))}
+              <span className="pointer-events-none absolute left-[8%] top-[10%] text-base text-[#d7b450]" style={{ animation: "ff-twinkle 1.4s ease-in-out infinite 0.2s" }}>&#10022;</span>
+              <span className="pointer-events-none absolute left-[18%] top-[3%] text-sm text-[#d7b450]" style={{ animation: "ff-soft-spin 2s ease-in-out infinite 0.3s" }}>&#10023;</span>
+              <span className="pointer-events-none absolute right-[15%] top-[4%] text-base text-[#d7b450]" style={{ animation: "ff-twinkle 1.6s ease-in-out infinite 0.4s" }}>&#10022;</span>
+              <span className="pointer-events-none absolute right-[7%] top-[14%] text-sm text-[#d7b450]" style={{ animation: "ff-soft-spin 2.1s ease-in-out infinite 0.5s" }}>&#10023;</span>
+              <span className="pointer-events-none absolute left-[30%] top-[0%] text-sm text-[#d7b450]" style={{ animation: "ff-twinkle 1.55s ease-in-out infinite 0.15s" }}>&#10027;</span>
+              <span className="pointer-events-none absolute right-[31%] top-[1%] text-sm text-[#d7b450]" style={{ animation: "ff-soft-spin 2.3s ease-in-out infinite 0.22s" }}>&#10038;</span>
+              <span className="pointer-events-none absolute left-[4%] bottom-[14%] text-xs text-[#d7b450]" style={{ animation: "ff-twinkle 1.35s ease-in-out infinite 0.4s" }}>&#9733;</span>
+              <span className="pointer-events-none absolute right-[4%] bottom-[13%] text-xs text-[#d7b450]" style={{ animation: "ff-twinkle 1.45s ease-in-out infinite 0.5s" }}>&#10040;</span>
+              <span className="pointer-events-none absolute left-[12%] bottom-[9%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.1s ease-in-out infinite 0.25s" }} />
+              <span className="pointer-events-none absolute right-[12%] bottom-[9%] h-1.5 w-1.5 rounded-full bg-[#d8b23f]" style={{ animation: "ff-dot-blink 1.2s ease-in-out infinite 0.35s" }} />
+            </div>
+
+            <h1 className="mt-3 text-[1.55rem] font-black tracking-[0.28em] text-[#2b3b2a] [text-shadow:0_0_0.01px_#2b3b2a,0_0_0.01px_#2b3b2a] sm:text-[2.35rem]">
+              {loadingChars.map((char, index) => (
+                <span
+                  key={`${char}-${index}`}
+                  className="inline-block"
+                  style={{
+                    animation: "ff-letter-wave 1.25s ease-in-out infinite",
+                    animationDelay: `${index * 0.09}s`,
+                  }}
+                >
+                  {char}
+                </span>
+              ))}
+            </h1>
+
+            <div className="mx-auto mt-4 h-3.5 w-full max-w-[320px] overflow-hidden rounded-full bg-[#d0d0d4]">
+              <div
+                className="h-full rounded-full bg-[#669b3a]"
+                style={{ width: "0%", animation: "ff-fill 2.85s ease-out forwards" }}
+              />
+            </div>
+
+            <p className="mt-5 text-[0.85rem] font-normal text-[#6b6b6b] sm:text-[1rem]">
+              Reducing Food Waste, Feeding Lives
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Banner */}
       <section className="w-full pt-20 sm:pt-[4.5rem] sm:-mt-[4.5rem]">
         <div
@@ -305,7 +454,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };
