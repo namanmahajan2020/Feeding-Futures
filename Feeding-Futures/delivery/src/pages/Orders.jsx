@@ -168,30 +168,6 @@ useEffect(() => {
     return false;
   });
 
-  if (loading)
-    return <OrdersSkeleton />;
-
-  if (error)
-    return (
-      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center text-red-600 font-medium">
-        {error}
-      </div>
-    );
-
-  const formatDate = (dateString) => {
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return new Date(dateString).toLocaleString(undefined, options);
-  };
-
-  const pageTitle =
-    selectedStatus === "All" ? "Orders" : selectedStatus;
-
   useEffect(() => {
     if (!showSignInPrompt) return undefined;
 
@@ -223,6 +199,30 @@ useEffect(() => {
       document.body.style.overflow = previousOverflow;
     };
   }, [orders, showSignInPrompt]);
+
+  if (loading)
+    return <OrdersSkeleton />;
+
+  if (error)
+    return (
+      <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 flex justify-center items-center text-red-600 font-medium">
+        {error}
+      </div>
+    );
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleString(undefined, options);
+  };
+
+  const pageTitle =
+    selectedStatus === "All" ? "Orders" : selectedStatus;
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-sky-100 via-indigo-100 to-green-100 relative">
