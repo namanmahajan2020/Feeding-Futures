@@ -36,7 +36,7 @@ const Home = () => {
   const [activeQuote, setActiveQuote] = useState(0);
   const [showPreloader, setShowPreloader] = useState(() => {
     if (typeof window === "undefined") return false;
-    return window.localStorage.getItem(HOME_PRELOADER_SEEN_KEY) !== "1";
+    return window.sessionStorage.getItem(HOME_PRELOADER_SEEN_KEY) !== "1";
   });
   const swipeStartX = useRef(null);
   const loadingChars = "LOADING".split("");
@@ -76,7 +76,7 @@ const Home = () => {
   useEffect(() => {
     if (!showPreloader) return undefined;
 
-    window.localStorage.setItem(HOME_PRELOADER_SEEN_KEY, "1");
+    window.sessionStorage.setItem(HOME_PRELOADER_SEEN_KEY, "1");
 
     const timer = window.setTimeout(() => {
       setShowPreloader(false);
