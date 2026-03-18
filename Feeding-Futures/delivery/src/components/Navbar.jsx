@@ -239,22 +239,22 @@ const Header = ({ isLoggedIn = false, onLogout }) => {
           onClick={() => setShowLogoutConfirm(false)}
         >
           <div
-            className="w-[90%] max-w-md rounded-3xl border border-rose-100 bg-[#eef5f3]/95 px-6 py-8 text-center shadow-2xl"
+            className="w-[13rem] rounded-2xl border border-white/60 bg-white/35 p-3 text-center shadow-[0_18px_42px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:w-[14rem] md:w-[15rem] md:p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="mb-6 text-4xl font-bold text-rose-700 max-sm:text-3xl">
+            <p className="text-base font-semibold text-rose-700 md:text-base">
               Confirm logout
             </p>
-            <div className="flex items-center justify-center gap-4">
+            <div className="mt-3 flex items-center justify-center gap-3">
               <button
                 onClick={logout}
-                className="min-w-28 rounded-2xl bg-rose-600 px-7 py-3 text-4xl font-bold text-white transition hover:bg-rose-700 max-sm:text-3xl"
+                className="min-w-14 rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-rose-500 md:px-3 md:py-1.5 md:text-sm"
               >
                 Yes
               </button>
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="min-w-28 rounded-2xl bg-slate-200 px-7 py-3 text-4xl font-bold text-slate-600 transition hover:bg-slate-300 max-sm:text-3xl"
+                className="min-w-14 rounded-lg bg-slate-200/90 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-300 md:px-3 md:py-1.5 md:text-sm"
               >
                 No
               </button>
