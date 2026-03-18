@@ -33,6 +33,9 @@ useEffect(() => {
   orders.forEach((order) => {
     if (order.showConfirm) {
       const timer = setTimeout(() => {
+        const basePercent =
+          order.status === "Pending" ? 0 : order.status === "Processing" ? 50 : 100;
+        setDragPercentByOrder((prev) => ({ ...prev, [order._id]: basePercent }));
         setOrders((prev) =>
           prev.map((o) =>
             o._id === order._id ? { ...o, showConfirm: false } : o
@@ -561,7 +564,7 @@ useEffect(() => {
                                 dragPercentByOrder[order._id] ??
                                 getBasePercent(order.status)
                               }
-                              className={`relative h-10 w-full touch-none select-none rounded-full border border-white/70 bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 ${
+                              className={`relative h-10 w-full touch-none select-none overflow-hidden rounded-full border border-white/70 bg-gradient-to-r from-yellow-300 via-blue-400 to-green-400 ${
                                 deliveryPartner && canDragStatus(order.status)
                                   ? "cursor-grab ring-2 ring-indigo-300 active:cursor-grabbing"
                                   : "cursor-not-allowed opacity-60"
@@ -588,17 +591,17 @@ useEffect(() => {
                                     : "transition-all duration-200"
                                 }`}
                                 style={{
-                                  left: `${
+                                  left: `calc((100% - 1.75rem) * ${
                                     Math.min(
-                                      98,
+                                      100,
                                       Math.max(
-                                        2,
+                                        0,
                                         dragPercentByOrder[order._id] ??
                                           getBasePercent(order.status)
                                       )
-                                    )
-                                  }%`,
-                                  transform: "translate(-50%, -50%)",
+                                    ) / 100
+                                  })`,
+                                  transform: "translateY(-50%)",
                                 }}
                               />
                             </div>

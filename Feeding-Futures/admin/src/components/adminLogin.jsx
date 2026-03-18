@@ -59,7 +59,7 @@ const AdminLogin = () => {
 
   return (
     <div className="admin-page flex min-h-screen flex-col bg-[linear-gradient(180deg,#eef6f2_0%,#e7f0ec_100%)] text-slate-100">
-<header className="border-b border-cyan-300/15 bg-[linear-gradient(120deg,#122041_0%,#1a2f57_58%,#1f3d6e_100%)] shadow-[0_10px_20px_rgba(6,23,46,0.24)]">
+<header className="fixed top-0 left-0 right-0 z-40 border-b border-cyan-300/15 bg-[linear-gradient(120deg,#122041_0%,#1a2f57_58%,#1f3d6e_100%)] shadow-[0_10px_20px_rgba(6,23,46,0.24)]">
   <div className="flex h-18 w-full items-center justify-between px-4 sm:px-6 md:px-10 lg:px-14">
           <h1 className="ml-1 text-[1.2rem] font-extrabold leading-none text-slate-100 sm:text-[1.35rem] md:ml-0 md:text-[1.5rem] lg:text-[1.6rem]">
       Feeding <span className="text-emerald-400">Futures</span>{" "}
@@ -68,7 +68,7 @@ const AdminLogin = () => {
   </div>
 </header>
 
-      <main className="relative flex flex-1 items-center justify-center overflow-hidden px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <main className="relative flex flex-1 items-center justify-center overflow-hidden px-4 pt-24 pb-6 sm:px-6 sm:pt-24 sm:pb-8 lg:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.10),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.10),_transparent_34%)]" />
         <div className="relative mx-auto w-full max-w-2xl rounded-[1.8rem] shadow-[0_20px_42px_rgba(15,23,42,0.10),0_0_0_2px_rgba(167,243,208,0.22),0_0_28px_rgba(94,234,212,0.22)]">
           <form
