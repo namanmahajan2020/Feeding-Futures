@@ -30,9 +30,9 @@ const Analytics = () => {
   const { isDarkMode } = useContext(AppContext);
   const { data, isLoading, error } = useDataFetcher();
   const [showLoadingSkeleton, setShowLoadingSkeleton] = useState(true);
-  const { donations = [], users = [] } = data || {};
-  const feedback = donations.filter((donation) => donation.rating != null);
-  const validRatings = feedback.filter((entry) => entry.rating > 0);
+  const { donations = [], users = [], feedback = [] } = data || {};
+  const ratedDonations = donations.filter((donation) => donation.rating != null);
+  const validRatings = ratedDonations.filter((entry) => entry.rating > 0);
 
   useEffect(() => {
     if (!isLoading) {

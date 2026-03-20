@@ -9,7 +9,7 @@ const PastOrder = () => {
   const [yourEmail, setYourEmail] = useState("");
   const [ratings, setRatings] = useState({}); // temporary (user-selected)
   const [submittedRatings, setSubmittedRatings] = useState({}); // actually submitted ones
-  const [showRatingBox, setShowRatingBox] = useState({});
+  const [activeRatingOrderId, setActiveRatingOrderId] = useState(null);
   const [hoveredStars, setHoveredStars] = useState({});
 
   useEffect(() => {
@@ -58,6 +58,32 @@ const PastOrder = () => {
     fetchOrders();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!activeRatingOrderId) return;
+
+      const clickedInsideRatingSection = event.target.closest(
+        `[data-rating-box="${activeRatingOrderId}"]`
+      );
+      if (clickedInsideRatingSection) return;
+
+      setRatings((prev) => {
+        const next = { ...prev };
+        delete next[activeRatingOrderId];
+        return next;
+      });
+      setHoveredStars((prev) => {
+        const next = { ...prev };
+        delete next[activeRatingOrderId];
+        return next;
+      });
+      setActiveRatingOrderId(null);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [activeRatingOrderId]);
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString(undefined, {
       year: "numeric",
@@ -69,10 +95,35 @@ const PastOrder = () => {
   };
 
   const handleShowRating = (orderId) => {
-    setShowRatingBox((prev) => ({
-      ...prev,
-      [orderId]: !prev[orderId],
-    }));
+    if (activeRatingOrderId === orderId) {
+      setRatings((prev) => {
+        const next = { ...prev };
+        delete next[orderId];
+        return next;
+      });
+      setHoveredStars((prev) => {
+        const next = { ...prev };
+        delete next[orderId];
+        return next;
+      });
+      setActiveRatingOrderId(null);
+      return;
+    }
+
+    if (activeRatingOrderId) {
+      setRatings((prev) => {
+        const next = { ...prev };
+        delete next[activeRatingOrderId];
+        return next;
+      });
+      setHoveredStars((prev) => {
+        const next = { ...prev };
+        delete next[activeRatingOrderId];
+        return next;
+      });
+    }
+
+    setActiveRatingOrderId(orderId);
   };
 
   const handleSetRating = (orderId, value) => {
@@ -99,8 +150,13 @@ const PastOrder = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to update rating");
 
-      setShowRatingBox((prev) => ({ ...prev, [orderId]: false }));
+      setActiveRatingOrderId(null);
       setSubmittedRatings((prev) => ({ ...prev, [orderId]: rating }));
+      setHoveredStars((prev) => {
+        const next = { ...prev };
+        delete next[orderId];
+        return next;
+      });
 
       setOrders((prev) =>
         prev.map((order) =>
@@ -208,7 +264,10 @@ const PastOrder = () => {
                       </div>
 
                       {/* ⭐ Rating Section */}
-                      <div className="flex flex-col items-start space-y-2 font-semibold text-yellow-500 md:items-end">
+                      <div
+                        className="flex flex-col items-start space-y-2 font-semibold text-yellow-500 md:items-end"
+                        data-rating-box={order._id}
+                      >
                         {submittedRatings[order._id] ? (
                           // ⭐ Show saved rating
                           <div className="flex space-x-1">
@@ -224,7 +283,7 @@ const PastOrder = () => {
                               />
                             ))}
                           </div>
-                        ) : !showRatingBox[order._id] ? (
+                        ) : activeRatingOrderId !== order._id ? (
                           <button
                             onClick={() => handleShowRating(order._id)}
                             className="text-sm px-4 py-1 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg hover:bg-yellow-200 transition"
